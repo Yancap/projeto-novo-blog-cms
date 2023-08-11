@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import { Flex, Text, Box, Stack, Button } from '@chakra-ui/react'
+import { Input } from '@/components/Input/index'
 
 
 export default function Home() {
@@ -10,7 +12,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+      <Flex as="main" justify="center" align="center" h="100vh" borderRadius={4}>
+        <Stack as="form" spacing="12"  bg="gray.900" px="4rem" py="5.25rem"  >
+          <Stack spacing="5">
+            <Box w="360px">
+              <Input type='email' label='E-mail'/>
+            </Box>
+            <Box w="360px">
+              <Input type='password' label='Senha'/>
+            </Box>
+          </Stack>
+          <Button size='lg' bg="purple.700" fontSize="xl" color="white"  _hover={{bgColor: 'purple.800'}}>
+            Entrar
+          </Button>
+        </Stack>
+      </Flex>
     </>
   )
 }
