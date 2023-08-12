@@ -18,7 +18,8 @@ export const theme = extendTheme({
         purple: {
             "800": "#4643F0",
             "700": "#5653F4",
-            "300": "#9D9BF2"
+            "300": "#9D9BF2",
+            "200": "#8198DB"
         }
     },
     fonts: {
