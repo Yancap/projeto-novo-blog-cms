@@ -1,6 +1,14 @@
-import { Header } from "@/components/Header";
-import { HeaderLink } from "@/components/Header/HeaderLink";
 import Head from "next/head";
+import { Admin } from "@/components/Admin";
+import {  Button,  Flex, Heading, Icon, Text } from "@chakra-ui/react";
+import { Table } from "@/components/Table";
+import { Thead } from "@/components/Table/Thead";
+import { Tr } from "@/components/Table/Tr";
+import { Th } from "@/components/Table/Th";
+import { Tbody } from "@/components/Table/Tbody";
+import { Td } from "@/components/Table/Td";
+import { Pagination } from "@/components/Pagination";
+
 
 export default function Home() {
     return (
@@ -11,17 +19,84 @@ export default function Home() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Header>
-            <HeaderLink>
-                Artigos
-            </HeaderLink>
-            <HeaderLink>
-                Criar
-            </HeaderLink>
-            <HeaderLink>
-                Adicionar autor
-            </HeaderLink>
-        </Header>
+        <Admin>
+            <Flex as="header" >
+                <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
+                    Artigos publicados
+                </Heading>
+            </Flex>
+            <Table >
+                <Thead>
+                    <Tr>
+                        <Th>
+                            Titulo
+                        </Th>
+                        <Th>Categoria</Th>
+                        <Th>Data de publicação</Th>
+                        <Th></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr>
+                        <Td>
+                            <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
+                                Titulo do artigo sobre o Front-End e suas tecnologias 
+                            </Heading>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">Front-end</Text>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">21 de Julho, 2023</Text>
+                        </Td>
+                        <Td>
+                            <Button as="a" size="xs" fontSize="xs" colorScheme="purple">
+                                <Icon as="svg" fontSize="xs"/>
+                            </Button>
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>
+                            <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
+                                Titulo do artigo sobre o Front-End e suas tecnologias 
+                            </Heading>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">Front-end</Text>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">21 de Julho, 2023</Text>
+                        </Td>
+                        <Td>
+                            <Button as="a" size="xs" fontSize="xs" colorScheme="purple">
+                                <Icon as="svg" fontSize="xs"/>
+                            </Button>
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>
+                            <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
+                                Titulo do artigo sobre o Front-End e suas tecnologias 
+                            </Heading>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">Front-end</Text>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">21 de Julho, 2023</Text>
+                        </Td>
+                        <Td>
+                            <Button as="a" size="xs" fontSize="xs" colorScheme="purple">
+                                <Icon as="svg" fontSize="xs"/>
+                            </Button>
+                        </Td>
+                    </Tr>
+                </Tbody>
+            </Table>
+            <Flex as="footer">
+                <Pagination />
+            </Flex>
+        </Admin>
       </>
     )
   }

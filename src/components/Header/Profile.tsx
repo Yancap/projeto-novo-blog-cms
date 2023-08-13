@@ -18,7 +18,7 @@ export const Profile = () => {
         {null ? 
         <Avatar size='md' name='Yan Gabriel' src=''/>
         : 
-        <Avatar bg="transparent" color="purple.700" fill="purple.700" />
+        <Avatar bg="transparent" color="purple.700" fill="purple.700" border="2px" />
         }
         
     </Flex>
