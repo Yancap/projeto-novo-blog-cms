@@ -1,12 +1,11 @@
-import { Table as ChakraTable, TableProps } from '@chakra-ui/react'
-import {ReactNode} from 'react'
-
-
+import { Table as ChakraTable, TableProps, Box } from '@chakra-ui/react'
 
 export const Table = ({children, ...props}: TableProps) => {
   return (
-    <ChakraTable colorScheme="whiteAlpha" {...props}>
-        {children}
-    </ChakraTable>
+    <Box  overflowX="scroll" className=''>
+      <ChakraTable   colorScheme="whiteAlpha" {...props}>
+          {children}
+      </ChakraTable>
+    </Box>
   )
 }

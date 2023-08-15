@@ -1,9 +1,17 @@
 import Head from 'next/head'
 import { Flex, Text, Box, Stack, Button } from '@chakra-ui/react'
 import { Input } from '@/components/Input/index'
+import { useManagement } from '@/context/ManagementContext'
+import { useRouter } from 'next/router'
 
 
 export default function Home() {
+  const {useHierarchy, hierarchy} = useManagement()
+  const router = useRouter()
+  function handleClick(){
+    
+    router.push(`${hierarchy}/`)
+  }
   return (
     <>
       <Head>
@@ -23,7 +31,7 @@ export default function Home() {
               <Input type='password' label='Senha'/>
             </Box>
           </Stack>
-          <Button size={['md','lg']} bg="purple.700" fontSize="xl" color="white"  _hover={{bgColor: 'purple.800'}}>
+          <Button onClick={handleClick} size={['md','lg']} bg="purple.700" fontSize="xl" color="white"  _hover={{bgColor: 'purple.800'}}>
             Entrar
           </Button>
         </Flex>

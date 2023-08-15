@@ -6,7 +6,7 @@ import React from 'react'
 export const Profile = () => {
   return (
     <Flex gap="4" align="center">
-        <Box>
+        <Box display={{base: "none",sm: "block"}}>
             <Text>
                 Yan Gabriel
             </Text>

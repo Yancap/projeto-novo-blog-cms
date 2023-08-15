@@ -7,17 +7,16 @@ import { Container, Flex, Stack } from "@chakra-ui/react";
 import {  RiFileTextLine } from "react-icons/ri";
 import {  MdOutlinePeopleAlt } from "react-icons/md";
 
-interface AdminProps {
+interface AuthorProps {
     children: ReactNode
 }
 
-export const Admin = ({children}: AdminProps) => {
+export const Author = ({children}: AuthorProps) => {
   return (
     <>
          <Header>
             <HeaderLink>Artigos</HeaderLink>
             <HeaderLink>Criar</HeaderLink>
-            <HeaderLink>Adicionar autor</HeaderLink>
         </Header>
         <Flex as="main" overflow="hidden" 
         align="center" justify="center" 
@@ -26,8 +25,7 @@ export const Admin = ({children}: AdminProps) => {
               justifyContent="space-between"  w="100%" 
               maxW={{lg: 1024,'2xl': 1124}}>
                 <Aside>
-                    <AsideLink href='articles' text='Artigos'  icon={RiFileTextLine}/>
-                    <AsideLink href='authors'  text='Autores'  icon={MdOutlinePeopleAlt}/>
+                    <AsideLink href='comments' text='Comentários'  icon={RiFileTextLine}/>
                 </Aside>
                 <Stack as="section" borderRadius={12} w={{base:"100%", md:"55rem"}}
                 px="8" py="8" bg="gray.900" spacing='6' maxW="100%" >
