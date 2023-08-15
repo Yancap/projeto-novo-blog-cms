@@ -15,8 +15,8 @@ export const Author = ({children}: AuthorProps) => {
   return (
     <>
          <Header>
-            <HeaderLink>Artigos</HeaderLink>
-            <HeaderLink>Criar</HeaderLink>
+            <HeaderLink href='/'>Artigos</HeaderLink>
+            <HeaderLink href='create'>Criar</HeaderLink>
         </Header>
         <Flex as="main" overflow="hidden" 
         align="center" justify="center" 

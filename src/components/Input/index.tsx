@@ -9,8 +9,8 @@ interface InputProps {
 export const Input = ({label, type}: InputProps) => {
   return (
     <FormControl>
-        <FormLabel htmlFor={type} fontSize="xl" fontWeight="medium">{label}</FormLabel>
-        <ChakraInput name={type} type={type} focusBorderColor='purple.700' _hover={{bgColor: 'gray.800'}}        
+        <FormLabel htmlFor={label} fontSize={['md','lg']} fontWeight="medium">{label}</FormLabel>
+        <ChakraInput name={label} type={type} focusBorderColor='purple.700' _hover={{bgColor: 'gray.800'}}        
         bgColor='gray.800' variant='filled' size={['md','lg']} />
     </FormControl>
   )

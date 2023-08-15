@@ -18,10 +18,12 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
     "framer-motion": "^10.15.1",
+    "miragejs": "^0.1.47",
     "next": "13.4.13",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+    "react-query": "^3.39.3",
     "typescript": "5.1.6"
   }
 }

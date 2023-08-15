@@ -1,13 +1,20 @@
 import Head from "next/head";
 import Publications from "@/components/Settings/Publications";
 import { useManagement } from "@/context/ManagementContext";
-import { Author } from "@/components/Author";
+import { Author as AuthorContainer } from "@/components/Author";
 import Drafts from "@/components/Settings/Drafts";
 import Disabled from "@/components/Settings/Disabled";
 import Comments from "@/components/Manager/Comments";
+import { GetServerSideProps } from "next";
+import { useMemo } from "react";
 
 
-export default function Home() {
+export default function Author() {
+  const PublicationsMemo = useMemo(() => <Publications />, [])
+  const DraftsMemo = useMemo(() => <Drafts />, [])
+  const DisabledMemo = useMemo(() => <Disabled />, [])
+  const AuthorssMemo = useMemo(() => <Comments/>, [])
+
     const { navigation } = useManagement()
     return (
       <>
@@ -17,14 +24,40 @@ export default function Home() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Author>
+        <AuthorContainer>
         {
-            navigation === "" ? <Publications /> : 
-            navigation === "drafts" ? <Drafts /> : 
-            navigation === "disabled" ? <Disabled /> : 
-            navigation === "comments" ? <Comments /> : null
+            navigation === "" ? PublicationsMemo : 
+            navigation === "drafts" ? DraftsMemo : 
+            navigation === "disabled" ? DisabledMemo : 
+            navigation === "comments" ? AuthorssMemo : null
         }
-        </Author>
+        </AuthorContainer>
       </>
     )
+  }
+
+  export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
+  
+    let hierarchy = "author" 
+    if (hierarchy === "admin") {
+      return {
+        redirect: {
+          destination: '/admin',
+          permanent: true
+        }
+      }
+    } else if (hierarchy !== "author"){
+      return {
+        redirect: {
+          destination: '/',
+          permanent: true
+        }
+      }
+    }
+  
+    return {
+      props: {
+        
+      }
+    }
   }

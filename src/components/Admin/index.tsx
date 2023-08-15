@@ -15,9 +15,9 @@ export const Admin = ({children}: AdminProps) => {
   return (
     <>
          <Header>
-            <HeaderLink>Artigos</HeaderLink>
-            <HeaderLink>Criar</HeaderLink>
-            <HeaderLink>Adicionar autor</HeaderLink>
+            <HeaderLink href='/admin'>Artigos</HeaderLink>
+            <HeaderLink href='/create'>Criar</HeaderLink>
+            <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
         </Header>
         <Flex as="main" overflow="hidden" 
         align="center" justify="center" 
