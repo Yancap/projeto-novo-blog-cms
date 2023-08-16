@@ -8,10 +8,10 @@ import { Th } from "@/components/Table/Th";
 import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
-import { RiDeleteBin6Line, RiEdit2Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
-import { PiPlusBold } from "react-icons/pi";
+import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
+import { memo } from "react";
 
-export default function Authors() {
+const Authors = () => {
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
@@ -79,3 +79,5 @@ export default function Authors() {
       </>
     )
   }
+
+  export default memo(Authors)

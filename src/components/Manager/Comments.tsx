@@ -9,9 +9,10 @@ import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line, RiEyeLine } from "react-icons/ri";
+import { memo } from "react";
 
 
-export default function Comments() {
+const Comments = () => {
     return (
       <>
             <Flex as="header" >
@@ -94,3 +95,5 @@ export default function Comments() {
       </>
     )
   }
+
+export default memo(Comments)

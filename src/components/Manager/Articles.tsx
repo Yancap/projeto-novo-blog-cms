@@ -10,8 +10,9 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiEdit2Line, RiFilter3Fill } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
+import { memo } from "react";
 
-export default function Articles() {
+const Articles = () => {
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
@@ -101,3 +102,5 @@ export default function Articles() {
       </>
     )
   }
+
+  export default memo(Articles)

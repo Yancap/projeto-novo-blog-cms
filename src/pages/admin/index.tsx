@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Admin } from "@/components/Admin";
 import { useManagement } from "@/context/ManagementContext";
 import Publications from "@/components/Settings/Publications";
 import Drafts from "@/components/Settings/Drafts";
@@ -7,8 +6,8 @@ import Disabled from "@/components/Settings/Disabled";
 import Articles from "@/components/Manager/Articles";
 import Authors from "@/components/Manager/Authors";
 import { GetServerSideProps } from "next";
-import { useMemo, useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { Main } from "@/components/Main";
 
 export interface Article {
   id: string;
@@ -26,35 +25,22 @@ interface AdminProps {
   articles: Article[];
 }
 
-export default function Adm({}: AdminProps) {
-    const [ articles, setArticles ] = useState<Article[] | null>(null)
-    const [ disabled, setDisabled ] = useState<Article[] | null>(null)
-    const [ drafts, setDrafts ] = useState<Article[] | null>(null)
-    // const { data, isLoading, error } = useQuery('articles', async () => {
-    //   const response = await fetch("http://localhost:3000/api/articles")
-    //   const data = response.json()
-      
-    //   return data
-    // })
-    useEffect(() => {
-      fetch("/api/articles")
-      .then(res => res.json())
-      .then(json => {
-        const pub = json.articles.filter(article => article.state === "active")
-        const disabled = json.articles.filter(article => article.state === "inactive")
-        const drafts = json.articles.filter(article => article.state === "draft")
-        setArticles(pub)
-        setDisabled(disabled)
-        setDrafts(drafts)
-      })
-    }, [])
+export default function Admin({}: AdminProps) {
+  const { data, isLoading, error } = useQuery('articles', async () => {
+    const response = await fetch("http://localhost:3000/api/articles")
+    const data = await response.json()
+    const published: Article[] = data.articles
+    .filter((article: Article) => article.state === "active")
+
+    const disabled: Article[] = data.articles
+    .filter((article: Article) => article.state === "inactive")
+
+    const drafts: Article[] = data.articles
+    .filter((article: Article) => article.state === "draft")
+    return {published, disabled, drafts}
+})
     
     
-    const PublicationsMemo = useMemo(() => <Publications articles={articles ?? null}/>, [articles])
-    const DraftsMemo = useMemo(() => <Drafts articles={drafts ?? null}/>, [drafts])
-    const DisabledMemo = useMemo(() => <Disabled articles={disabled ?? null}/>, [disabled])
-    const AuthorsMemo = useMemo(() => <Authors/>, [])
-    const ArticlesMemo = useMemo(() => <Articles />, [])
     
   const { navigation } = useManagement()
 
@@ -66,15 +52,15 @@ export default function Adm({}: AdminProps) {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Admin>
+        <Main>
             {
-            navigation === "" ? PublicationsMemo : 
-            navigation === "drafts" ? DraftsMemo: 
-            navigation === "disabled" ? DisabledMemo: 
-            navigation === "authors" ? AuthorsMemo : 
-            navigation === "articles" ? ArticlesMemo : null
+            navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
+            navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
+            navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
+            navigation === "authors" ? <Authors/>  : 
+            navigation === "articles" ? <Articles /> : null
             }
-        </Admin>
+        </Main>
       </>
     )
   }

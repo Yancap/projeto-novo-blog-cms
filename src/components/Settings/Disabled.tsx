@@ -9,17 +9,19 @@ import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Article } from "@/pages/admin/index";
 
 interface DisabledProps {
-    articles: Article[] | null;
-    isLoading?: boolean;
+    articles: Article[] | undefined;
+    isLoading: boolean;
+    error: unknown;
 }
 
-export default function Disabled({articles, isLoading}: DisabledProps) {
+const Disabled = ({articles, isLoading, error}: DisabledProps) => {
     const [page, setPage ] = useState(1)
-    const maxPages = (articles) ? articles.length / 10  : 0
+    const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
+
     return (
       <>
             <Flex as="header" >
@@ -27,11 +29,14 @@ export default function Disabled({articles, isLoading}: DisabledProps) {
                     Desativados
                 </Heading>
             </Flex>
-            { !articles ? (
-                        <Flex justify='center'>
-                            <Spinner />
-                        </Flex>
-                    ) : 
+            { isLoading ? 
+            <Flex justify='center'>
+                <Spinner />
+            </Flex>
+            : error ? 
+            <Flex>
+                <Text> Falha ao buscar os dados </Text>
+            </Flex> :
             <>
                 <Table>
                     <Thead>
@@ -45,7 +50,7 @@ export default function Disabled({articles, isLoading}: DisabledProps) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                    { articles
+                    { articles && articles
                         .slice((page - 1) * 10, page * 10)
                         .map( article => 
                         <Tr key={article.id}>
@@ -77,3 +82,5 @@ export default function Disabled({articles, isLoading}: DisabledProps) {
       </>
     )
   }
+
+  export default memo(Disabled)

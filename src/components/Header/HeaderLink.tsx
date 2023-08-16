@@ -13,7 +13,8 @@ export const HeaderLink = ({children, href}: HeaderLinkProps) => {
   return (
     <Link href={href}>
       <LinkBox boxSizing='content-box' py="6" px="2" 
-      fontWeight={asPath === href ? "medium" : "light"}
+      fontWeight={asPath === href ? "bold" : "light"}
+      fontSize="sm" w="max-content"
       cursor="pointer" borderBottom={{md:"2px"}} borderTop={{base: "2px", md:"0px"}} transition="ease-in" transitionDuration=".15s"
       borderBottomColor={asPath === href ? { md:"purple.700" } : { md:"gray.800" }} 
       borderTopColor={asPath === href ? "purple.700"  :  "gray.900" } 

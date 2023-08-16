@@ -14,14 +14,15 @@ import { Article } from "@/pages/admin";
 import { memo, useState } from "react";
 
 interface PublicationsProps {
-    articles: Article[] | null;
-    isLoading?: boolean;
+    articles: Article[] | undefined;
+    isLoading: boolean;
+    error: unknown;
 }
 
-const Publications = ({articles, isLoading}: PublicationsProps) => {
+const Publications = ({articles, isLoading, error}: PublicationsProps) => {
     const [page, setPage ] = useState(1)
-    const maxPages = (articles) ? articles.length / 10  : 0
-    console.log(articles);
+    const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
+    
     
     return (
       <>
@@ -36,11 +37,14 @@ const Publications = ({articles, isLoading}: PublicationsProps) => {
                 </Button>
             </Flex>
 
-            { !articles ? (
+            { isLoading ? (
                         <Flex justify='center'>
                             <Spinner />
                         </Flex>
-                    ) : 
+                    ) : error ? 
+                    <Flex>
+                        <Text> Falha ao buscar os dados </Text>
+                    </Flex> :
             <>
                 <Table>
                     <Thead>
@@ -54,7 +58,7 @@ const Publications = ({articles, isLoading}: PublicationsProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        { articles
+                        {articles && articles
                         .slice((page - 1) * 10, page * 10)
                         .map( article => 
                         <Tr key={article.id}>

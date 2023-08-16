@@ -10,17 +10,18 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Article } from "@/pages/admin/index";
 
 interface DraftsProps {
-    articles: Article[] | null;
-    isLoading?: boolean;
+    articles: Article[] | undefined;
+    isLoading: boolean;
+    error: unknown;
 }
 
-export default function Drafts({articles, isLoading}: DraftsProps) {
+const Drafts = ({articles, isLoading, error}: DraftsProps) => {
     const [page, setPage ] = useState(1)
-    const maxPages = (articles) ? articles.length / 10  : 0
+    const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
     return (
         <>
         <Flex as="header" align="center" justify="space-between">
@@ -33,12 +34,15 @@ export default function Drafts({articles, isLoading}: DraftsProps) {
                     Criar novo
                 </Button>
             </Flex>
-        { !articles ? (
-                        <Flex justify='center'>
-                            <Spinner />
-                        </Flex>
-                    ) : 
-            <>
+        { !articles ? 
+        <Flex justify='center'>
+            <Spinner />
+        </Flex>
+          : error ? 
+        <Flex>
+            <Text> Falha ao buscar os dados </Text>
+        </Flex> :
+        <>
         <Table>
             <Thead>
                 <Tr>
@@ -50,9 +54,8 @@ export default function Drafts({articles, isLoading}: DraftsProps) {
                 </Tr>
             </Thead>
             <Tbody>
-            { articles
-                .slice((page - 1) * 10, page * 10)
-                .map( article => 
+            {articles && articles.slice((page - 1) * 10, page * 10)
+                .map(article => 
                 <Tr key={article.id}>
                     <Td minW="80">
                         <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
@@ -80,3 +83,5 @@ export default function Drafts({articles, isLoading}: DraftsProps) {
   </>
     )
   }
+
+export default memo(Drafts)

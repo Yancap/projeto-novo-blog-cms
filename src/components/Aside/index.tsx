@@ -52,7 +52,7 @@ export const Aside = ({children}: AsideProps) => {
     )
   }
   return (
-    <Stack as="aside" py="8" spacing="12">
+    <Stack as="aside" py="8" spacing="12" w="8rem">
         <Stack spacing="3">
             <Heading as="h4" marginBottom="2" fontSize="12px" fontWeight="extrabold" color="gray.400">
                 Configurações
