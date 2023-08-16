@@ -42,12 +42,14 @@ export function makeServer(){
                     return "Yan Gabriel Ferreira"
                 },
                 state(i: number) {
-                    return i % 2 === 0 ? "active" : "inactive"
+                    return i % 3 === 0 ? "draft" : i % 2 === 0 ? "active" : "inactive"
                 },
-                createdAt() {
+                created_at() {
                     const dataIni = new Date(2023, 0, 1);
                     const dataAtual = new Date();
-                    return new Date(dataIni.getTime() + Math.random() * (dataAtual.getTime() - dataIni.getTime()));                },
+                    const data = new Date(dataIni.getTime() + Math.random() * (dataAtual.getTime() - dataIni.getTime()))
+                    return `${data.getDay() <= 10 ? "0"+data.getDay() : data.getDay()}/${data.getMonth() <= 10 ? "0"+data.getMonth() : data.getMonth()}/${data.getFullYear()}`;                
+                },
                 })
         },
         seeds(server){

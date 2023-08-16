@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Admin } from "@/components/Admin";
-import {  Button,  Flex, Heading, Icon, Text } from "@chakra-ui/react";
+import {  Button,  Flex, Heading, Icon, Text, Spinner } from "@chakra-ui/react";
 import { Table } from "@/components/Table";
 import { Thead } from "@/components/Table/Thead";
 import { Tr } from "@/components/Table/Tr";
@@ -10,9 +10,17 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
+import { useState } from "react";
+import { Article } from "@/pages/admin/index";
 
+interface DraftsProps {
+    articles: Article[] | null;
+    isLoading?: boolean;
+}
 
-export default function Drafts() {
+export default function Drafts({articles, isLoading}: DraftsProps) {
+    const [page, setPage ] = useState(1)
+    const maxPages = (articles) ? articles.length / 10  : 0
     return (
         <>
         <Flex as="header" align="center" justify="space-between">
@@ -25,6 +33,12 @@ export default function Drafts() {
                     Criar novo
                 </Button>
             </Flex>
+        { !articles ? (
+                        <Flex justify='center'>
+                            <Spinner />
+                        </Flex>
+                    ) : 
+            <>
         <Table>
             <Thead>
                 <Tr>
@@ -36,14 +50,17 @@ export default function Drafts() {
                 </Tr>
             </Thead>
             <Tbody>
-                <Tr>
+            { articles
+                .slice((page - 1) * 10, page * 10)
+                .map( article => 
+                <Tr key={article.id}>
                     <Td minW="80">
                         <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                            Titulo do artigo sobre o Front-End e suas tecnologias 
+                            {article.title} 
                         </Heading>
                     </Td>
                     <Td>
-                        <Text fontSize="sm" color="gray.300">Front-end</Text>
+                        <Text fontSize="sm" color="gray.300">{article.category}</Text>
                     </Td>
                     <Td>
                         <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
@@ -52,43 +69,14 @@ export default function Drafts() {
                         </Button>
                     </Td>
                 </Tr>
-                <Tr>
-                    <Td minW="80">
-                        <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                            Titulo do artigo sobre o Front-End e suas tecnologias 
-                        </Heading>
-                    </Td>
-                    <Td>
-                        <Text fontSize="sm" color="gray.300">Front-end</Text>
-                    </Td>
-                    <Td>
-                        <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                            <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                            Editar
-                        </Button>
-                    </Td>
-                </Tr>
-                <Tr>
-                    <Td minW="80">
-                        <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                            Titulo do artigo sobre o Front-End e suas tecnologias 
-                        </Heading>
-                    </Td>
-                    <Td>
-                        <Text fontSize="sm" color="gray.300">Front-end</Text>
-                    </Td>
-                    <Td>
-                        <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                            <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                            Editar
-                        </Button>
-                    </Td>
-                </Tr>
-            </Tbody>
+            )}
+            </Tbody> 
         </Table>
         <Flex as="footer">
-            <Pagination />
+            <Pagination page={page} setPage={setPage} maxPages={maxPages}/>
         </Flex>
+        </> 
+        }
   </>
     )
   }

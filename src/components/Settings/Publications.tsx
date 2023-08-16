@@ -11,13 +11,16 @@ import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
 import { Article } from "@/pages/admin";
+import { memo, useState } from "react";
 
 interface PublicationsProps {
     articles: Article[] | null;
     isLoading?: boolean;
 }
 
-export default function Publications({articles, isLoading}: PublicationsProps) {
+const Publications = ({articles, isLoading}: PublicationsProps) => {
+    const [page, setPage ] = useState(1)
+    const maxPages = (articles) ? articles.length / 10  : 0
     console.log(articles);
     
     return (
@@ -51,8 +54,10 @@ export default function Publications({articles, isLoading}: PublicationsProps) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        { articles.map( article => 
-                        <Tr>
+                        { articles
+                        .slice((page - 1) * 10, page * 10)
+                        .map( article => 
+                        <Tr key={article.id}>
                             <Td minW="14rem">
                                 <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
                                     {article.title}
@@ -73,51 +78,15 @@ export default function Publications({articles, isLoading}: PublicationsProps) {
                         </Tr>    
                         )}
                         
-                        <Tr>
-                            <Td minW="14rem">
-                                <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                                    Titulo do artigo sobre o Front-End e suas tecnologias 
-                                </Heading>
-                            </Td>
-                            <Td>
-                                <Text fontSize="sm" color="gray.300">Front-end</Text>
-                            </Td>
-                            <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">21 de Julho, 2023</Text>
-                            </Td>
-                            <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                                    <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                                    Editar
-                                </Button>
-                            </Td>
-                        </Tr>
-                        <Tr>
-                            <Td minW="14rem">
-                                <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                                    Titulo do artigo sobre o Front-End e suas tecnologias 
-                                </Heading>
-                            </Td>
-                            <Td>
-                                <Text fontSize="sm" color="gray.300">Front-end</Text>
-                            </Td>
-                            <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">21 de Julho, 2023</Text>
-                            </Td>
-                            <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                                    <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                                    Editar
-                                </Button>
-                            </Td>
-                        </Tr>
                     </Tbody>
                 </Table>
                 <Flex as="footer">
-                    <Pagination />
+                    <Pagination page={page} setPage={setPage} maxPages={maxPages}/>
                 </Flex>
             </>
             }
       </>
     )
   }
+
+  export default memo(Publications)

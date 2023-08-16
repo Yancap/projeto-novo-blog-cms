@@ -11,7 +11,7 @@ import { useMemo, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 export interface Article {
-  
+  id: string;
   title: string;
   subtitle: string;
   text: string;
@@ -22,20 +22,37 @@ export interface Article {
   
 }
 
-export default function Adm() {
+interface AdminProps {
+  articles: Article[];
+}
 
+export default function Adm({}: AdminProps) {
     const [ articles, setArticles ] = useState<Article[] | null>(null)
-    
+    const [ disabled, setDisabled ] = useState<Article[] | null>(null)
+    const [ drafts, setDrafts ] = useState<Article[] | null>(null)
+    // const { data, isLoading, error } = useQuery('articles', async () => {
+    //   const response = await fetch("http://localhost:3000/api/articles")
+    //   const data = response.json()
+      
+    //   return data
+    // })
     useEffect(() => {
       fetch("/api/articles")
       .then(res => res.json())
-      .then(json => setArticles(json.articles))
+      .then(json => {
+        const pub = json.articles.filter(article => article.state === "active")
+        const disabled = json.articles.filter(article => article.state === "inactive")
+        const drafts = json.articles.filter(article => article.state === "draft")
+        setArticles(pub)
+        setDisabled(disabled)
+        setDrafts(drafts)
+      })
     }, [])
     
     
-    const PublicationsMemo = useMemo(() => <Publications articles={articles}/>, [articles])
-    const DraftsMemo = useMemo(() => <Drafts />, [])
-    const DisabledMemo = useMemo(() => <Disabled />, [])
+    const PublicationsMemo = useMemo(() => <Publications articles={articles ?? null}/>, [articles])
+    const DraftsMemo = useMemo(() => <Drafts articles={drafts ?? null}/>, [drafts])
+    const DisabledMemo = useMemo(() => <Disabled articles={disabled ?? null}/>, [disabled])
     const AuthorsMemo = useMemo(() => <Authors/>, [])
     const ArticlesMemo = useMemo(() => <Articles />, [])
     
@@ -73,10 +90,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       }
     }
   }
-
+  
   return {
     props: {
-      
+      //articles
     }
   }
 }
