@@ -1,14 +1,17 @@
 import Head from "next/head";
 import { useManagement } from "@/context/ManagementContext";
-import Publications from "@/components/Settings/Publications";
-import Drafts from "@/components/Settings/Drafts";
-import Disabled from "@/components/Settings/Disabled";
-import Articles from "@/components/Manager/Articles";
-import Authors from "@/components/Manager/Authors";
-import { GetServerSideProps } from "next";
-import { useMemo, useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
+import { Button, Flex, FormControl, FormLabel, Stack, Input as ChakraInput, Text, Icon, Box } from "@chakra-ui/react";
+import { Input } from "@/components/Input";
+import { RiAddCircleLine } from "react-icons/ri";
+import { RxTextAlignLeft } from "react-icons/rx";
+
+import { MdFormatBold, MdFormatItalic } from "react-icons/md";
+import { useState } from 'react'
+import { CreditsForms } from "@/components/CreateArticlesForms/CreditsForms";
+import { TagsForms } from "@/components/CreateArticlesForms/TagsForms";
+import { CategoryForms } from "@/components/CreateArticlesForms/CategoryForms";
+import { TextForms } from "@/components/CreateArticlesForms/TextForms";
 
 export interface Article {
   id: string;
@@ -28,9 +31,10 @@ interface AdminProps {
 
 export default function Create({}: AdminProps) {
 
+   const [ category, setCategory ] = useState("") 
+   const [ addCategory, setAddCategory ] = useState(false) 
     
-  const { navigation } = useManagement()
-
+    
     return (
       <>
         <Head>
@@ -40,7 +44,37 @@ export default function Create({}: AdminProps) {
             <link rel="icon" href="/favicon.ico" />
         </Head>
         <Main aside={false}>
-            {/* TODO */}
+            <Stack as="header">
+              <Flex gap="4" alignSelf="flex-end">
+                <Button fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
+                  RASCUNHO
+                </Button>
+                <Button fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
+                  SALVAR
+                </Button>
+              </Flex>
+              <Stack as="form" spacing="4">
+                  <Input label="Titulo" type="text"/>
+                  <Input label="Subtitulo" type="text"/>
+
+                  <FormControl >
+                    <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">Imagem</Text>
+                    <FormLabel  htmlFor="image" display="grid" placeContent="center"
+                      variant="filled" h="360px" w="full" borderRadius="8" bgColor='gray.800' 
+                      _hover={{bgColor: 'gray.800'}}
+                    >
+                      <ChakraInput id="image" name="image" type="file"display="none"/>
+                      <Icon as={RiAddCircleLine} fontSize="4xl" color="purple.200" />
+                    </FormLabel>
+                  </FormControl>
+
+                  <TextForms />
+
+                  <CategoryForms />
+                  <TagsForms />
+                  <CreditsForms />
+              </Stack>
+            </Stack>
         </Main>
       </>
     )
