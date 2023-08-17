@@ -2,8 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import { FormControl, FormLabel,  Input } from "@chakra-ui/react";
 
-export const CategoryForms = () => {
-  const [ category, setCategory ] = useState("") 
+interface CategoryFormsProps {
+    setValue: any
+}
+
+export const CategoryForms = ({setValue}: CategoryFormsProps) => {
   const [ addCategory, setAddCategory ] = useState(false) 
   
   return (
@@ -19,7 +22,7 @@ export const CategoryForms = () => {
                 return setAddCategory(true)
             }
             setAddCategory(false)
-            setCategory(event.target.value)
+            setValue('category', event.target.value)
             }}
         >
             <Input as="option" value="front-end">Front-end</Input>
@@ -30,7 +33,7 @@ export const CategoryForms = () => {
         <Input id="category" name="category" mt="4" 
             focusBorderColor='purple.700' _hover={{bgColor: 'gray.800'}}        
             bgColor='gray.800' variant='filled' size={'md'} 
-            onChange={(event) => setCategory(event.target.value.toLowerCase())}
+            onChange={(event) => setValue('category', event.target.value.toLowerCase())}
             placeholder="Adicionar Categoria" display={addCategory ? "block" : "none"}
         />
     </FormControl>

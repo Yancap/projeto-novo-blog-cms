@@ -8,7 +8,11 @@ interface CreditsInputForm {
     link: string;
 }
 
-export const CreditsForms = () => {
+interface CreditsFormsProps {
+    setValue: any
+}
+
+export const CreditsForms = ({setValue}: CreditsFormsProps) => {
   const [ credits, setCredits ] = useState<CreditsInputForm[]>([
     {name: "", link: ""}
   ])
@@ -27,10 +31,12 @@ export const CreditsForms = () => {
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
                 borderRadius="0" color="purple.300" px="1" 
-                onChange={({currentTarget}) => {
+                onBlur={({currentTarget}) => {
                     setCredits(credits => ({...credits, 
                         [add]: { name: currentTarget.value, link: credits[add]?.link ?? ''}}
                     ))
+                    setValue('credits',  credits )
+                    
                 }}
                 />
                 </Flex>
@@ -47,6 +53,7 @@ export const CreditsForms = () => {
                     setCredits(credits => ({...credits, 
                         [add]: { name: credits[add]?.name ?? '', link: currentTarget.value}}
                     ))
+                    setValue('credits',  credits)
                 }}
                 />
                 </Flex>

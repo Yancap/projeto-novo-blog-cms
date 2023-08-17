@@ -33,12 +33,13 @@ export interface FormCreateArticles{
 
 export default function Create({}) {
   
-  
-  const { register, handleSubmit } = useForm<FormCreateArticles>()
+  const shouldRenderClientSide = process.browser;
+  const { register, handleSubmit, formState, setValue   } = useForm<FormCreateArticles>()
   const handleSignIn: SubmitHandler<FormCreateArticles> = (value, event) =>{
     console.log(value);
   }
-
+  console.log("att");
+  
   return (
     <>
       <Head>
@@ -61,11 +62,11 @@ export default function Create({}) {
             <Stack spacing="4" >
                   <TitleForms register={register}/>
                   <SubtitleForms register={register}/>
-                  <ImageForms />
-                  <TextForms />
-                  <CategoryForms />
-                  <TagsForms />
-                  <CreditsForms />
+                  <ImageForms setValue={setValue}/>
+                  <TextForms setValue={setValue}/>
+                  <CategoryForms setValue={setValue}/>
+                  <TagsForms setValue={setValue}/>
+                  <CreditsForms setValue={setValue}/>
             </Stack>
           </Stack>
           

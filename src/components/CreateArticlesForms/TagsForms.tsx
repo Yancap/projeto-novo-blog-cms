@@ -7,8 +7,12 @@ interface TagsInputForm {
     tag: string;
 }
 
-export const TagsForms = () => {
-  const [ credits, setCredits ] = useState<TagsInputForm[]>([
+interface TagsFormsProps {
+    setValue: any
+}
+
+export const TagsForms = ({setValue}: TagsFormsProps) => {
+  const [ tags, setTags ] = useState<TagsInputForm[]>([
     {tag: ""}
   ])
 
@@ -27,9 +31,10 @@ export const TagsForms = () => {
                     <Input type="text" name="tag" variant="unstyled"
                     borderRadius="0" color="purple.300" px="1"
                     onChange={({currentTarget}) => {
-                        setCredits(credits => ({...credits, 
+                        setTags(tags => ({...tags, 
                             [add]: { tag: currentTarget.value}}
                         ))
+                        setValue('tags', tags)
                     }}
                     />
                 </Flex>

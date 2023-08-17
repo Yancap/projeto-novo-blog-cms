@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import {  FormControl, FormLabel,  Input, Text, Icon } from "@chakra-ui/react";
 import { RiAddCircleLine } from "react-icons/ri";
+import { UseFormRegister } from "react-hook-form";
+import { FormCreateArticles } from '@/pages/create/index';
 
-export const ImageForms = () => {
-  const [image, setimage] = useState<string | ArrayBuffer | null>('')
-  console.log(image);
+interface ImageFormsProps {
+    setValue: any;
+  }
+
+export const ImageForms = ({ setValue }: ImageFormsProps) => {
   
   return (
     <FormControl >
@@ -13,11 +17,12 @@ export const ImageForms = () => {
             variant="filled" h="360px" w="full" borderRadius="8" bgColor='gray.800' 
             _hover={{bgColor: 'gray.800'}}
         >
-            <Input id="image" name="image" type="file" display="none" 
+            <Input id="image" name="image" type="file" display="none"
             onChange={(event)=>{
                     let reader = new FileReader();
                     reader.onload = () => {
-                        setimage(reader.result)
+                        setValue('image', reader.result)
+                        
                     }
                     if(event.target.files) {
                         reader.readAsDataURL(event.target.files[0]);
