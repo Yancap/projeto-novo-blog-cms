@@ -1,0 +1,69 @@
+
+
+.jodit-container {
+    border-radius: .5rem !important;
+    overflow: hidden;
+    border: none !important;
+    background-color: #1E2027 !important;
+}
+
+.jodit-container * {
+    border: none !important;
+}
+
+.jodit-toolbar__box{
+    background: #4A4E5D !important;
+}
+
+.jodit-toolbar__box svg {
+    fill: #D0DAFA;
+}
+
+.jodit-ui-group_separated_true:not(:last-child):not(.jodit-ui-group_before-spacer_true):after {
+    border-left: 0;
+    border-right: none !important; 
+    content: "";
+    cursor: default;
+    margin: 2px;
+    padding: 0;
+}
+.jodit-toolbar-editor-collection_mode_horizontal:after {
+    background-color: #fff;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 0; 
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.jodit-toolbar-button button:hover {
+    background: #404451 !important;
+}
+
+.jodit-dialog__header, .jodit-dialog__content {
+    background: #1E2027 !important;
+}
+.jodit-dialog__header-toolbar svg{
+    fill: #AEB8D6;
+}
+.jodit-toolbar-button__button[aria-pressed=true]:not([disabled]) {
+    background: #404451 !important;
+    outline: 0;
+}
+.jodit-workplace {
+    background-color: #1E2027 !important;
+}
+.jodit-status-bar {
+    background-color: #1E2027 !important;
+}
+
+.jodit-status-bar span, .jodit-status-bar a {
+    color: #D0DAFA !important;   
+}
+
+.jodit-status-bar a {
+    color: #D0DAFA !important;  
+    font-size: 8px; 
+}
