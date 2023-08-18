@@ -10,6 +10,7 @@ import { ImageForms } from "@/components/CreateArticlesForms/ImageForms";
 import { SubtitleForms } from "@/components/CreateArticlesForms/SubtitleForms";
 import { TitleForms } from "@/components/CreateArticlesForms/TitleForms";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useQuery } from "react-query";
 
 interface Tags {
   tag: string;
@@ -32,9 +33,8 @@ export interface FormCreateArticles{
 
 
 export default function Create({}) {
-  
-  const shouldRenderClientSide = process.browser;
-  const { register, handleSubmit, formState, setValue   } = useForm<FormCreateArticles>()
+ 
+  const { register, handleSubmit, setValue   } = useForm<FormCreateArticles>()
   const handleSignIn: SubmitHandler<FormCreateArticles> = (value, event) =>{
     console.log(value);
   }

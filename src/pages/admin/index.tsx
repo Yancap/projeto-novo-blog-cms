@@ -27,17 +27,22 @@ interface AdminProps {
 
 export default function Admin({}: AdminProps) {
   const { data, isLoading, error } = useQuery('articles', async () => {
-    const response = await fetch("http://localhost:3000/api/articles")
-    const data = await response.json()
-    const published: Article[] = data.articles
+    const articles = await fetch("http://localhost:3000/api/articles")
+    const authors = await fetch("http://localhost:3000/api/authors")
+
+    const authorsJson = await authors.json()
+    const articlesJson = await articles.json()
+    console.log(authorsJson);
+    
+    const published: Article[] = articlesJson.articles
     .filter((article: Article) => article.state === "active")
 
-    const disabled: Article[] = data.articles
+    const disabled: Article[] = articlesJson.articles
     .filter((article: Article) => article.state === "inactive")
 
-    const drafts: Article[] = data.articles
+    const drafts: Article[] = articlesJson.articles
     .filter((article: Article) => article.state === "draft")
-    return {published, disabled, drafts}
+    return {published, disabled, drafts, articles: articlesJson.articles}
 })
     
     
@@ -58,7 +63,7 @@ export default function Admin({}: AdminProps) {
             navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
             navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
             navigation === "authors" ? <Authors/>  : 
-            navigation === "articles" ? <Articles /> : null
+            navigation === "articles" ? <Articles articles={data?.articles} isLoading={isLoading} error={error}/> : null
             }
         </Main>
       </>

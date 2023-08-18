@@ -4,7 +4,8 @@ no YG.News
 
 - [x] Fazer cada componente de formulário da pagina de criação de artigo
 - [x] Fazer o editor de texto e pesquisar na internet como fzr
-- [] implementar o React Hook Forms
+- [x] implementar o React Hook Forms
+- [] Realizar o Mock de dados dos autores e comentários
 
 
 - [-] Usar o MirageJS para criar dados fakes para a página

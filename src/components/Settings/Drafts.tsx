@@ -34,7 +34,7 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
                     Criar novo
                 </Button>
             </Flex>
-        { !articles ? 
+        { !isLoading ? 
         <Flex justify='center'>
             <Spinner />
         </Flex>
