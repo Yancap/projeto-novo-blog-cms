@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { Admin } from "@/components/Admin";
-import {  Avatar, Box, Button,  Flex, Heading, Icon, Text } from "@chakra-ui/react";
+import {  Avatar, Box, Button,  Flex, Heading, Icon, Spinner, Text } from "@chakra-ui/react";
 import { Table } from "@/components/Table";
 import { Thead } from "@/components/Table/Thead";
 import { Tr } from "@/components/Table/Tr";
@@ -9,7 +8,7 @@ import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Authors } from "@/pages/admin/index";
 
 interface AuthorsProps {
@@ -19,6 +18,8 @@ interface AuthorsProps {
 }
 
 const Authors = ({authors, isLoading, error}: AuthorsProps) => {
+    const [page, setPage ] = useState(1)
+    const maxPages = (authors) ? Number((authors.length / 10).toFixed())  : 0
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
@@ -31,58 +32,78 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                     <Icon as={RiFilter3Fill} fontSize="lg" ml="1"/>
                 </Button>
             </Flex>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th>
-                            Autor
-                        </Th>
-                        <Th>Quantidade de artigos</Th>
-                        <Th></Th>
-                        <Th></Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    <Tr>
-                        <Td minW="18rem">
-                            <Flex gap="4" align="center">
-                                {null ? 
-                                <Avatar size='md' name='Yan Gabriel' src=''/>
-                                : 
-                                <Avatar bg="transparent" color="purple.700" fill="purple.700" border="2px" />
-                                }
-                                <Box display={{base: "none",sm: "block"}}>
-                                    <Text>
-                                        Yan Gabriel Ferreira
-                                    </Text>
-                                    <Text fontSize='xs' color="purple.300">
-                                        yan@email.com
-                                    </Text>
-                                </Box>
-                                
-                            </Flex>
-                        </Td>
-                        <Td minW="14rem">
-                            <Text fontSize="sm" color="gray.300">12 Artigos</Text>
-                        </Td>
-                        <Td maxW="7.5rem">
-                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
-                                <Icon as={RiMessage3Line} fontSize="md" mr="1"/>
-                                Mensagem
-                            </Button>
-                        </Td>
-                        <Td>
-                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                                <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
-                                Excluir
-                            </Button>
-                        </Td>
-                    </Tr>
-                </Tbody>
-            </Table>
-            <Flex as="footer">
-                <Pagination />
+            { isLoading ? 
+            <Flex justify='center'>
+                <Spinner />
             </Flex>
+                : error ? 
+            <Flex>
+                <Text> Falha ao buscar os dados </Text>
+            </Flex> :
+            <>
+                <Table>
+                    <Thead>
+                    
+                        <Tr>
+                            <Th>
+                                Autor
+                            </Th>
+                            <Th>Quantidade de artigos</Th>
+                            <Th></Th>
+                            <Th></Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                    {authors && authors.slice((page - 1) * 10, page * 10)
+                    .map(author =>
+                        <Tr>
+                            <Td minW="18rem">
+                                <Flex gap="4" align="center">
+                                    {author.avatar ? 
+                                    <Avatar size='md' name='Yan Gabriel' src={author.avatar}/>
+                                    : 
+                                    <Avatar bg="gray.800" name={author.name} color="purple.700" fill="purple.700" border="2px" />
+                                    }
+                                    <Box display={{base: "none",sm: "block"}}>
+                                        <Text>
+                                            {author.name}
+                                        </Text>
+                                        <Text fontSize='xs' color="purple.300">
+                                            {author.email}
+                                        </Text>
+                                    </Box>
+                                    
+                                </Flex>
+                            </Td>
+                            <Td minW="14rem">
+                                <Text fontSize="sm" color="gray.300">
+                                    {author.all_articles === 0 ? "N/A" :
+                                    author.all_articles === 1 ? '1 Artigo' :
+                                    `${author.all_articles} Artigos`
+                                    }
+                                </Text>
+                            </Td>
+                            <Td maxW="7.5rem">
+                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
+                                    <Icon as={RiMessage3Line} fontSize="md" mr="1"/>
+                                    Mensagem
+                                </Button>
+                            </Td>
+                            <Td>
+                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                    <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
+                                    Excluir
+                                </Button>
+                            </Td>
+                        </Tr>
+                    )}
+                    </Tbody>
+                </Table>
+                <Flex as="footer">
+                    <Pagination page={page} setPage={setPage} maxPages={maxPages}/>
+                </Flex>
+            </>
+            }
       </>
     )
   }

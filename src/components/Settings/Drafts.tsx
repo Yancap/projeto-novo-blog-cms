@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Admin } from "@/components/Admin";
 import {  Button,  Flex, Heading, Icon, Text, Spinner } from "@chakra-ui/react";
 import { Table } from "@/components/Table";
 import { Thead } from "@/components/Table/Thead";
@@ -34,7 +33,7 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
                     Criar novo
                 </Button>
             </Flex>
-        { !isLoading ? 
+        { isLoading ? 
         <Flex justify='center'>
             <Spinner />
         </Flex>

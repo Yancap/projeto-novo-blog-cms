@@ -7,7 +7,7 @@ interface TextFormsProps {
   setValue: any
 }
 
-export const TextForms = ({setValue}: TextFormsProps) => {
+function TextForms({setValue}: TextFormsProps){
   const editor = useRef(null)
   const [clientRendered, setClientRendered] = useState(false);
   
@@ -33,10 +33,12 @@ export const TextForms = ({setValue}: TextFormsProps) => {
         <FormLabel htmlFor="text" fontSize={['md','lg']} fontWeight="medium">
             Texto
         </FormLabel>
-          <JoditEditor ref={editor} config={config} 
-          onBlur={(value) => {setValue('text',value);}} />
+          <JoditEditor ref={editor} config={config} value=''
+          onBlur={(value) => {setValue('text', value);}} />
       </>
       }
     </FormControl>
   )
 }
+
+export default TextForms

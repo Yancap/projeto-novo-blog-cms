@@ -26,7 +26,22 @@ export interface Authors {
   name: string;
   email: string;
   avatar: string | null | undefined;
-  
+  all_articles: number;
+}
+type Comments = {
+  id: string;
+  text: string;
+  created_at: string;
+  user_name: string;
+}
+
+export interface ArticleComments {
+  comments: Comments[],
+  article: {
+      slug: string;
+      title: string;
+      category: string;
+  }
 }
 
 interface AdminProps {
@@ -35,26 +50,37 @@ interface AdminProps {
 
 export default function Admin({}: AdminProps) {
   const { data, isLoading, error } = useQuery('articles', async () => {
-    const articles = await fetch("http://localhost:3000/api/articles")
-    const authors = await fetch("http://localhost:3000/api/authors")
-
-    const authorsJson = await authors.json()
-    const articlesJson = await articles.json()
-    console.log(authorsJson);
     
-    const published: Article[] = articlesJson.articles
+    const [articlesResponse, authorsResponse, commentsResponse] = await Promise.all([
+      fetch("http://localhost:3000/api/articles"),
+      fetch("http://localhost:3000/api/authors"),
+      fetch("http://localhost:3000/api/comments")
+    ])
+
+    const [{articles}, authors, comments] = await Promise.all([
+      articlesResponse.json(),
+      authorsResponse.json(),
+      commentsResponse.json()
+    ])
+
+    const published: Article[] = articles
     .filter((article: Article) => article.state === "active")
 
-    const disabled: Article[] = articlesJson.articles
+    const disabled: Article[] = articles
     .filter((article: Article) => article.state === "inactive")
 
-    const drafts: Article[] = articlesJson.articles
+    const drafts: Article[] = articles
     .filter((article: Article) => article.state === "draft")
-    return {published, disabled, drafts, articles: articlesJson.articles, authors: authorsJson}
+
+    return {
+      published, disabled, drafts, 
+      articles, authors, comments
+    }
 })
     
     
-    
+  console.log(data?.comments);
+  
   const { navigation } = useManagement()
 
     return (
@@ -70,7 +96,7 @@ export default function Admin({}: AdminProps) {
             navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
             navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
             navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
-            navigation === "comments" ? <Comments/>  : 
+            navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/>  : 
             navigation === "authors" ? <Authors authors={data?.authors} isLoading={isLoading} error={error}/>  : 
             navigation === "articles" ? <Articles articles={data?.articles} isLoading={isLoading} error={error}/> : null
             }
