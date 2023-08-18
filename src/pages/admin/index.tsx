@@ -49,6 +49,7 @@ interface AdminProps {
 }
 
 export default function Admin({}: AdminProps) {
+
   const { data, isLoading, error } = useQuery('articles', async () => {
     
     const [articlesResponse, authorsResponse, commentsResponse] = await Promise.all([
@@ -76,7 +77,7 @@ export default function Admin({}: AdminProps) {
       published, disabled, drafts, 
       articles, authors, comments
     }
-})
+  })
     
     
   console.log(data?.comments);

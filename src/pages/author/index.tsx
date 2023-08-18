@@ -13,17 +13,29 @@ import { Main } from "@/components/Main";
 
 export default function Author() {
   const { data, isLoading, error } = useQuery('articles', async () => {
-      const response = await fetch("http://localhost:3000/api/articles")
-      const data = await response.json()
-      const published: Article[] = data.articles
-      .filter((article: Article) => article.state === "active")
+    
+    const [articlesResponse, commentsResponse] = await Promise.all([
+      fetch("http://localhost:3000/api/articles"),
+      fetch("http://localhost:3000/api/comments")
+    ])
 
-      const disabled: Article[] = data.articles
-      .filter((article: Article) => article.state === "inactive")
+    const [{articles}, comments] = await Promise.all([
+      articlesResponse.json(),
+      commentsResponse.json()
+    ])
 
-      const drafts: Article[] = data.articles
-      .filter((article: Article) => article.state === "draft")
-      return {published, disabled, drafts}
+    const published: Article[] = articles
+    .filter((article: Article) => article.state === "active")
+
+    const disabled: Article[] = articles
+    .filter((article: Article) => article.state === "inactive")
+
+    const drafts: Article[] = articles
+    .filter((article: Article) => article.state === "draft")
+
+    return {
+      published, disabled, drafts, comments
+    }
   })
 
   const { navigation } = useManagement()
@@ -40,7 +52,7 @@ export default function Author() {
           navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
           navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
           navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
-          navigation === "comments" ? <Comments/> : null
+          navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/> : null
       }
       </Main>
     </>
