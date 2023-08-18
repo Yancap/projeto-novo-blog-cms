@@ -14,7 +14,7 @@ interface AdminProps {
     children: ReactNode
 }
 
-export const Main = ({children, aside=true}: AdminProps) => {
+export const Main = ({children, aside=true, ...props}: AdminProps) => {
 
 
   const {hierarchy} = useManagement()
@@ -47,7 +47,7 @@ export const Main = ({children, aside=true}: AdminProps) => {
                 </Aside>
                 }
                 <Stack as="section" borderRadius={12} w={{base:"100%"}}
-                px="8" py="8" bg="gray.900" spacing='6' maxW="100%" >
+                px="8" py="8" bg="gray.900" spacing='6' maxW="100%" {...props}>
                     {children}
                 </Stack>
             </Container>

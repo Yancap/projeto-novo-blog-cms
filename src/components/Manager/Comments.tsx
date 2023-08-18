@@ -10,6 +10,8 @@ import { Pagination } from "@/components/Pagination";
 import { RiEyeLine } from "react-icons/ri";
 import { memo, useState } from "react";
 import { ArticleComments } from "@/pages/admin";
+import Link from "../../../node_modules/next/link";
+import { useRouter } from "../../../node_modules/next/router";
 
 interface CommentsProps {
     comments: ArticleComments[] | undefined;
@@ -18,6 +20,9 @@ interface CommentsProps {
 }
 
 const Comments = ({comments, isLoading, error}: CommentsProps) => {
+    const {query} = useRouter()
+    console.log(query);
+    
     const [page, setPage ] = useState(1)
     const maxPages = (comments) ? Number((comments.length / 10).toFixed())  : 0
     return (
@@ -65,10 +70,12 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                                 }</Text>
                             </Td>
                             <Td>
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                                <Icon as={RiEyeLine} fontSize="xs" mr="1"/>
-                                    Vizualizar
-                                </Button>
+                                <Link href={`comments/${data.article.slug}`}>
+                                    <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                    <Icon as={RiEyeLine} fontSize="xs" mr="1"/>
+                                        Vizualizar
+                                    </Button>
+                                </Link>
                             </Td>
                         </Tr>
                     )}

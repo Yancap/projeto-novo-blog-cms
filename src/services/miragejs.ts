@@ -112,7 +112,7 @@ export function makeServer(){
             comment: Factory.extend({
                 comments(i: number) {
                     const comments = []
-                    for(let index = 0; index < (i*3); index++){
+                    for(let index = 0; index < (i*4); index++){
                         const dataIni = new Date(2023, 0, 1);
                         const dataAtual = new Date();
                         const data = new Date(dataIni.getTime() + Math.random() * 
@@ -166,7 +166,14 @@ export function makeServer(){
             this.get('/comments', (schema) => {
                 return schema.db._collections[3]._records
             })
-
+            this.get('/comments/:slug', (schema, request) => {
+                let slug = request.params.slug
+                const [comments] = schema.db._collections[3]._records.filter((comment: ArticlesComments) => 
+                    comment.article.slug === slug
+                )
+                
+                return comments
+            })
             this.namespace = ''
             this.passthrough()
         }

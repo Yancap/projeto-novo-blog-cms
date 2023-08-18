@@ -79,8 +79,6 @@ export default function Admin({}: AdminProps) {
     }
   })
     
-    
-  console.log(data?.comments);
   
   const { navigation } = useManagement()
 

@@ -56,7 +56,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                     <Tbody>
                     {authors && authors.slice((page - 1) * 10, page * 10)
                     .map(author =>
-                        <Tr>
+                        <Tr key={author.id}>
                             <Td minW="18rem">
                                 <Flex gap="4" align="center">
                                     {author.avatar ? 
