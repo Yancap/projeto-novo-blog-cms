@@ -69,7 +69,7 @@ export default function Comments() {
                     </Heading>
                     <Stack borderRadius="4" bg="gray.800">
                         <Flex>
-                            asd
+                            add
                         </Flex>
                     </Stack>
                 </Stack>
