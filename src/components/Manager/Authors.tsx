@@ -10,8 +10,15 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
 import { memo } from "react";
+import { Authors } from "@/pages/admin/index";
 
-const Authors = () => {
+interface AuthorsProps {
+    authors: Authors[] | undefined;
+    isLoading: boolean;
+    error: unknown;
+}
+
+const Authors = ({authors, isLoading, error}: AuthorsProps) => {
     return (
       <>
             <Flex as="header" align="center" justify="space-between">

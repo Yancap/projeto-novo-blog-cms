@@ -8,6 +8,7 @@ import Authors from "@/components/Manager/Authors";
 import { GetServerSideProps } from "next";
 import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
+import Comments from "@/components/Manager/Comments";
 
 export interface Article {
   id: string;
@@ -18,6 +19,13 @@ export interface Article {
   author: string;
   created_at: string;
   state: string;
+  
+}
+export interface Authors {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string | null | undefined;
   
 }
 
@@ -42,7 +50,7 @@ export default function Admin({}: AdminProps) {
 
     const drafts: Article[] = articlesJson.articles
     .filter((article: Article) => article.state === "draft")
-    return {published, disabled, drafts, articles: articlesJson.articles}
+    return {published, disabled, drafts, articles: articlesJson.articles, authors: authorsJson}
 })
     
     
@@ -62,7 +70,8 @@ export default function Admin({}: AdminProps) {
             navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
             navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
             navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
-            navigation === "authors" ? <Authors/>  : 
+            navigation === "comments" ? <Comments/>  : 
+            navigation === "authors" ? <Authors authors={data?.authors} isLoading={isLoading} error={error}/>  : 
             navigation === "articles" ? <Articles articles={data?.articles} isLoading={isLoading} error={error}/> : null
             }
         </Main>
