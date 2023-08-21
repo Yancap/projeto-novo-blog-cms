@@ -11,6 +11,7 @@ import { RiDeleteBin6Line, RiEdit2Line, RiFilter3Fill } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
 import { memo, useState } from "react";
 import { Article } from "@/pages/admin/index";
+import { Filter } from "../Filter";
 
 interface ArticlesProps {
     articles: Article[] | undefined;
@@ -83,6 +84,7 @@ const Articles = ({articles, isLoading, error}: ArticlesProps) => {
                 </Flex>
             </>
         }
+        <Filter />
       </>
     )
   }
