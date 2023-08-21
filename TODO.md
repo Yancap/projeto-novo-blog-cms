@@ -6,6 +6,7 @@ no YG.News
 - [x] Fazer o editor de texto e pesquisar na internet como fzr
 - [x] implementar o React Hook Forms
 - [X] Realizar o Mock de dados dos autores e comentários
-- [] Fazer a página de comentários
+- [x] Fazer a página de comentários
+- [] Fazer o Filter
 
 - [-] Usar o MirageJS para criar dados fakes para a página
