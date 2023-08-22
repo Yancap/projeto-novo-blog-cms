@@ -84,6 +84,8 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                 if(articles) {
                     setsArticles = articles
                     const keys = Object.keys(filter).map( key => key.split('_'))
+                    console.log(filter);
+                    
                     keys.forEach(key => {
                         if(key[0] === "filter") {
                             setsArticles = setsArticles.filter( article => {
@@ -93,10 +95,44 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                                 if (key[1] === "author"){
                                     return article.author === filter.filter_author
                                 }
+                                if (key[1] === "publication"){
+                                    const articleDate = new Date(article.created_at)
+                                    const articleYear = articleDate.getFullYear()
+                                    const articleMonth = articleDate.getMonth()
+                                    const articleDay = articleDate.getDate()
+                                    const now = new Date()
+                                    if (filter["filter_publication"] === "last-week") {
+                                        return now.getFullYear() - articleYear === 0 &&
+                                        now.getMonth() - articleMonth === 0 &&
+                                        now.getDate() - articleDay <= 7
+                                    } else if (filter["filter_publication"] === "last-month") {
+                                        return now.getFullYear() - articleYear === 0 &&
+                                        now.getMonth() - articleMonth === 0
+                                    } else if (filter["filter_publication"] === "last-year") {
+                                        return now.getFullYear() - articleYear === 0 
+                                    }
+                                }
                             })
                         } 
-                        if (key[0] === "order") {
-
+                        if (key[0] === 'order') {
+                            
+                            if(filter["order"] === "data") {
+                                setsArticles = setsArticles.sort((a, b) =>  new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())
+                            }
+                            if(filter["order"] === "title") {
+                                setsArticles = setsArticles.sort((a, b) =>  {
+                                    let x = a.title.toLowerCase(),
+                                    y = b.title.toLowerCase()
+                                    return x == y ? 0 : x > y ? 1 : -1
+                                })
+                            }
+                            if(filter["order"] === "authors") {
+                                setsArticles = setsArticles.sort((a, b) =>  {
+                                    let x = a.author.toLowerCase(),
+                                    y = b.author.toLowerCase()
+                                    return x == y ? 0 : x > y ? 1 : -1
+                                })
+                            }
                         }
                     })  
                 }
@@ -104,7 +140,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
             })
         }
     }, [filter])
-
+    
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
@@ -151,7 +187,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                                 <Text fontSize="sm" color="gray.300">{article.author}</Text>
                             </Td>
                             <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">{article.created_at}</Text>
+                                <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
                                 <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
@@ -205,7 +241,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
             <FilterHeader>
                 Ordenação
             </FilterHeader>
-            <FilterContent value='order_by' setFilter={setFilter}>
+            <FilterContent value='order' setFilter={setFilter}>
                 <Box >
                     <Checkbox id="data" value='data' name='order'>
                         Data de publicação

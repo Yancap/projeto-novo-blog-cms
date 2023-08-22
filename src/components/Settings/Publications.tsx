@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Admin } from "@/components/Admin";
 import {  Button,  Flex, Heading, Icon, Spinner, Text } from "@chakra-ui/react";
 import { Table } from "@/components/Table";
 import { Thead } from "@/components/Table/Thead";
@@ -71,7 +70,7 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                                 <Text fontSize="sm" color="gray.300">{article.category}</Text>
                             </Td>
                             <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">{article.created_at}</Text>
+                                <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
                                 <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">

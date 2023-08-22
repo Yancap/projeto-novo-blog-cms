@@ -81,7 +81,8 @@ export function makeServer(){
                     const dataIni = new Date(2023, 0, 1);
                     const dataAtual = new Date();
                     const data = new Date(dataIni.getTime() + Math.random() * (dataAtual.getTime() - dataIni.getTime()))
-                    return `${data.getDay() <= 10 ? "0"+data.getDay() : data.getDay()}/${data.getMonth() <= 10 ? "0"+data.getMonth() : data.getMonth()}/${data.getFullYear()}`;                
+                    //data.toDateString()
+                    return data;                
                 },
             }),
             category: Factory.extend({

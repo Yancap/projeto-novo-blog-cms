@@ -62,7 +62,7 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
                                 <Text fontSize="sm" color="gray.300">{article.category}</Text>
                             </Td>
                             <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">{article.created_at}</Text>
+                                <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td>
                                 <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="green">

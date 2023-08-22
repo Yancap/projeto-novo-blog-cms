@@ -6,6 +6,8 @@ import { Checkbox } from './Checkbox'
 export interface FilterState {
   filter_category?: string
   filter_author?: string
+  filter_publication?: string;
+  order?: string;
 }
 
 interface FilterContentProps {
@@ -22,7 +24,7 @@ export const FilterContent = ({value, children, setFilter}:FilterContentProps) =
     onChange={(content: string) => 
     setFilter(filter => ({ ...filter, [value]: content}))}
     >
-        <Flex justify="space-between" flexWrap="wrap" gap="4">
+        <Flex align="start" justify="space-between" flexWrap="wrap" gap="1">
           
            {children} 
         </Flex>
