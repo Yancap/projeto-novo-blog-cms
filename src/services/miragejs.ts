@@ -49,10 +49,10 @@ export function makeServer(){
         factories: {
             article: Factory.extend({
                 title(i: number) {
-                    return `Titulo do artigo sobre front end e suas tecnologias ${i + 1}`
+                    return `Titulo do artigo sobre ${ i % 2 === 0 ? 'front end' : 'back end'} e suas tecnologias ${i + 1}`
                 },
                 subtitle(i: number) {
-                    return `subtitulo sobre front-end ${i + 1}`
+                    return `subtitulo sobre ${ i % 2 === 0 ? 'front end' : 'back end'} ${i + 1}`
                 },
                 text() {
                     return `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -66,11 +66,13 @@ export function makeServer(){
                     Maecenas nibh libero, semper fermentum accumsan at, pellentesque at mauris. 
                     Quisque egestas risus ut feugiat convallis.`
                 },
-                category() {
-                    return "Front-end"
+                category(i: number) {
+                    const categories = [ "front-end", "back-end"]
+                    return categories[(i % 2)]
                 },
-                author() {
-                    return "Yan Gabriel Ferreira"
+                author(i: number) {
+                    const authors = [ "Yan Gabriel Ferreira", 'Pedro Car']
+                    return i % 3 === 0 ? authors[1] : authors[0] 
                 },
                 state(i: number) {
                     return i % 3 === 0 ? "draft" : i % 2 === 0 ? "active" : "inactive"
@@ -96,7 +98,7 @@ export function makeServer(){
                     return `category-${i + 1}`
                 },
                 name(i: number) {
-                    const names = ['Yan Gabriel', 'Marcus Vinycius', 
+                    const names = ['Yan Gabriel Ferreira', 'Marcus Vinycius', 
                     'Daiana Chargas', 'Dolly Santos', 'Pedro Car']
                     return names[i]
                 },

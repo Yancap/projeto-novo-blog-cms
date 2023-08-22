@@ -13,7 +13,7 @@ import { memo, useEffect, useState } from "react";
 import { Article, Authors } from "@/pages/admin/index";
 import { Filter } from "../Filter";
 import { FilterHeader } from "../Filter/FilterHeader";
-import { FilterContent } from "../Filter/FilterContent";
+import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Checkbox } from "../Filter/Checkbox";
 import { Category } from "@/pages/create/_interfaces";
 
@@ -25,23 +25,19 @@ interface ArticlesProps {
     error: unknown;
 }
 
-interface FilterState {
-    category?: string
-    author?: string
-}
 
 const Articles = ({articles, authors, categories, isLoading, error}: ArticlesProps) => {
-    const [page, setPage ] = useState(1)
-    const maxPages = (articles) ? Number((articles.length / 10).toFixed()) : 0
-
+    
     const [articlesState, setArticlesState] = useState(articles)
     const [modalFilter, setModalFilter] = useState(false)
+
+    const [page, setPage ] = useState(1)
+    const maxPages = (articlesState) ? Number((articlesState.length / 10).toFixed()) : 0
 
     const authorsFilterContainer: JSX.Element[] =  [] as JSX.Element[]
     const categoriesFilterContainer: JSX.Element[] =  [] as JSX.Element[]
 
-    const [filter, setFilter] = useState<FilterState>({} as FilterState)
-    console.log(filter);
+    const [filter, setFilter] = useState<FilterState | null>(null)
     
     if(authors) {
         for(let i = 1; i <= authors.length; i += 2){
@@ -64,11 +60,11 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
         for(let i = 1; i <= categories.length; i += 2){
             categoriesFilterContainer.push(
                 <Box key={categories[i-1].id}>
-                    <Checkbox id={categories[i-1].id} value={categories[i-1].category} name='author'>
+                    <Checkbox id={categories[i-1].id} value={categories[i-1].category} name='category'>
                         {categories[i-1].category}
                     </Checkbox>
                     { categories[i] && 
-                    <Checkbox id={categories[i].id} value={categories[i].category} name='author'>
+                    <Checkbox id={categories[i].id} value={categories[i].category} name='category'>
                         {categories[i].category}
                     </Checkbox>
                     }
@@ -77,9 +73,36 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
             
         }
     }
-
+    
     useEffect(() => {
-        //const aux = articlesState?.filter(article => article.)
+        if(!filter) {
+            setArticlesState(articles)
+        }
+        if(articlesState && filter){
+            return setArticlesState(() => {
+                let setsArticles: Article[] = []
+                if(articles) {
+                    setsArticles = articles
+                    const keys = Object.keys(filter).map( key => key.split('_'))
+                    keys.forEach(key => {
+                        if(key[0] === "filter") {
+                            setsArticles = setsArticles.filter( article => {
+                                if (key[1] === "category") {
+                                    return article.category === filter.filter_category
+                                } 
+                                if (key[1] === "author"){
+                                    return article.author === filter.filter_author
+                                }
+                            })
+                        } 
+                        if (key[0] === "order") {
+
+                        }
+                    })  
+                }
+                return setsArticles
+            })
+        }
     }, [filter])
 
     return (
@@ -145,35 +168,35 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                 </Flex>
             </>
             }
-        <Filter active={modalFilter} setActive={setModalFilter} >
+        <Filter active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
             <FilterHeader>
                 Autores
             </FilterHeader>
-            <FilterContent value='author' setFilter={setFilter}>
+            <FilterContent value='filter_author' setFilter={setFilter}>
                 {authorsFilterContainer}
             </FilterContent>
 
             <FilterHeader>
                 Categoria
             </FilterHeader>
-            <FilterContent value='category' setFilter={setFilter}>
+            <FilterContent value='filter_category' setFilter={setFilter}>
                 {categoriesFilterContainer}
             </FilterContent>
 
             <FilterHeader>
                 Data publicação
             </FilterHeader>
-            <FilterContent value='publication' setFilter={setFilter}>
+            <FilterContent value='filter_publication' setFilter={setFilter}>
                 <Box >
-                    <Checkbox id="last-week" value='last-week' name='category'>
+                    <Checkbox id="last-week" value='last-week' name='publication'>
                         Ultima semana
                     </Checkbox>
-                    <Checkbox id="last-month" value='last-month' name='category'>
+                    <Checkbox id="last-month" value='last-month' name='publication'>
                         Ultima mês
                     </Checkbox>
                 </Box>
                 <Box flexGrow="1">
-                    <Checkbox id="last-year" value='last-year' name='category'>
+                    <Checkbox id="last-year" value='last-year' name='publication'>
                         Ultima ano
                     </Checkbox>
                 </Box>
@@ -182,17 +205,17 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
             <FilterHeader>
                 Ordenação
             </FilterHeader>
-            <FilterContent value='order'>
+            <FilterContent value='order_by' setFilter={setFilter}>
                 <Box >
-                    <Checkbox id="data" value='data' name='category'>
+                    <Checkbox id="data" value='data' name='order'>
                         Data de publicação
                     </Checkbox>
-                    <Checkbox id="title" value='title' name='category'>
+                    <Checkbox id="title" value='title' name='order'>
                         Titulo
                     </Checkbox>
                 </Box>
                 <Box flexGrow="1">
-                    <Checkbox id="authors" value='authors' name='category'>
+                    <Checkbox id="authors" value='authors' name='order'>
                         Autores
                     </Checkbox>
                 </Box>
