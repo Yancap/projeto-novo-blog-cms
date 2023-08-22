@@ -7,6 +7,7 @@ no YG.News
 - [x] implementar o React Hook Forms
 - [X] Realizar o Mock de dados dos autores e comentários
 - [x] Fazer a página de comentários
-- [] Fazer o Filter
+- [x] Fazer o Filter
+- [] Filtrar
 
 - [-] Usar o MirageJS para criar dados fakes para a página

@@ -7,7 +7,7 @@ interface FilterHeaderProps {
 
 export const FilterHeader = ({children}: FilterHeaderProps) => {
   return (
-    <Box>
+    <Box pb="1">
         <Heading fontSize="lg">
             {children}
         </Heading>

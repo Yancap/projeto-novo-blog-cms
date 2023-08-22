@@ -21,7 +21,6 @@ interface CommentsProps {
 
 const Comments = ({comments, isLoading, error}: CommentsProps) => {
     const {query} = useRouter()
-    console.log(query);
     
     const [page, setPage ] = useState(1)
     const maxPages = (comments) ? Number((comments.length / 10).toFixed())  : 0

@@ -48,20 +48,27 @@ interface AdminProps {
   articles: Article[];
 }
 
+export interface Category {
+  id: string;
+  category: string;
+}
+
 export default function Admin({}: AdminProps) {
 
   const { data, isLoading, error } = useQuery('articles', async () => {
     
-    const [articlesResponse, authorsResponse, commentsResponse] = await Promise.all([
+    const [articlesResponse, authorsResponse, commentsResponse, categoriesResponse] = await Promise.all([
       fetch("http://localhost:3000/api/articles"),
       fetch("http://localhost:3000/api/authors"),
-      fetch("http://localhost:3000/api/comments")
+      fetch("http://localhost:3000/api/comments"),
+      fetch("http://localhost:3000/api/categories")
     ])
 
-    const [{articles}, authors, comments] = await Promise.all([
+    const [{articles}, authors, comments, categories] = await Promise.all([
       articlesResponse.json(),
       authorsResponse.json(),
-      commentsResponse.json()
+      commentsResponse.json(),
+      categoriesResponse.json()
     ])
 
     const published: Article[] = articles
@@ -75,7 +82,7 @@ export default function Admin({}: AdminProps) {
 
     return {
       published, disabled, drafts, 
-      articles, authors, comments
+      articles, authors, comments, categories
     }
   })
     
@@ -97,7 +104,7 @@ export default function Admin({}: AdminProps) {
             navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
             navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/>  : 
             navigation === "authors" ? <Authors authors={data?.authors} isLoading={isLoading} error={error}/>  : 
-            navigation === "articles" ? <Articles articles={data?.articles} isLoading={isLoading} error={error}/> : null
+            navigation === "articles" ? <Articles categories={data?.categories} authors={data?.authors} articles={data?.articles} isLoading={isLoading} error={error}/> : null
             }
         </Main>
       </>
