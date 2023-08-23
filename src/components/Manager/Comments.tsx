@@ -53,7 +53,7 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                     {comments && comments.slice((page - 1) * 10, page * 10)
                     .map(data =>
                         <Tr key={data.article.slug}>
-                            <Td maxW="18rem">
+                            <Td minW="14rem">
                                 <Heading fontSize="sm" fontFamily="Ubuntu" maxW="25ch">
                                     {data.article.title}
                                 </Heading>
@@ -61,7 +61,7 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                             <Td>
                                 <Text fontSize="sm" color="gray.300">{data.article.category}</Text>
                             </Td>
-                            <Td minW="8rem">
+                            <Td minW="10rem">
                                 <Text fontSize="sm" color="gray.300">{
                                     data.comments.length === 0 ? 'Sem comentários' :
                                     data.comments.length === 1 ? '1 Comentário' :

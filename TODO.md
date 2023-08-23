@@ -8,6 +8,6 @@ no YG.News
 - [X] Realizar o Mock de dados dos autores e comentários
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
-- [] Filtrar
+- [x] Filtrar
 
-- [-] Usar o MirageJS para criar dados fakes para a página
+- [x] Usar o MirageJS para criar dados fakes para a página
