@@ -8,8 +8,13 @@ import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Authors } from "@/pages/admin/index";
+import { FilterContent, FilterState } from "../Filter/FilterContent";
+import { Filter } from "../Filter/index";
+import { FilterHeader } from "../Filter/FilterHeader";
+import { Checkbox } from "../Filter/Checkbox";
+import { filterForAuthors } from "../Filter/services/filterForAuthors";
 
 interface AuthorsProps {
     authors: Authors[] | undefined;
@@ -20,6 +25,23 @@ interface AuthorsProps {
 const Authors = ({authors, isLoading, error}: AuthorsProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (authors) ? Number((authors.length / 10).toFixed())  : 0
+    const [modalFilter, setModalFilter] = useState(false)
+    const [filter, setFilter] = useState<FilterState | null>(null)
+    const [authorsState, setAuthorsState] = useState(authors)
+    const stack = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if(!filter) {
+            setAuthorsState(authors)
+        }
+        if(authorsState && filter && authors){
+            console.log(filter);
+            
+            return setAuthorsState(() => {
+                return filterForAuthors(filter, authors)
+            })
+        }
+    }, [filter])
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
@@ -27,7 +49,8 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                     Artigos totais
                 </Heading>
                 <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
-                fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}>
+                fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}
+                onClick={() => setModalFilter(true)}>
                     Filtrar
                     <Icon as={RiFilter3Fill} fontSize="lg" ml="1"/>
                 </Button>
@@ -54,7 +77,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                    {authors && authors.slice((page - 1) * 10, page * 10)
+                    {authorsState && authorsState.slice((page - 1) * 10, page * 10)
                     .map(author =>
                         <Tr key={author.id}>
                             <Td minW="18rem">
@@ -104,6 +127,23 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                 </Flex>
             </>
             }
+            <Filter stack={stack} active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
+            
+
+            <FilterHeader>
+                Ordenação
+            </FilterHeader>
+            <FilterContent  value='order' setFilter={setFilter}>
+                <Box >
+                    <Checkbox id="data" value='authors' name='order'>
+                        Autores
+                    </Checkbox>
+                    <Checkbox id="title" value='articles' name='order'>
+                        Quantidade de Artigos
+                    </Checkbox>
+                </Box>
+            </FilterContent>
+        </Filter>
       </>
     )
   }

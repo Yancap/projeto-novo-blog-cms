@@ -11,7 +11,7 @@ interface PaginationProps {
 export const Pagination = ({page, setPage, maxPages}: PaginationProps) => {
   let paginationButtons = []
   for(var i = 0; i < maxPages; i++) {
-    paginationButtons.push(<PaginationButton page={page} setPage={setPage} number={i+1}/>)
+    paginationButtons.push(<PaginationButton key={i+1} page={page} setPage={setPage} number={i+1}/>)
   }
   return (
     <Stack spacing="6"

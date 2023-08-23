@@ -1,16 +1,18 @@
+import { Article, Authors } from "@/pages/admin/index";
 import { FilterState } from "../FilterContent";
 
 
-export function filter<T>(filter: FilterState | null, object: T[]){
-    let setsObjects: T[] = []
-    if(object && filter) {
-        setsObjects = object
+
+export function filterForArticles(filter: FilterState | null, objects: Article[]  ){
+    let setsObjects = [] as Article[] 
+    if(objects && filter) {
+        setsObjects = objects
         const keys = Object.keys(filter).map( key => key.split('_'))
         
         keys.forEach(key => {
             if(key[0] === "filter") {
-                setsObjects = setsObjects.filter( article => {
-                    if (key[1] === "category" && object.includes("category")) {
+                setsObjects = setsObjects.filter( object => {
+                    if (key[1] === "category") {
                         return object.category === filter.filter_category
                     } 
                     if (key[1] === "author"){
@@ -35,7 +37,7 @@ export function filter<T>(filter: FilterState | null, object: T[]){
                     }
                 })
             } 
-            if (key[0] === 'order') {
+            if (key[0] === 'order' && 'created_at' in objects[0]) {
                 
                 if(filter["order"] === "data") {
                     setsObjects = setsObjects.sort((a, b) =>  new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())

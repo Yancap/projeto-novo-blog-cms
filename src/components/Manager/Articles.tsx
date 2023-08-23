@@ -8,14 +8,14 @@ import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiEdit2Line, RiFilter3Fill } from "react-icons/ri";
-import { PiPlusBold } from "react-icons/pi";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Article, Authors } from "@/pages/admin/index";
 import { Filter } from "../Filter";
 import { FilterHeader } from "../Filter/FilterHeader";
 import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Checkbox } from "../Filter/Checkbox";
 import { Category } from "@/pages/create/_interfaces";
+import { filterForArticles } from "../Filter/services/filterForArticles";
 
 interface ArticlesProps {
     articles: Article[] | undefined;
@@ -30,6 +30,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
     
     const [articlesState, setArticlesState] = useState(articles)
     const [modalFilter, setModalFilter] = useState(false)
+    const [filter, setFilter] = useState<FilterState | null>(null)
 
     const [page, setPage ] = useState(1)
     const maxPages = (articlesState) ? Number((articlesState.length / 10).toFixed()) : 0
@@ -37,7 +38,9 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
     const authorsFilterContainer: JSX.Element[] =  [] as JSX.Element[]
     const categoriesFilterContainer: JSX.Element[] =  [] as JSX.Element[]
 
-    const [filter, setFilter] = useState<FilterState | null>(null)
+    const form = useRef<HTMLFormElement>(null)
+    const stack = useRef<HTMLDivElement>(null)
+
     
     if(authors) {
         for(let i = 1; i <= authors.length; i += 2){
@@ -78,13 +81,14 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
         if(!filter) {
             setArticlesState(articles)
         }
-        if(articlesState && filter){
+        if(articlesState && filter && articles){
             return setArticlesState(() => {
+                return filterForArticles(filter, articles)
                 let setsArticles: Article[] = []
                 if(articles) {
                     setsArticles = articles
-                    const keys = Object.keys(filter).map( key => key.split('_'))
-                    console.log(filter);
+                    const keys = Object.keys(filter).map( key => key.split('_') )
+                    //console.log(filter);
                     
                     keys.forEach(key => {
                         if(key[0] === "filter") {
@@ -204,7 +208,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                 </Flex>
             </>
             }
-        <Filter active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
+        <Filter stack={stack} active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
             <FilterHeader>
                 Autores
             </FilterHeader>
