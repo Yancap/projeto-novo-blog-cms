@@ -27,9 +27,10 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
             <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
             }
         </Header>
-        <Flex as="main" overflow="hidden" 
-        align="center" justify="center" 
-        py={{base:"16", md:"12"}} maxW="100vw" px={{base: 4,sm: 8, md: 0}}>
+        <Flex as="main" overflow-x="hidden" pb={{base:"71px", md:"12"}}
+         align="start" justify="center" pt={{base:"4", md:"12"}} 
+         maxW="100vw" px={{base: 4,sm: 8, md: 0}}
+         position="relative" minH="100vh">
             <Container as="section" display="flex" gap="24" 
               justifyContent="space-between"  w="100%" 
               maxW={{lg: 1024,'2xl': 1124}}>
@@ -47,7 +48,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
                 </Aside>
                 }
                 <Stack as="section" borderRadius={12} w={{base:"100%"}}
-                px={["4", "8"]} py="8" bg="gray.900" spacing='6' maxW="100%" {...props}>
+                px={["4", "8"]} py="8" bg="gray.900" spacing='6'  maxW="100%" {...props}>
                     {children}
                 </Stack>
             </Container>

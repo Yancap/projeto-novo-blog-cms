@@ -1,4 +1,4 @@
-import { Box,  Button,  Flex, Icon, Stack} from '@chakra-ui/react'
+import { Box,  Button,  Flex, Icon, Stack, useRadio} from '@chakra-ui/react'
 import React, { Dispatch, RefObject, SetStateAction, useRef, useState } from 'react'
 import { RiCloseFill } from 'react-icons/ri'
 
@@ -7,26 +7,27 @@ interface FilterProps {
     active: boolean;
     setActive: Dispatch<SetStateAction<boolean>>
     setFilter: any;
-    stack: RefObject<HTMLDivElement>
 }
 
-export const Filter = ({children, active, setActive, setFilter,  stack}: FilterProps) => {
+export const Filter = ({children, active, setActive, setFilter }: FilterProps) => {
+  const stack = useRef<HTMLFormElement>(null)
+  
   
   return (
     <Flex bg="#27282B" borderRadius="8" transitionDuration=".5s" transition="all" 
-    position="absolute" right={active ? "0" : "-300px"}
-    w="460px" justifyContent="space-between" p="2" display={active ? "flex" : "none"}>
-        <Stack py="2" pl="2" flexGrow="1" ref={stack}>
+    position="absolute" right={"0px"}  pb={{base:"71px", md:"4"}} pt="2" px="2"
+    w={{base:"80vw", sm:"460px"}} justifyContent="space-between"  display={active ? "flex" : "none"}>
+        <Stack as="form" py="2" pl="2" flexGrow="1" ref={stack}>
             {children}
             <Button onClick={(event) => {
                 setFilter(null)
                 stack.current?.querySelectorAll("[data-checked]").forEach((item) => {
                     item.removeAttribute("data-checked")
-                })
-                stack.current?.querySelectorAll("form").forEach((form) => {
-                    console.log(form.name);
-                    
-                    form.reset()
+                    const input = item.querySelector("input")
+                    if (input) {
+                        input.checked = false
+                        console.log(input.checked);
+                    }
                 })
             }} colorScheme='purple'>
                 Limpar o filtro

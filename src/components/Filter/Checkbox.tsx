@@ -1,5 +1,5 @@
 import { ForwardRefRenderFunction, forwardRef } from 'react'
-import { FormControl, FormLabel, Radio, RadioProps} from '@chakra-ui/react'
+import { FormControl, FormLabel, Radio, RadioProps, useRadio} from '@chakra-ui/react'
 
 interface CheckboxProps extends RadioProps{
     id: string;
@@ -7,12 +7,12 @@ interface CheckboxProps extends RadioProps{
     name: string;
 }   
 
-const CheckboxBase: ForwardRefRenderFunction<HTMLInputElement, CheckboxProps>
- = ({children, id, name, value, ...props}: CheckboxProps, ref) => {
+export const Checkbox = ({children, id, name, value, ...props}: CheckboxProps) => {
+  
   return (
     <>
         <FormLabel display="flex" gap="1" htmlFor={id} fontSize="sm" fontWeight="medium">
-            <Radio value={value} name={name} colorScheme='purple' size="md" ref={ref} {...props} />
+            <Radio id={id} defaultChecked={true} value={value} name={name} colorScheme='purple' size="md" {...props} />
             {children}
         </FormLabel>
     </>
@@ -20,4 +20,4 @@ const CheckboxBase: ForwardRefRenderFunction<HTMLInputElement, CheckboxProps>
   )
 }
 
-export const Checkbox = forwardRef(CheckboxBase)
+//export const Checkbox = forwardRef(CheckboxBase)

@@ -24,11 +24,11 @@ interface AuthorsProps {
 
 const Authors = ({authors, isLoading, error}: AuthorsProps) => {
     const [page, setPage ] = useState(1)
-    const maxPages = (authors) ? Number((authors.length / 10).toFixed())  : 0
+    const [authorsState, setAuthorsState] = useState(authors)
+    const maxPages = (authorsState) ? Number((authorsState.length / 10).toFixed())  : 0
     const [modalFilter, setModalFilter] = useState(false)
     const [filter, setFilter] = useState<FilterState | null>(null)
-    const [authorsState, setAuthorsState] = useState(authors)
-    const stack = useRef<HTMLDivElement>(null)
+    
 
     useEffect(() => {
         if(!filter) {
@@ -127,7 +127,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                 </Flex>
             </>
             }
-            <Filter stack={stack} active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
+            <Filter active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
             
 
             <FilterHeader>

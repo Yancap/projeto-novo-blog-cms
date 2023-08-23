@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {  Button,  Flex, Heading, Icon, Text, Spinner, Box } from "@chakra-ui/react";
+import {  Button,  Flex, Heading, Icon, Text, Spinner, Box, useRadioGroup } from "@chakra-ui/react";
 import { Table } from "@/components/Table";
 import { Thead } from "@/components/Table/Thead";
 import { Tr } from "@/components/Table/Tr";
@@ -37,9 +37,6 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
 
     const authorsFilterContainer: JSX.Element[] =  [] as JSX.Element[]
     const categoriesFilterContainer: JSX.Element[] =  [] as JSX.Element[]
-
-    const form = useRef<HTMLFormElement>(null)
-    const stack = useRef<HTMLDivElement>(null)
 
     
     if(authors) {
@@ -84,63 +81,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
         if(articlesState && filter && articles){
             return setArticlesState(() => {
                 return filterForArticles(filter, articles)
-                let setsArticles: Article[] = []
-                if(articles) {
-                    setsArticles = articles
-                    const keys = Object.keys(filter).map( key => key.split('_') )
-                    //console.log(filter);
-                    
-                    keys.forEach(key => {
-                        if(key[0] === "filter") {
-                            setsArticles = setsArticles.filter( article => {
-                                if (key[1] === "category") {
-                                    return article.category === filter.filter_category
-                                } 
-                                if (key[1] === "author"){
-                                    return article.author === filter.filter_author
-                                }
-                                if (key[1] === "publication"){
-                                    const articleDate = new Date(article.created_at)
-                                    const articleYear = articleDate.getFullYear()
-                                    const articleMonth = articleDate.getMonth()
-                                    const articleDay = articleDate.getDate()
-                                    const now = new Date()
-                                    if (filter["filter_publication"] === "last-week") {
-                                        return now.getFullYear() - articleYear === 0 &&
-                                        now.getMonth() - articleMonth === 0 &&
-                                        now.getDate() - articleDay <= 7
-                                    } else if (filter["filter_publication"] === "last-month") {
-                                        return now.getFullYear() - articleYear === 0 &&
-                                        now.getMonth() - articleMonth === 0
-                                    } else if (filter["filter_publication"] === "last-year") {
-                                        return now.getFullYear() - articleYear === 0 
-                                    }
-                                }
-                            })
-                        } 
-                        if (key[0] === 'order') {
-                            
-                            if(filter["order"] === "data") {
-                                setsArticles = setsArticles.sort((a, b) =>  new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())
-                            }
-                            if(filter["order"] === "title") {
-                                setsArticles = setsArticles.sort((a, b) =>  {
-                                    let x = a.title.toLowerCase(),
-                                    y = b.title.toLowerCase()
-                                    return x == y ? 0 : x > y ? 1 : -1
-                                })
-                            }
-                            if(filter["order"] === "authors") {
-                                setsArticles = setsArticles.sort((a, b) =>  {
-                                    let x = a.author.toLowerCase(),
-                                    y = b.author.toLowerCase()
-                                    return x == y ? 0 : x > y ? 1 : -1
-                                })
-                            }
-                        }
-                    })  
-                }
-                return setsArticles
+                
             })
         }
     }, [filter])
@@ -208,25 +149,25 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                 </Flex>
             </>
             }
-        <Filter stack={stack} active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
+        <Filter  active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
             <FilterHeader>
                 Autores
             </FilterHeader>
-            <FilterContent value='filter_author' setFilter={setFilter}>
+            <FilterContent  value='filter_author' setFilter={setFilter}>
                 {authorsFilterContainer}
             </FilterContent>
 
             <FilterHeader>
                 Categoria
             </FilterHeader>
-            <FilterContent value='filter_category' setFilter={setFilter}>
+            <FilterContent  value='filter_category' setFilter={setFilter}>
                 {categoriesFilterContainer}
             </FilterContent>
 
             <FilterHeader>
                 Data publicação
             </FilterHeader>
-            <FilterContent value='filter_publication' setFilter={setFilter}>
+            <FilterContent  value='filter_publication' setFilter={setFilter}>
                 <Box >
                     <Checkbox id="last-week" value='last-week' name='publication'>
                         Ultima semana
@@ -245,7 +186,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
             <FilterHeader>
                 Ordenação
             </FilterHeader>
-            <FilterContent value='order' setFilter={setFilter}>
+            <FilterContent  value='order' setFilter={setFilter}>
                 <Box >
                     <Checkbox id="data" value='data' name='order'>
                         Data de publicação
