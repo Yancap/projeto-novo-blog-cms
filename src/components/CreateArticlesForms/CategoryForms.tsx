@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { FormControl, FormLabel,  Input, Spinner } from "@chakra-ui/react";
 import { useQuery } from "react-query";
-import { Category, FormCreateArticles } from '@/pages/create/_interfaces';
+import { Category, FormCreateArticles } from '@/interfaces/_interfaces';
 import { UseFormSetValue } from 'react-hook-form';
 
 

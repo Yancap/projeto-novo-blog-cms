@@ -3,13 +3,13 @@ import { Aside } from "@/components/Aside";
 import { AsideLink } from "@/components/Aside/AsideLink";
 import { Header } from "@/components/Header";
 import { HeaderLink } from "@/components/Header/HeaderLink";
-import { Container, Flex, Stack } from "@chakra-ui/react";
+import { Container, Flex, Stack, StackProps } from "@chakra-ui/react";
 import {  RiFileTextLine, RiMessage3Line, RiMessage2Line } from "react-icons/ri";
 import {  MdOutlinePeopleAlt } from "react-icons/md";
 import {  LiaComment } from "react-icons/lia";
 import { useManagement } from '@/context/ManagementContext';
 
-interface AdminProps {
+interface AdminProps extends StackProps{
     aside?: boolean;
     children: ReactNode
 }
@@ -17,13 +17,13 @@ interface AdminProps {
 export const Main = ({children, aside=true, ...props}: AdminProps) => {
 
 
-  const {hierarchy} = useManagement()
+  const {profile} = useManagement()
   return (
     <>
          <Header>
             <HeaderLink href='/admin'>Gerencia</HeaderLink>
             <HeaderLink href='/create'>Novo artigo</HeaderLink>
-            {hierarchy === "admin" &&
+            {profile.hierarchy === "admin" &&
             <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
             }
         </Header>
@@ -38,7 +38,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
                 <Aside>
                     <AsideLink href='comments' text='Comentários'  icon={RiMessage2Line}/>
 
-                    {hierarchy === "admin" &&
+                    {profile.hierarchy === "admin" &&
                     <>
                     <AsideLink href='articles' text='Artigos'  icon={RiFileTextLine}/>
                     <AsideLink href='authors'  text='Autores'  icon={MdOutlinePeopleAlt}/>

@@ -12,7 +12,7 @@ import { makeServer } from '@/services/miragejs'
 
 
 if(process.env.NODE_ENV === 'development') {
-  makeServer()
+  //makeServer()
 }
 const client = new QueryClient()
 

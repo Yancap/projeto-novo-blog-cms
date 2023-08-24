@@ -1,17 +1,91 @@
 import Head from 'next/head'
-import { Flex, Text, Box, Stack, Button } from '@chakra-ui/react'
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Flex, Text, Box, Stack, Button, StackProps, ButtonProps, FlexProps, Spinner } from '@chakra-ui/react'
 import { Input } from '@/components/Input/index'
 import { useManagement } from '@/context/ManagementContext'
 import { useRouter } from 'next/router'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { cms_api } from '@/services/cms_api';
+import { AxiosError } from 'axios';
+import { useEffect } from 'react'
 
+interface SignInForm{
+  email: string;
+  password: string;
+}
+
+const button: ButtonProps = {
+  type:"submit",
+  size:['md','lg'],
+  bg:"purple.700",
+  fontSize:"xl",
+  color:"white",
+  _hover:{bgColor: 'purple.800'}
+}
+
+const form: StackProps = {
+  as:"form",
+  gap:["8","12"],
+  direction:"column",
+  bg:"gray.900",
+  px:["2rem","4rem"],
+  py:"5.25rem",
+  w:"100%",
+  maxW:"480px",
+  borderRadius: 8
+}
+
+const main: FlexProps = {
+  as:"main",
+  justify:"center",
+  align:"center",
+  w:"100vw",
+  h:"100vh",
+  p:"4"
+}
 
 export default function Home() {
-  const {useHierarchy, hierarchy} = useManagement()
+  const signInFormSchema = yup.object().shape({
+    email: yup.string().required("E-mail obrigatório.").email("E-mail Inválido."),
+    password: yup.string().required("Senha obrigatória.")
+  })
+  
+  const { register, handleSubmit, formState, setError } = useForm<SignInForm>({
+    resolver: yupResolver(signInFormSchema)
+  })
+
+  const { setProfile } = useManagement()
   const router = useRouter()
-  function handleClick(){
-    
-    router.push(`${hierarchy}/`)
+  useEffect(() => {
+    //Limpar os Cookies
+    document.cookie.split(";")
+    .forEach(function(c) { 
+      document.cookie = c.replace(/^ +/, "")
+      .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+    });
+  }, [])
+  const handleSignIn: SubmitHandler<SignInForm> = async (value, event) =>{
+   
+    try {
+      const {data} = await cms_api.post("/sessions", value)
+      const { name, email, hierarchy, token, avatar} = data
+
+      setProfile({ name, email, hierarchy, avatar })
+
+      document.cookie = `hierarchy=${hierarchy}; expires=DATA; path=/;`
+      sessionStorage.setItem("token", token)
+
+      router.push(`/${hierarchy}`)
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        setError("root", { message: err.response?.data.message })
+      }
+      
+    }
   }
+
+
   return (
     <>
       <Head>
@@ -20,20 +94,25 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex as="main" justify="center" align="center" w="100vw" h="100vh" p="4">
-        <Flex as="form" gap={["8","12"]} direction="column" bg="gray.900" 
-          px={["2rem","4rem"]} py="5.25rem" w="100%" maxW="480px" borderRadius={8}>
+      <Flex {...main}>
+        <Flex {...form} onSubmit={handleSubmit(handleSignIn)}>
           <Stack spacing="5">
             <Box >
-              <Input type='email' label='E-mail'/>
+              <Input type='email' label='E-mail' {...register('email')} error={formState.errors.email}/>
             </Box>
             <Box >
-              <Input type='password' label='Senha'/>
+              <Input type='password' label='Senha' {...register('password')} error={formState.errors.email}/>
+              {formState.errors.root && 
+              <Text color='red.500'>
+                {formState.errors.root.message}
+              </Text>
+              }
             </Box>
           </Stack>
-          <Button onClick={handleClick} size={['md','lg']} bg="purple.700" fontSize="xl" color="white"  _hover={{bgColor: 'purple.800'}}>
-            Entrar
+          <Button {...button} isLoading={formState.isLoading}>
+            { formState.isLoading ? <Spinner /> : "Entrar"}
           </Button>
+          
         </Flex>
       </Flex>
     </>

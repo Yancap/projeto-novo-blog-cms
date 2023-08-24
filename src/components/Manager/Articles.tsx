@@ -14,7 +14,7 @@ import { Filter } from "../Filter";
 import { FilterHeader } from "../Filter/FilterHeader";
 import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Checkbox } from "../Filter/Checkbox";
-import { Category } from "@/pages/create/_interfaces";
+import { Category } from "@/interfaces/_interfaces";
 import { filterForArticles } from "../Filter/services/filterForArticles";
 
 interface ArticlesProps {

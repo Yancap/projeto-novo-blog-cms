@@ -10,7 +10,8 @@ import { SubtitleForms } from "@/components/CreateArticlesForms/SubtitleForms";
 import { TitleForms } from "@/components/CreateArticlesForms/TitleForms";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useQuery } from "react-query";
-import {  FormCreateArticles } from "./_interfaces";
+import {  FormCreateArticles } from "../../interfaces/_interfaces";
+import { GetServerSideProps } from "next";
 
 
 
@@ -73,3 +74,22 @@ export default function Create({}) {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
+  console.log(req.cookies );
+  
+  let { hierarchy } = req.cookies 
+  if (!hierarchy) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true
+      }
+    }
+  }
+  
+  return {
+    props: {
+      //articles
+    }
+  }
+}

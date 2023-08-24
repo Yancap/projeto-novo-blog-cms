@@ -25,7 +25,7 @@ interface AuthorsProps {
 const Authors = ({authors, isLoading, error}: AuthorsProps) => {
     const [page, setPage ] = useState(1)
     const [authorsState, setAuthorsState] = useState(authors)
-    const maxPages = (authorsState) ? Number((authorsState.length / 10).toFixed())  : 0
+    const maxPages = (authorsState ) ? Number((authorsState .length / 10).toFixed())  : 0
     const [modalFilter, setModalFilter] = useState(false)
     const [filter, setFilter] = useState<FilterState | null>(null)
     

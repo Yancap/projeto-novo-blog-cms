@@ -113,8 +113,8 @@ export default function Admin({}: AdminProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
   
-  let hierarchy = "admin" 
-  if (hierarchy !== "admin") {
+  let { hierarchy } = req.cookies 
+  if (!hierarchy || hierarchy !== "admin") {
     return {
       redirect: {
         destination: '/author',

@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import {  FormControl, FormLabel,  Input, Text, Icon } from "@chakra-ui/react";
 import { RiAddCircleLine } from "react-icons/ri";
-import { UseFormRegister } from "react-hook-form";
-import { FormCreateArticles } from '@/pages/create/index';
 
 interface ImageFormsProps {
     setValue: any;

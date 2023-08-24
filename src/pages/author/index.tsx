@@ -61,18 +61,27 @@ export default function Author() {
 
   export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
   
-    let hierarchy = "author" 
-    if (hierarchy === "admin") {
+    let { hierarchy } = req.cookies 
+  
+    if (!hierarchy ) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: true
+        }
+      }
+      
+    } else if (hierarchy === "admin"){
       return {
         redirect: {
           destination: '/admin',
           permanent: true
         }
       }
-    } else if (hierarchy !== "author"){
+    } else if (hierarchy === "author"){
       return {
         redirect: {
-          destination: '/',
+          destination: '/author',
           permanent: true
         }
       }
