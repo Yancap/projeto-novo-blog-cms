@@ -12,4 +12,5 @@ no YG.News
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que
 são resposaveis por retornar o conteudo das sessões
+- [] Resolver o problema da renderização desnecessária da header e dos demais componentes
 - [-] Usar o MirageJS para criar dados fakes para a página
