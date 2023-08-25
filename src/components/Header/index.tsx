@@ -18,7 +18,7 @@ export const Header = ({children}: HeaderProps) => {
   })
 
   const { onOpen } = useAsideDrawer()
-    
+  
   return (
     <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, md: 0}}  align="center" justify="center">
         <Container alignItems="center" justifyContent="space-between" 
