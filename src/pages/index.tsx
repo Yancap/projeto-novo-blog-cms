@@ -68,13 +68,17 @@ export default function Home() {
   const handleSignIn: SubmitHandler<SignInForm> = async (value, event) =>{
    
     try {
-      const {data} = await cms_api.post("/sessions", value)
+      const { data } = await cms_api.post("/sessions", value)
       const { name, email, hierarchy, token, avatar} = data
 
       setProfile({ name, email, hierarchy, avatar })
 
       document.cookie = `hierarchy=${hierarchy}; expires=DATA; path=/;`
       sessionStorage.setItem("token", token)
+      sessionStorage.setItem("hierarchy", hierarchy)
+      sessionStorage.setItem("email", email)
+      sessionStorage.setItem("name", name)
+      sessionStorage.setItem("avatar", avatar)
 
       router.push(`/${hierarchy}`)
     } catch (err) {
@@ -112,7 +116,6 @@ export default function Home() {
           <Button {...button} isLoading={formState.isLoading}>
             { formState.isLoading ? <Spinner /> : "Entrar"}
           </Button>
-          
         </Flex>
       </Flex>
     </>

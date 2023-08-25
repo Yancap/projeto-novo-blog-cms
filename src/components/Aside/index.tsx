@@ -18,7 +18,8 @@ export const Aside = ({children}: AsideProps) => {
     base: true,
     lg: false
   })
-
+  
+  
   if(isDrawerSidebar){
     return (
         <Drawer isOpen={isOpen} placement='left' onClose={onClose}>

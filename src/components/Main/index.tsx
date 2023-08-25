@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { Aside } from "@/components/Aside";
 import { AsideLink } from "@/components/Aside/AsideLink";
 import { Header } from "@/components/Header";
@@ -8,6 +8,7 @@ import {  RiFileTextLine, RiMessage3Line, RiMessage2Line } from "react-icons/ri"
 import {  MdOutlinePeopleAlt } from "react-icons/md";
 import {  LiaComment } from "react-icons/lia";
 import { useManagement } from '@/context/ManagementContext';
+import { useRouter } from 'next/router';
 
 interface AdminProps extends StackProps{
     aside?: boolean;
@@ -16,17 +17,36 @@ interface AdminProps extends StackProps{
 
 export const Main = ({children, aside=true, ...props}: AdminProps) => {
 
+  const router = useRouter()
+  const {profile, setProfile} = useManagement()
 
-  const {profile} = useManagement()
+  useEffect(() => {
+    const hierarchy = sessionStorage.getItem('hierarchy')
+    const name = sessionStorage.getItem('name')
+    const email = sessionStorage.getItem('email')
+    const avatar = sessionStorage.getItem('avatar')
+    if (hierarchy && name && email ) {
+
+      setProfile({...profile, 
+        ['hierarchy']: hierarchy,
+        ['email']: email,
+        ['name']: name,
+        ['avatar']: avatar as string,
+      })
+
+    } else {
+      router.push("/")
+    } 
+  }, [])
   return (
     <>
-         <Header>
-            <HeaderLink href='/admin'>Gerencia</HeaderLink>
-            <HeaderLink href='/create'>Novo artigo</HeaderLink>
-            {profile.hierarchy === "admin" &&
-            <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
-            }
-        </Header>
+        <Header>
+          <HeaderLink href='/admin'>Gerencia</HeaderLink>
+                      <HeaderLink href='/create'>Novo artigo</HeaderLink>
+                      {profile.hierarchy === "admin" &&
+                      <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
+                      }
+          </Header>
         <Flex as="main" overflow-x="hidden" pb={{base:"71px", md:"12"}}
          align="start" justify="center" pt={{base:"4", md:"12"}} 
          maxW="100vw" px={{base: 4,sm: 8, md: 0}}
@@ -37,7 +57,6 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
                 {aside && 
                 <Aside>
                     <AsideLink href='comments' text='Comentários'  icon={RiMessage2Line}/>
-
                     {profile.hierarchy === "admin" &&
                     <>
                     <AsideLink href='articles' text='Artigos'  icon={RiFileTextLine}/>

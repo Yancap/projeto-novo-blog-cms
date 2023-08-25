@@ -9,7 +9,6 @@ interface TitleFormsProps {
 }
 
 export const TitleForms = ({register}: TitleFormsProps) => {
-  console.log("aaaaaa");
   
   return (
     <>

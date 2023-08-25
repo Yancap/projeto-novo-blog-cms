@@ -1,6 +1,5 @@
 import { Box, Container, Flex, Icon, IconButton, useBreakpointValue } from '@chakra-ui/react'
 import Image from 'next/image'
-import React from 'react'
 import { Profile } from './Profile'
 import { RiMenuLine } from 'react-icons/ri'
 import { useAsideDrawer } from '@/context/AsideDrawerContext'
@@ -11,12 +10,15 @@ interface HeaderProps {
 }
 
 export const Header = ({children}: HeaderProps) => {
+
   const { asPath } = useRouter() 
   const isWideVersion = useBreakpointValue({
     base: false,
     md: true,
   })
+
   const { onOpen } = useAsideDrawer()
+    
   return (
     <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, md: 0}}  align="center" justify="center">
         <Container alignItems="center" justifyContent="space-between" 

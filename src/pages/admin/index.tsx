@@ -46,6 +46,7 @@ export interface ArticleComments {
 
 interface AdminProps {
   articles: Article[];
+  hierarchy: string;
 }
 
 export interface Category {
@@ -53,7 +54,7 @@ export interface Category {
   category: string;
 }
 
-export default function Admin({}: AdminProps) {
+export default function Admin({hierarchy}: AdminProps) {
 
   const { data, isLoading, error } = useQuery('articles', async () => {
     
@@ -87,9 +88,9 @@ export default function Admin({}: AdminProps) {
   })
     
   
-  const { navigation } = useManagement()
-
-    return (
+  const { navigation, setProfile } = useManagement()
+  
+  return (
       <>
         <Head>
             <title>Admin | ARTechCMS</title>
@@ -125,7 +126,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   
   return {
     props: {
-      //articles
+      hierarchy
     }
   }
 }
