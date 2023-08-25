@@ -13,7 +13,7 @@ interface AsideLink {
 export const AsideLink = ({icon, text, href}: AsideLink) => {
   const { navigation, useNavigation } = useManagement()
   return (
-      <ChakraLink onClick={() => {}} display="flex" gap="3" alignItems="center" 
+      <ChakraLink onClick={() => {useNavigation(href)}} display="flex" gap="3" alignItems="center" 
       color={href === navigation ? "purple.300" : "gray.200" } 
       fontWeight={href === navigation ? "bold" : "normal" } 
       _hover={{color: "purple.300"}}>

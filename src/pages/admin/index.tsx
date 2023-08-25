@@ -86,10 +86,7 @@ export default function Admin({hierarchy}: AdminProps) {
       articles, authors, comments, categories
     }
   })
-    
-  
   const { navigation, setProfile } = useManagement()
-  
   return (
       <>
         <Head>

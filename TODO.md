@@ -8,6 +8,7 @@ no YG.News
 - [X] Realizar o Mock de dados dos autores e comentários
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
-- [] Filtrar
+- [x] Filtrar
+- [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 
 - [-] Usar o MirageJS para criar dados fakes para a página
