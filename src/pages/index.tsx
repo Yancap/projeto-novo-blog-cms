@@ -70,10 +70,12 @@ export default function Home() {
     try {
       const { data } = await cms_api.post("/sessions", value)
       const { name, email, hierarchy, token, avatar} = data
-
+      console.log(data);
+      
       setProfile({ name, email, hierarchy, avatar })
 
       document.cookie = `hierarchy=${hierarchy}; expires=DATA; path=/;`
+      document.cookie = `token=${token}; expires=DATA; path=/;`
       sessionStorage.setItem("token", token)
       sessionStorage.setItem("hierarchy", hierarchy)
       sessionStorage.setItem("email", email)

@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
+import { cms_api } from "@/services/cms_api";
 
 export interface Article {
   id: string;
@@ -47,6 +48,9 @@ export interface ArticleComments {
 interface AdminProps {
   articles: Article[];
   hierarchy: string;
+  published: Article[];
+  disabled: Article[];
+  drafts: Article[];
 }
 
 export interface Category {
@@ -54,8 +58,9 @@ export interface Category {
   category: string;
 }
 
-export default function Admin({hierarchy}: AdminProps) {
-
+export default function Admin({hierarchy,  published, disabled, drafts}: AdminProps) {
+  console.log(published);
+  
   const { data, isLoading, error } = useQuery('articles', async () => {
     
     const [articlesResponse, authorsResponse, commentsResponse, categoriesResponse] = await Promise.all([
@@ -97,7 +102,7 @@ export default function Admin({hierarchy}: AdminProps) {
         </Head>
         <Main>
             {
-            navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
+            navigation === "" ? <Publications articles={published} isLoading={false} error={null}/> : 
             navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
             navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
             navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/>  : 
@@ -111,8 +116,8 @@ export default function Admin({hierarchy}: AdminProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
   
-  let { hierarchy } = req.cookies 
-  if (!hierarchy || hierarchy !== "admin") {
+  let { hierarchy, token } = req.cookies 
+  if (!hierarchy || !token || hierarchy !== "admin") {
     return {
       redirect: {
         destination: '/author',
@@ -121,9 +126,31 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
     }
   }
   
+  const config = {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  }
+  const { data } = await cms_api.get("/articles", config)
+  console.log(data);
+  
+  
+  
+  const published: Article[] = data.articles
+  .filter((article: Article) => article.state === "active")
+
+  const disabled: Article[] = data.articles
+  .filter((article: Article) => article.state === "inactive")
+
+  const drafts: Article[] = data.articles
+  .filter((article: Article) => article.state === "draft")
+  
   return {
     props: {
-      hierarchy
+      hierarchy,
+      published,
+      disabled,
+      drafts
     }
   }
 }
