@@ -9,17 +9,17 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
 import { memo, useEffect, useRef, useState } from "react";
-import { Authors } from "@/pages/admin/index";
 import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Filter } from "../Filter/index";
 import { FilterHeader } from "../Filter/FilterHeader";
 import { Checkbox } from "../Filter/Checkbox";
 import { filterForAuthors } from "../Filter/services/filterForAuthors";
+import { IAuthors } from "@/pages/admin/interfaces";
 
 interface AuthorsProps {
-    authors: Authors[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    authors: IAuthors[];
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Authors = ({authors, isLoading, error}: AuthorsProps) => {
@@ -46,7 +46,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
       <>
             <Flex as="header" align="center" justify="space-between">
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
-                    Artigos totais
+                    Autores
                 </Heading>
                 <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
                 fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}
@@ -55,10 +55,11 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                     <Icon as={RiFilter3Fill} fontSize="lg" ml="1"/>
                 </Button>
             </Flex>
-            { isLoading ? 
+            { authors.length === 0 ? 
             <Flex justify='center'>
-                <Spinner />
+                <Text> Sem dados </Text>
             </Flex>
+            
                 : error ? 
             <Flex>
                 <Text> Falha ao buscar os dados </Text>
@@ -100,9 +101,9 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                             </Td>
                             <Td minW="14rem">
                                 <Text fontSize="sm" color="gray.300">
-                                    {author.all_articles === 0 ? "N/A" :
-                                    author.all_articles === 1 ? '1 Artigo' :
-                                    `${author.all_articles} Artigos`
+                                    {author.allArticles === 0 ? "N/A" :
+                                    author.allArticles === 1 ? '1 Artigo' :
+                                    `${author.allArticles} Artigos`
                                     }
                                 </Text>
                             </Td>

@@ -21,8 +21,8 @@ interface ArticlesProps {
     articles: Article[] | undefined;
     authors: Authors[] | undefined;
     categories: Category[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 

@@ -9,6 +9,8 @@ no YG.News
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
 - [x] Filtrar
+- [] rotas para mostrar todas as categorias
+- [] adicionar as funcionalidades de editar
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que
 são resposaveis por retornar o conteudo das sessões

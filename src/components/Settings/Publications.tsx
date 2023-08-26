@@ -9,13 +9,13 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
-import { Article } from "@/pages/admin";
 import { memo, useState } from "react";
+import { IArticles } from "@/pages/admin/interfaces";
 
 interface PublicationsProps {
-    articles: Article[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    articles: IArticles[] ;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Publications = ({articles, isLoading, error}: PublicationsProps) => {
@@ -36,10 +36,10 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                 </Button>
             </Flex>
 
-            { isLoading ? (
-                        <Flex justify='center'>
-                            <Spinner />
-                        </Flex>
+            { articles.length === 0 ? (
+                    <Flex justify='center'>
+                        <Text> Sem dados </Text>
+                    </Flex>
                     ) : error ? 
                     <Flex>
                         <Text> Falha ao buscar os dados </Text>
@@ -57,7 +57,7 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {articles && articles
+                        {articles
                         .slice((page - 1) * 10, page * 10)
                         .map( article => 
                         <Tr key={article.id}>

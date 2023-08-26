@@ -9,12 +9,12 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { memo, useState } from "react";
-import { Article } from "@/pages/admin/index";
+import { IArticles } from "@/pages/admin/interfaces";
 
 interface DisabledProps {
-    articles: Article[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    articles: IArticles[];
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Disabled = ({articles, isLoading, error}: DisabledProps) => {
@@ -28,9 +28,9 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
                     Desativados
                 </Heading>
             </Flex>
-            { isLoading ? 
+            { articles.length === 0 ? 
             <Flex justify='center'>
-                <Spinner />
+                <Text> Sem dados </Text>
             </Flex>
             : error ? 
             <Flex>

@@ -10,47 +10,17 @@ import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
 import { cms_api } from "@/services/cms_api";
+import { IAuthors, IArticles  } from "./interfaces";
 
-export interface Article {
-  id: string;
-  title: string;
-  subtitle: string;
-  text: string;
-  category: string;
-  author: string;
-  created_at: string;
-  state: string;
-  
-}
-export interface Authors {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string | null | undefined;
-  all_articles: number;
-}
-type Comments = {
-  id: string;
-  text: string;
-  created_at: string;
-  user_name: string;
-}
 
-export interface ArticleComments {
-  comments: Comments[],
-  article: {
-      slug: string;
-      title: string;
-      category: string;
-  }
-}
 
 interface AdminProps {
-  articles: Article[];
+  articles: IArticles[];
   hierarchy: string;
-  published: Article[];
-  disabled: Article[];
-  drafts: Article[];
+  published: IArticles[];
+  disabled: IArticles[];
+  drafts: IArticles[];
+  authors: IAuthors[];
 }
 
 export interface Category {
@@ -58,8 +28,7 @@ export interface Category {
   category: string;
 }
 
-export default function Admin({hierarchy,  published, disabled, drafts}: AdminProps) {
-  console.log(published);
+export default function Admin({hierarchy,  published, disabled, drafts, authors, articles}: AdminProps) {
   
   const { data, isLoading, error } = useQuery('articles', async () => {
     
@@ -102,12 +71,12 @@ export default function Admin({hierarchy,  published, disabled, drafts}: AdminPr
         </Head>
         <Main>
             {
-            navigation === "" ? <Publications articles={published} isLoading={false} error={null}/> : 
-            navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
-            navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
+            navigation === "" ? <Publications articles={published} /> : 
+            navigation === "drafts" ? <Drafts articles={drafts} /> : 
+            navigation === "disabled" ? <Disabled articles={disabled} /> : 
             navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/>  : 
-            navigation === "authors" ? <Authors authors={data?.authors} isLoading={isLoading} error={error}/>  : 
-            navigation === "articles" ? <Articles categories={data?.categories} authors={data?.authors} articles={data?.articles} isLoading={isLoading} error={error}/> : null
+            navigation === "authors" ? <Authors authors={authors} />  : 
+            navigation === "articles" ? <Articles categories={data?.categories} authors={authors} articles={articles}/> : null
             }
         </Main>
       </>
@@ -128,29 +97,31 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   
   const config = {
     headers: {
-      'Authorization': 'Bearer ' + token
+      'Authorization': 'Bearer ' + token 
     }
   }
-  const { data } = await cms_api.get("/articles", config)
-  console.log(data);
-  
-  
-  
-  const published: Article[] = data.articles
-  .filter((article: Article) => article.state === "active")
+  const { data: {articles} } = await cms_api.get("/articles", config)
+  const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
+  const { data: {allArticles} } = await cms_api.get("/admin/get-all-articles", config)
+  const { data: {categories} } = await cms_api.get("/admin/get-all-articles", config)
 
-  const disabled: Article[] = data.articles
-  .filter((article: Article) => article.state === "inactive")
+  const published: IArticles[] = articles
+  .filter((article: IArticles) => article.state === "active")
 
-  const drafts: Article[] = data.articles
-  .filter((article: Article) => article.state === "draft")
+  const disabled: IArticles[] = articles
+  .filter((article: IArticles) => article.state === "inactive")
+
+  const drafts: IArticles[] = articles
+  .filter((article: IArticles) => article.state === "draft")
   
   return {
     props: {
       hierarchy,
       published,
       disabled,
-      drafts
+      drafts,
+      authors,
+      articles: allArticles
     }
   }
 }

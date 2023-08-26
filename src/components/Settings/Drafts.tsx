@@ -10,12 +10,12 @@ import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
 import { memo, useState } from "react";
-import { Article } from "@/pages/admin/index";
+import { IArticles } from "@/pages/admin/interfaces";
 
 interface DraftsProps {
-    articles: Article[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    articles: IArticles[];
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Drafts = ({articles, isLoading, error}: DraftsProps) => {
@@ -32,48 +32,48 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
                     <Icon as={PiPlusBold} fontSize="sm" mr="1"/>
                     Criar novo
                 </Button>
-            </Flex>
-        { isLoading ? 
-        <Flex justify='center'>
-            <Spinner />
         </Flex>
-          : error ? 
-        <Flex>
-            <Text> Falha ao buscar os dados </Text>
-        </Flex> :
+          { articles.length === 0 ? 
+            <Flex justify='center'>
+                <Text> Sem dados </Text>
+            </Flex>
+            : error ? 
+            <Flex>
+                <Text> Falha ao buscar os dados </Text>
+            </Flex> :
         <>
-        <Table>
-            <Thead>
-                <Tr>
-                    <Th>
-                        Titulo
-                    </Th>
-                    <Th>Categoria</Th>
-                    <Th></Th>
-                </Tr>
-            </Thead>
-            <Tbody>
-            {articles && articles.slice((page - 1) * 10, page * 10)
-                .map(article => 
-                <Tr key={article.id}>
-                    <Td minW="80">
-                        <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
-                            {article.title} 
-                        </Heading>
-                    </Td>
-                    <Td>
-                        <Text fontSize="sm" color="gray.300">{article.category}</Text>
-                    </Td>
-                    <Td>
-                        <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                            <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                            Editar
-                        </Button>
-                    </Td>
-                </Tr>
-            )}
-            </Tbody> 
-        </Table>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th>
+                            Titulo
+                        </Th>
+                        <Th>Categoria</Th>
+                        <Th></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                {articles && articles.slice((page - 1) * 10, page * 10)
+                    .map(article => 
+                    <Tr key={article.id}>
+                        <Td minW="80">
+                            <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
+                                {article.title} 
+                            </Heading>
+                        </Td>
+                        <Td>
+                            <Text fontSize="sm" color="gray.300">{article.category}</Text>
+                        </Td>
+                        <Td>
+                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
+                                Editar
+                            </Button>
+                        </Td>
+                    </Tr>
+                )}
+                </Tbody> 
+            </Table>
         <Flex as="footer">
             <Pagination page={page} setPage={setPage} maxPages={maxPages}/>
         </Flex>
