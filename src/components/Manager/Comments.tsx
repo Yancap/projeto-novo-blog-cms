@@ -15,8 +15,8 @@ import { useRouter } from "../../../node_modules/next/router";
 
 interface CommentsProps {
     comments: ArticleComments[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Comments = ({comments, isLoading, error}: CommentsProps) => {
