@@ -9,12 +9,12 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEyeLine } from "react-icons/ri";
 import { memo, useState } from "react";
-import { ArticleComments } from "@/pages/admin";
 import Link from "../../../node_modules/next/link";
 import { useRouter } from "../../../node_modules/next/router";
+import { ArticleComments } from "@/pages/admin/interfaces";
 
 interface CommentsProps {
-    comments: ArticleComments[] | undefined;
+    comments: ArticleComments[] | null;
     isLoading?: boolean;
     error?: unknown;
 }
@@ -31,12 +31,8 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                     Comentários
                 </Heading>
             </Flex>
-            { isLoading ? 
-            <Flex justify='center'>
-                <Spinner />
-            </Flex>
-                : error ? 
-            <Flex>
+            { !comments ? 
+            <Flex justify="center">
                 <Text> Falha ao buscar os dados </Text>
             </Flex> :
             <>

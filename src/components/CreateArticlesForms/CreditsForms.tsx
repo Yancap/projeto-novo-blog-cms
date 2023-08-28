@@ -22,8 +22,9 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
   let elements = []
   for(let i = 0; i < add+1; i++){
     elements.push(
-        <Flex gap="10" key={i}>
-            <Box w="45%" borderLeft="2px" borderColor="gray.900" px="4" py="2">
+        <Flex gap={{base: "0",md:"10"}} direction={{base: "column",md:"row"}} key={i}
+        borderBottom={{base: "2px",md:"0"}} borderColor="gray.900">
+            <Box w={{base: "100&",md:"45%"}} borderLeft="2px" borderColor="gray.900" px="4" py="2">
                 <FormLabel fontSize="sm" color="gray.400">
                 Nome
                 </FormLabel>
@@ -32,16 +33,17 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
                 <Input type="text" name="tag" variant="unstyled"
                 borderRadius="0" color="purple.300" px="1" 
                 onBlur={({currentTarget}) => {
-                    setCredits(credits => ({...credits, 
-                        [add]: { name: currentTarget.value, link: credits[add]?.link ?? ''}}
-                    ))
+                    setCredits(credits => {
+                        credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
+                        return credits
+                    })
                     setValue('credits',  credits )
                     
                 }}
                 />
                 </Flex>
             </Box>
-            <Box w="45%" borderLeft="2px" borderColor="gray.900" px="4" py="2">
+            <Box w={{base: "100&",md:"45%"}}  borderLeft="2px" borderColor="gray.900" px="4" py="2">
                 <FormLabel fontSize="sm" color="gray.400">
                 Link
                 </FormLabel>
@@ -50,9 +52,10 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
                 <Input type="text" name="tag" variant="unstyled"
                 borderRadius="0" color="purple.300" px="1"
                 onChange={({currentTarget}) => {
-                    setCredits(credits => ({...credits, 
-                        [add]: { name: credits[add]?.name ?? '', link: currentTarget.value}}
-                    ))
+                    setCredits(credits => {
+                        credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
+                        return credits
+                    })
                     setValue('credits',  credits)
                 }}
                 />
@@ -63,7 +66,7 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
   }
   
   return (
-    <FormControl w="80%">
+    <FormControl w={{base: "100%",md:"80%"}}>
         <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">
             Créditos
         </Text>

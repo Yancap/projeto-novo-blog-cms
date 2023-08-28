@@ -10,7 +10,7 @@ import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
 import { cms_api } from "@/services/cms_api";
-import { IAuthors, IArticles, Category  } from "./interfaces";
+import { IAuthors, IArticles, Category, IComments, ArticleComments  } from "./interfaces";
 
 
 
@@ -22,6 +22,7 @@ interface AdminProps {
   drafts: IArticles[];
   authors: IAuthors[];
   categories: Category[];
+  comments: ArticleComments[];
 }
 
 
@@ -29,36 +30,7 @@ interface AdminProps {
 export default function Admin(data: AdminProps) {
   console.log(data.articles);
 
-  const { data: d, isLoading, error } = useQuery('articles', async () => {
-    
-    const [articlesResponse, authorsResponse, commentsResponse, categoriesResponse] = await Promise.all([
-      fetch("http://localhost:3000/api/articles"),
-      fetch("http://localhost:3000/api/authors"),
-      fetch("http://localhost:3000/api/comments"),
-      fetch("http://localhost:3000/api/categories")
-    ])
-
-    const [{articles}, authors, comments, categories] = await Promise.all([
-      articlesResponse.json(),
-      authorsResponse.json(),
-      commentsResponse.json(),
-      categoriesResponse.json()
-    ])
-
-    const published: Article[] = articles
-    .filter((article: Article) => article.state === "active")
-
-    const disabled: Article[] = articles
-    .filter((article: Article) => article.state === "inactive")
-
-    const drafts: Article[] = articles
-    .filter((article: Article) => article.state === "draft")
-
-    return {
-      published, disabled, drafts, 
-      articles, authors, comments, categories
-    }
-  })
+  
   const { navigation, setProfile } = useManagement()
   return (
       <>
@@ -73,7 +45,7 @@ export default function Admin(data: AdminProps) {
             navigation === "" ? <Publications articles={data.published} /> : 
             navigation === "drafts" ? <Drafts articles={data.drafts} /> : 
             navigation === "disabled" ? <Disabled articles={data.disabled} /> : 
-            navigation === "comments" ? <Comments comments={d?.comments} />  : 
+            navigation === "comments" ? <Comments comments={data.comments} />  : 
             navigation === "authors" ? <Authors authors={data.authors} />  : 
             navigation === "articles" ? <Articles categories={data.categories} authors={data.authors} articles={data.articles}/> : null
             }
@@ -103,7 +75,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
   const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
   const { data: {categories} } = await cms_api.get("/categories", config)
-  
+  const comments = "TODO"
   
   const published: IArticles[] = articles
   .filter((article: IArticles) => article.state === "active")
@@ -114,6 +86,8 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   const drafts: IArticles[] = articles
   .filter((article: IArticles) => article.state === "draft")
   
+
+
   return {
     props: {
       hierarchy,
@@ -122,7 +96,8 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       drafts,
       authors,
       articles: allArticles ?? null,
-      categories
+      categories,
+      comments: null
     }
   }
 }

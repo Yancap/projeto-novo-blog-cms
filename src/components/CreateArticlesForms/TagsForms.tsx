@@ -21,8 +21,8 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
   let elements = []
   for(let i = 0; i < add+1; i++){
     elements.push(
-        <Flex gap="10" key={i}>
-            <Box w="70%" borderLeft="2px" borderColor="gray.900" px="4" py="2">
+        <Flex gap="10" key={i} borderBottom={{base: "2px",md:"0"}} borderColor="gray.900">
+            <Box w={{base: "100%",md:"70%"}} borderLeft="2px" borderColor="gray.900" px="4" py="2">
                 <FormLabel fontSize="sm" color="gray.400">
                     Tag
                 </FormLabel>
@@ -31,9 +31,10 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
                     <Input type="text" name="tag" variant="unstyled"
                     borderRadius="0" color="purple.300" px="1"
                     onChange={({currentTarget}) => {
-                        setTags(tags => ({...tags, 
-                            [add]: { tag: currentTarget.value}}
-                        ))
+                        setTags(tags => {
+                            tags[add] = { tag: currentTarget.value }
+                            return tags
+                        })
                         setValue('tags', tags)
                     }}
                     />
@@ -44,7 +45,7 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
   }
   
   return (
-    <FormControl w="50%">
+    <FormControl w={{base: "100%",md:"50%"}}>
         <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">
             Tags
         </Text>

@@ -21,7 +21,7 @@ export interface IAuthors {
     avatar: string | null | undefined;
     allArticles: number;
 }
-export type Comments = {
+export type IComments = {
     id: string;
     text: string;
     created_at: string;

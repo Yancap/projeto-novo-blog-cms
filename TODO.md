@@ -10,6 +10,7 @@ no YG.News
 - [x] Fazer o Filter
 - [x] Filtrar
 - [x] rotas para mostrar todas as categorias
+- [] finalzar a requisição para a pagina de criação
 - [] adicionar as funcionalidades de editar
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que

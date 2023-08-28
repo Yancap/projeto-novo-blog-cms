@@ -6,37 +6,23 @@ import Disabled from "@/components/Settings/Disabled";
 import Comments from "@/components/Manager/Comments";
 import { GetServerSideProps } from "next";
 import { useQuery } from "react-query";
-import { Article } from "../admin";
 import { Main } from "@/components/Main";
+import { ArticleComments, Category, IArticles } from "../admin/interfaces";
+import { cms_api } from "@/services/cms_api";
+
+interface AuthorProps {
+  articles?: IArticles[];
+  hierarchy: string;
+  published: IArticles[];
+  disabled: IArticles[];
+  drafts: IArticles[];
+  categories: Category[];
+  comments: ArticleComments[];
+}
 
 
-
-export default function Author() {
-  const { data, isLoading, error } = useQuery('articles', async () => {
-    
-    const [articlesResponse, commentsResponse] = await Promise.all([
-      fetch("http://localhost:3000/api/articles"),
-      fetch("http://localhost:3000/api/comments")
-    ])
-
-    const [{articles}, comments] = await Promise.all([
-      articlesResponse.json(),
-      commentsResponse.json()
-    ])
-
-    const published: Article[] = articles
-    .filter((article: Article) => article.state === "active")
-
-    const disabled: Article[] = articles
-    .filter((article: Article) => article.state === "inactive")
-
-    const drafts: Article[] = articles
-    .filter((article: Article) => article.state === "draft")
-
-    return {
-      published, disabled, drafts, comments
-    }
-  })
+export default function Author(data: AuthorProps) {
+  
 
   const { navigation } = useManagement()
   return (
@@ -49,10 +35,10 @@ export default function Author() {
       </Head>
       <Main>
       {
-          navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
-          navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
-          navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
-          navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/> : null
+          navigation === "" ? <Publications articles={data?.published} /> : 
+          navigation === "drafts" ? <Drafts articles={data?.drafts} /> : 
+          navigation === "disabled" ? <Disabled articles={data?.disabled} /> : 
+          navigation === "comments" ? <Comments comments={data?.comments} /> : null
       }
       </Main>
     </>
@@ -61,9 +47,9 @@ export default function Author() {
 
   export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
   
-    let { hierarchy } = req.cookies 
-  
-    if (!hierarchy ) {
+    let { hierarchy, token } = req.cookies  
+     
+    if (!hierarchy || !token ) {
       return {
         redirect: {
           destination: '/',
@@ -78,18 +64,37 @@ export default function Author() {
           permanent: true
         }
       }
-    } else if (hierarchy === "author"){
-      return {
-        redirect: {
-          destination: '/author',
-          permanent: true
-        }
+    } 
+  
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
       }
     }
+
+    const { data: {articles} } = await cms_api.get("/articles", config)
+    const { data: {categories} } = await cms_api.get("/categories", config)
+    const comments = "TODO"
+    
+    const published: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "active")
+  
+    const disabled: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "inactive")
+  
+    const drafts: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "draft")
+    
+  
   
     return {
       props: {
-        
+        hierarchy,
+        published,
+        disabled,
+        drafts,
+        categories,
+        comments: null
       }
     }
   }

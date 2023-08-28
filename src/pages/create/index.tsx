@@ -10,8 +10,9 @@ import { SubtitleForms } from "@/components/CreateArticlesForms/SubtitleForms";
 import { TitleForms } from "@/components/CreateArticlesForms/TitleForms";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useQuery } from "react-query";
-import {  FormCreateArticles } from "../../interfaces/_interfaces";
+import {  Category, FormCreateArticles } from "../../interfaces/_interfaces";
 import { GetServerSideProps } from "next";
+import { cms_api } from "@/services/cms_api";
 
 
 
@@ -19,23 +20,39 @@ const TextForms = dynamic(() => import("../../components/CreateArticlesForms/Tex
   ssr: false
 })
 
-
 const CategoryForms = dynamic(() => import("../../components/CreateArticlesForms/CategoryForms"), {
   ssr: false
 })
 
-export default function Create({}) {
+interface CreateProps {
+  categories: Category[];
+}
 
-  const { data, isLoading, error } = useQuery('categories', async () => {
-    const category = await fetch("http://localhost:3000/api/categories")
-    const categoryJson = await category.json()
-    const categories = categoryJson
-    return { categories }
-  })
+export default function Create({categories}: CreateProps) {
+
+
 
   const { register, handleSubmit, setValue   } = useForm<FormCreateArticles>()
-  const handleSignIn: SubmitHandler<FormCreateArticles> = (value, event) =>{
-    console.log(value);
+  const handleSignIn: SubmitHandler<FormCreateArticles> = (value, event) => {
+
+    const state = !value.title || !value.subtitle || !value.text || !value.image || 
+    !value.category || !value.tags || !value.credits ? "draft" : "active"
+
+    const data = {
+      article: {
+        title: value.title ?? '',
+        subtitle: value.subtitle ?? '',
+        text: value.text ?? '',
+        image: value.image ?? '',
+        category: value.category ?? '',
+        state: state,
+      }, 
+      tags: Array.from(value.tags || {}),
+      credits: Array.from(value.credits || {}),
+    }
+    console.log(data);
+    
+    //const articles = await cms_api.post('/articles', value)
   }
   
   return (
@@ -62,8 +79,7 @@ export default function Create({}) {
                   <SubtitleForms register={register}/>
                   <ImageForms setValue={setValue}/>
                   <TextForms setValue={setValue}/>
-                  <CategoryForms setValue={setValue} categories={data?.categories} 
-                    isLoading={isLoading} error={error}/>
+                  <CategoryForms setValue={setValue} categories={categories} />
                   <TagsForms setValue={setValue}/>
                   <CreditsForms setValue={setValue}/>
             </Stack>
@@ -75,10 +91,9 @@ export default function Create({}) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
-  console.log(req.cookies );
-  
-  let { hierarchy } = req.cookies 
-  if (!hierarchy) {
+  let { hierarchy, token } = req.cookies  
+
+  if (!hierarchy || !token) {
     return {
       redirect: {
         destination: '/',
@@ -86,10 +101,18 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       }
     }
   }
-  
+
+  const config = {
+    headers: {
+      'Authorization': 'Bearer ' + token 
+    }
+  }
+
+  const { data: {categories} } = await cms_api.get("/categories", config)
+
   return {
     props: {
-      //articles
+      categories
     }
   }
 }

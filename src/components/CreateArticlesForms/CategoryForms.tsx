@@ -9,8 +9,8 @@ import { UseFormSetValue } from 'react-hook-form';
 interface CategoryFormsProps {
     setValue: UseFormSetValue<FormCreateArticles>
     categories: Category[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 
