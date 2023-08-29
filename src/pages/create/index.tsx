@@ -94,7 +94,6 @@ export default function Create({categories}: CreateProps) {
       tags: value.tags ? Array.from(value.tags) : null,
       credits: value.credits ? Array.from(value.credits) : null,
     }
-    console.log(data);
     
     const token = sessionStorage.getItem('token')
     const config = {

@@ -21,6 +21,7 @@ interface CommentsProps {
 
 const Comments = ({comments, isLoading, error}: CommentsProps) => {
     const {query} = useRouter()
+    console.log(comments);
     
     const [page, setPage ] = useState(1)
     const maxPages = (comments) ? Number((comments.length / 10).toFixed())  : 0
@@ -31,9 +32,9 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                     Comentários
                 </Heading>
             </Flex>
-            { !comments ? 
+            { !comments || comments.length === 0 ? 
             <Flex justify="center">
-                <Text> Falha ao buscar os dados </Text>
+                <Text> Sem Comentários </Text>
             </Flex> :
             <>
                 <Table>

@@ -9,6 +9,7 @@ import { useManagement } from "../../context/ManagementContext";
 import Link from "next/link";
 import { Pagination } from "@/components/Pagination/index";
 import { useRouter } from "../../../node_modules/next/router";
+import { cms_api } from "@/services/cms_api";
 
 
 type Comments = {
@@ -29,23 +30,52 @@ export interface ArticleComments {
 
 interface CommentsProps {
   slug:  string
+  id:  string
+}
+
+interface Delete {
+  comment_id: string
+  article_id: string
 }
 
 export default function Comments({slug}: CommentsProps) {
   
-  const { data, isLoading, error } = useQuery('comments', async () => {
-    const commentsResponse = await fetch("http://localhost:3000/api/comments/" + slug)
-    const {article, comments}: ArticleComments = await commentsResponse.json()
-    console.log(comments.length);
+  const { data, isLoading, error, refetch } = useQuery('comments', async () => {
+    const token = sessionStorage.getItem('token')
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      }
+    }
+    const { data } = await cms_api.post("/comments/get-for-articles", { slug }, config)
+    const {article, comments}: ArticleComments = data
     
     return {
       comments, article
     }
   })
-  const { hierarchy } = useManagement()
+  const { profile } = useManagement()
   const [page, setPage ] = useState(1)
   const maxPages = (data?.comments) ? Number((data?.comments.length / 5).toFixed())  : 0
 
+  async function handleDelete({comment_id, article_id}: Delete){
+    const token = sessionStorage.getItem('token')
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      },
+      data:{ comment_id, article_id }
+    }
+    try {
+      await cms_api.delete("/comments/manager-delete", config) 
+      refetch()
+    } catch {
+
+    }
+    
+  }
+  console.log(data?.comments);
+  
   return (
     <>
       <Head>
@@ -56,7 +86,7 @@ export default function Comments({slug}: CommentsProps) {
       </Head>
       <Main aside={false} bg='gray.800'>
           <Stack gap="10">
-              <Link href={`/${hierarchy}`} style={{alignSelf:"flex-start"}}>
+              <Link href={`/${profile.hierarchy}`} style={{alignSelf:"flex-start"}}>
                   <Flex align="center" w="fit-content" transition="all" transitionDuration=".15s"
                   borderBottom={"1px"} borderColor='transparent' _hover={{ borderColor:'purple.700'}}>
                       <Icon as={RiArrowLeftSLine} color="purple.700" fontSize='3xl'/>
@@ -84,9 +114,9 @@ export default function Comments({slug}: CommentsProps) {
                       {data?.comments?.slice((page - 1) * 5, page * 5)
                       .map((comment: Comments) => 
                         <Flex gap="8" key={comment.id}>
-                            <Stack as='header' gap='0' borderLeft="2px" borderColor="purple.700" pl="3">
+                            <Stack flexGrow="1" as='header' gap='0' borderLeft="2px" borderColor="purple.700" pl="3">
                               <Text fontSize="sm" color="gray.700">
-                                {comment.user_name} - {comment.created_at}
+                                {comment.user_name} - {new Date(comment.created_at).toLocaleDateString()}
                               </Text>
                               <Text>
                                {comment.text}
@@ -94,7 +124,10 @@ export default function Comments({slug}: CommentsProps) {
                             </Stack>
                             <Flex align="center">
                               <Icon as={RiDeleteBin7Fill} color="gray.600" _hover={{color:"gray.400"}} 
-                              fontSize="2xl" transition="all" transitionDuration=".2s" cursor='pointer' my="auto"/>
+                              fontSize="2xl" transition="all" transitionDuration=".2s" cursor='pointer' my="auto"
+                              onClick={() => {
+                                handleDelete({comment_id: comment.id, article_id: data.article.id})
+                              }}/>
                             </Flex>
                         </Flex>
                       )}

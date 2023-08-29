@@ -28,6 +28,7 @@ interface AdminProps {
 
 
 export default function Admin(data: AdminProps) {
+  console.log(data.comments);
   
   const { navigation } = useManagement()
   return (
@@ -73,16 +74,12 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
   const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
   const { data: {categories} } = await cms_api.get("/categories", config)
-
+  const comments = []
   for(let article of articles){
-    try {
-      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
-      console.log(data);
-    } catch (error) {
-      
+    const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+    if(data){
+      comments.push(data);
     }
-    
-    
   }
   //const { data: {comments} } = await cms_api.get("/comments/get-all", config)
   
@@ -106,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       authors,
       articles: allArticles ?? null,
       categories,
-      comments: null
+      comments
     }
   }
 }
