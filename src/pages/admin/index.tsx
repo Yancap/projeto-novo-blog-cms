@@ -73,7 +73,18 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
   const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
   const { data: {categories} } = await cms_api.get("/categories", config)
-  const comments = "TODO"
+
+  for(let article of articles){
+    try {
+      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+      console.log(data);
+    } catch (error) {
+      
+    }
+    
+    
+  }
+  //const { data: {comments} } = await cms_api.get("/comments/get-all", config)
   
   const published: IArticles[] = articles
   .filter((article: IArticles) => article.state === "active")

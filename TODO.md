@@ -11,6 +11,7 @@ no YG.News
 - [x] Filtrar
 - [x] rotas para mostrar todas as categorias
 - [x] finalzar a requisição para a pagina de criação
+= [] Adicionar os comentarios
 - [] adicionar as funcionalidades de editar
 - [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
