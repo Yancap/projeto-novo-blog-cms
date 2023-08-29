@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
 import { Flex, FormControl, FormLabel, Stack, Input, Text, Icon, Box, Button } from "@chakra-ui/react";
-import { RiAddCircleLine } from "react-icons/ri";
+import { RiAddCircleLine, RiCloseCircleLine } from "react-icons/ri";
 import { RxTextAlignLeft } from "react-icons/rx";
 
 interface TagsInputForm {
-    tag: string;
+    name: string;
 }
 
 interface TagsFormsProps {
@@ -13,7 +13,7 @@ interface TagsFormsProps {
 
 export const TagsForms = ({setValue}: TagsFormsProps) => {
   const [ tags, setTags ] = useState<TagsInputForm[]>([
-    {tag: ""}
+    {name: ""}
   ])
 
   const [ add, setAdd ] = useState(0)
@@ -32,7 +32,7 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
                     borderRadius="0" color="purple.300" px="1"
                     onChange={({currentTarget}) => {
                         setTags(tags => {
-                            tags[add] = { tag: currentTarget.value }
+                            tags[add] = { name: currentTarget.value }
                             return tags
                         })
                         setValue('tags', tags)
@@ -52,8 +52,26 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
         <Stack minH="120px" borderRadius="4" bgColor='gray.800' px="8" py="4">
             
             {...elements}
-            <Icon as={RiAddCircleLine} fontSize="2xl" color="purple.200" 
-            onClick={() => setAdd(add+1)}/>
+            <Flex gap='2'>
+                <Icon as={RiAddCircleLine} fontSize="2xl" color="purple.200" 
+                onClick={() => setAdd(add+1)}/>
+                { add >= 1 &&
+                <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
+                onClick={() => {
+                    setAdd(add-1)
+                    setTags(tags => {
+                        try {
+                            tags.splice(add, 1)
+                            setValue('tags', tags)
+                            return tags
+                        } catch {
+                            return tags
+                        }
+                    })
+                }}/>
+                }
+            </Flex>
+            
         </Stack>
     </FormControl>
   )

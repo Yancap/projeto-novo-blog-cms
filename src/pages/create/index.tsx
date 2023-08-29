@@ -33,7 +33,7 @@ export default function Create({categories}: CreateProps) {
 
 
   const { register, handleSubmit, setValue   } = useForm<FormCreateArticles>()
-  const handleSignIn: SubmitHandler<FormCreateArticles> = (value, event) => {
+  const handleSave: SubmitHandler<FormCreateArticles> = async (value, event) => {
 
     const state = !value.title || !value.subtitle || !value.text || !value.image || 
     !value.category || !value.tags || !value.credits ? "draft" : "active"
@@ -50,11 +50,35 @@ export default function Create({categories}: CreateProps) {
       tags: Array.from(value.tags || {}),
       credits: Array.from(value.credits || {}),
     }
-    console.log(data);
+    const token = sessionStorage.getItem('token')
     
-    //const articles = await cms_api.post('/articles', value)
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      }
+    }
+    const articles = await cms_api.post('/articles', data, config)
+    console.log(articles);
   }
-  
+  const handleDraft: SubmitHandler<FormCreateArticles> = async (value, event) => {
+
+    const data = {
+      article: {
+        title: value.title ?? '',
+        subtitle: value.subtitle ?? '',
+        text: value.text ?? '',
+        image: value.image ?? '',
+        category: value.category ?? '',
+        state: "draft",
+      }, 
+      tags: Array.from(value.tags || {}),
+      credits: Array.from(value.credits || {}),
+    }
+    
+    const articles = await cms_api.post('/articles/draft', data)
+    console.log(articles);
+
+  }
   return (
     <>
       <Head>
@@ -65,9 +89,9 @@ export default function Create({categories}: CreateProps) {
       </Head>
       <Main aside={false}>
       
-          <Stack as="form" onSubmit={handleSubmit(handleSignIn)}>
+          <Stack as="form" onSubmit={handleSubmit(handleSave)}>
             <Flex gap="4" alignSelf="flex-end">
-              <Button fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
+              <Button type="submit" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
                 RASCUNHO
               </Button>
               <Button type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>

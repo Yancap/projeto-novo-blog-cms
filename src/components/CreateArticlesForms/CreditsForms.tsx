@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import { Flex, FormControl, FormLabel, Stack, Input, Text, Icon, Box, Button } from "@chakra-ui/react";
-import { RiAddCircleLine } from "react-icons/ri";
+import { RiAddCircleLine, RiCloseCircleLine } from "react-icons/ri";
 import { RxTextAlignLeft } from "react-icons/rx";
 
 interface CreditsInputForm {
@@ -32,7 +32,7 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
                 borderRadius="0" color="purple.300" px="1" 
-                onBlur={({currentTarget}) => {
+                onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
                         return credits
@@ -73,7 +73,26 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
         <Stack minH="120px" borderRadius="4" bgColor='gray.800' px="8" py="4">
             
             {...elements}
+            <Flex gap="2">
             <Icon as={RiAddCircleLine} fontSize="2xl" color="purple.200" onClick={() => setAdd(add+1)}/>
+            {add >= 1 && 
+            <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
+                onClick={() => {
+                    setAdd(add-1)
+                    setCredits(credits => {
+                        try {
+                            credits.splice(add, 1)
+                            setValue('credits', credits)
+                            return credits
+                        } catch {
+                            return credits
+                        }
+                    })
+                    
+                }}/>
+            }
+            </Flex>
+            
         </Stack>
     </FormControl>
   )
