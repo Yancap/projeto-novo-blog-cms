@@ -9,10 +9,10 @@ import { ImageForms } from "@/components/CreateArticlesForms/ImageForms";
 import { SubtitleForms } from "@/components/CreateArticlesForms/SubtitleForms";
 import { TitleForms } from "@/components/CreateArticlesForms/TitleForms";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useQuery } from "react-query";
 import {  Category, FormCreateArticles } from "../../interfaces/_interfaces";
 import { GetServerSideProps } from "next";
 import { cms_api } from "@/services/cms_api";
+import { MouseEvent, useState } from "react";
 
 
 
@@ -30,11 +30,30 @@ interface CreateProps {
 
 export default function Create({categories}: CreateProps) {
 
-
-
   const { register, handleSubmit, setValue   } = useForm<FormCreateArticles>()
-  const handleSave: SubmitHandler<FormCreateArticles> = async (value, event) => {
+  const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
+    if(event){
+      const button: HTMLButtonElement = event.target.querySelector('[data-click]')
+      if ('datatype' in button.attributes) {
+        if (button.getAttribute('datatype') === "draft") {
+          return handleDraft(value)
+        }
+        return handlePublish(value)
+        
+      }
+      
+    }
+    return null
+  }
 
+  function handleClickButton(event: MouseEvent){
+    const buttons = document.querySelectorAll('[data-click]')
+    for(let btn of buttons){
+      btn.removeAttribute('data-click')
+    }
+    event.currentTarget.setAttribute('data-click', 'true')
+  }
+  async function handlePublish(value: FormCreateArticles){
     const state = !value.title || !value.subtitle || !value.text || !value.image || 
     !value.category || !value.tags || !value.credits ? "draft" : "active"
 
@@ -44,7 +63,7 @@ export default function Create({categories}: CreateProps) {
         subtitle: value.subtitle ?? '',
         text: value.text ?? '',
         image: value.image ?? '',
-        category: value.category ?? '',
+        category: value.category ?? 'front-end',
         state: state,
       }, 
       tags: Array.from(value.tags || {}),
@@ -57,28 +76,37 @@ export default function Create({categories}: CreateProps) {
         'Authorization': 'Bearer ' + token 
       }
     }
-    const articles = await cms_api.post('/articles', data, config)
-    console.log(articles);
+    
+    const response = await cms_api.post('/articles', data, config)
+    console.log(response);
   }
-  const handleDraft: SubmitHandler<FormCreateArticles> = async (value, event) => {
-
+  async function handleDraft(value: FormCreateArticles){
+    
     const data = {
       article: {
         title: value.title ?? '',
         subtitle: value.subtitle ?? '',
         text: value.text ?? '',
         image: value.image ?? '',
-        category: value.category ?? '',
+        category: value.category ?? 'front-end',
         state: "draft",
       }, 
-      tags: Array.from(value.tags || {}),
-      credits: Array.from(value.credits || {}),
+      tags: value.tags ? Array.from(value.tags) : null,
+      credits: value.credits ? Array.from(value.credits) : null,
+    }
+    console.log(data);
+    
+    const token = sessionStorage.getItem('token')
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      }
     }
     
-    const articles = await cms_api.post('/articles/draft', data)
-    console.log(articles);
-
+    const response = await cms_api.patch('/articles', data, config)
+    console.log(response);
   }
+  
   return (
     <>
       <Head>
@@ -89,13 +117,13 @@ export default function Create({categories}: CreateProps) {
       </Head>
       <Main aside={false}>
       
-          <Stack as="form" onSubmit={handleSubmit(handleSave)}>
+          <Stack as="form" onSubmit={handleSubmit(Submit)} >
             <Flex gap="4" alignSelf="flex-end">
-              <Button type="submit" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
+              <Button onClick={handleClickButton} type="submit" datatype="draft" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
                 RASCUNHO
               </Button>
-              <Button type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
-                SALVAR
+              <Button onClick={handleClickButton} type="submit" datatype="publish" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
+                PUBLICAR
               </Button>
             </Flex>
             <Stack spacing="4" >

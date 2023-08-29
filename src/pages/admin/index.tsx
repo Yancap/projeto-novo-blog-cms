@@ -28,10 +28,8 @@ interface AdminProps {
 
 
 export default function Admin(data: AdminProps) {
-  console.log(data.articles);
-
   
-  const { navigation, setProfile } = useManagement()
+  const { navigation } = useManagement()
   return (
       <>
         <Head>

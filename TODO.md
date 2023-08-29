@@ -12,6 +12,7 @@ no YG.News
 - [x] rotas para mostrar todas as categorias
 - [] finalzar a requisição para a pagina de criação
 - [] adicionar as funcionalidades de editar
+- [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que
 são resposaveis por retornar o conteudo das sessões

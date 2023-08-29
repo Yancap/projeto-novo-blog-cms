@@ -23,7 +23,7 @@ const main: FlexProps = {
   justify:"center",
   pt:{base:"4",md:"12"},
   maxW:"100vw",
-  px:{base:4,sm:8,md:0},
+  px:{base:4,sm:8,md:10, lg:0},
   position:"relative",
   minH:"100vh"
 }
@@ -34,7 +34,7 @@ const container: ContainerProps = {
   gap:"24",
   justifyContent:"space-between",
   w:"100%",
-  maxW:{lg: 1024,'2xl': 1124}
+  maxW:{lg: 992,'2xl': 1124}
 }
 
 export const Main = ({children, aside=true, ...props}: AdminProps) => {

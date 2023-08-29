@@ -17,7 +17,7 @@ interface SignInForm{
 
 const button: ButtonProps = {
   type:"submit",
-  size:['md','lg'],
+  size:{ base: "md", xl:"lg"},
   bg:"purple.700",
   fontSize:"xl",
   color:"white",
@@ -26,13 +26,13 @@ const button: ButtonProps = {
 
 const form: StackProps = {
   as:"form",
-  gap:["8","12"],
+  gap:{ base: "8", md: "10", xl:"12"},
   direction:"column",
   bg:"gray.900",
-  px:["2rem","4rem"],
-  py:"5.25rem",
+  px:{ base: "2rem", md: "3rem", xl:"4rem"},
+  py:{ base: "4.5rem", xl:"5.25rem"},
   w:"100%",
-  maxW:"480px",
+  maxW:{ base: "440px", xl:"480px"},
   borderRadius: 8
 }
 
@@ -70,7 +70,6 @@ export default function Home() {
     try {
       const { data } = await cms_api.post("/sessions", value)
       const { name, email, hierarchy, token, avatar} = data
-      console.log(data);
       
       setProfile({ name, email, hierarchy, avatar })
 
@@ -102,7 +101,7 @@ export default function Home() {
       </Head>
       <Flex {...main}>
         <Flex {...form} onSubmit={handleSubmit(handleSignIn)}>
-          <Stack spacing="5">
+          <Stack spacing="4">
             <Box >
               <Input type='email' label='E-mail' {...register('email')} error={formState.errors.email}/>
             </Box>

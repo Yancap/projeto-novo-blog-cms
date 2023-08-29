@@ -42,10 +42,10 @@ export default function CategoryForms ({setValue, categories, isLoading, error}:
            categories && categories.map((category) => 
                 <Input as="option" value="front-end" key={category.id}>{category.category.toLocaleUpperCase()}</Input>
             )}
-            <Input required as="option" value="add" color="gray.400">Adicionar Categoria</Input>
+            <Input  as="option" value="add" color="gray.400">Adicionar Categoria</Input>
         </Input>
         
-        <Input id="category" name="category" mt="4" required
+        <Input id="category" name="category" mt="4" 
             focusBorderColor='purple.700' _hover={{bgColor: 'gray.800'}}        
             bgColor='gray.800' variant='filled' size={'md'} 
             onChange={(event) => setValue('category', event.target.value.toLowerCase())}

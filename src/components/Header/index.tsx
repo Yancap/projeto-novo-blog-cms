@@ -9,20 +9,21 @@ interface HeaderProps {
     children: React.ReactNode
 }
 
+
 export const Header = ({children}: HeaderProps) => {
 
   const { asPath } = useRouter() 
   const isWideVersion = useBreakpointValue({
     base: false,
-    md: true,
+    lg: true,
   })
 
   const { onOpen } = useAsideDrawer()
   
   return (
-    <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, md: 0}}  align="center" justify="center">
+    <Flex as="header" maxW="100vw" px={{base:4,sm:8,md:10, lg:0}}  align="center" justify="center">
         <Container alignItems="center" justifyContent="space-between" 
-        gap="8" display="flex" w="100%" maxW={{lg: 1024,'2xl': 1124}}
+        gap="8" display="flex" w="100%" maxW={{lg: 992,'2xl': 1024}}
         py={{base: "6", md: 0}}>
             {(!isWideVersion && (asPath === "/admin" || asPath === "/author"))&& (
             <IconButton icon={<Icon as={RiMenuLine}/>}  
@@ -40,6 +41,7 @@ export const Header = ({children}: HeaderProps) => {
                 w={{base: "100vw", md: "auto"}} 
                 bg={{base: "gray.900", md: "transparent"}} 
                 position={{base: "fixed", md: "static"}}>
+                    
                     {children}
                 </Flex>
             </Flex>
