@@ -12,9 +12,10 @@ import { PiPlusBold } from "react-icons/pi";
 import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface DraftsProps {
-    articles: IArticles[];
+    articles?: IArticles[];
     isLoading?: boolean;
     error?: unknown;
 }
@@ -26,17 +27,24 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
 
     return (
         <>
-        <Flex as="header" align="center" justify="space-between">
+            <Flex as="header" align="center" justify="space-between">
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
                     Rascunhos
                 </Heading>
-                <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
-                fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}>
-                    <Icon as={PiPlusBold} fontSize="sm" mr="1"/>
-                    Criar novo
-                </Button>
-        </Flex>
-          { articles.length === 0 ? 
+                <Link href='/articles/create'>
+                    <Button as="button" fontWeight="normal" size="sm" cursor="pointer"
+                    fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}>
+                        <Icon as={PiPlusBold} fontSize="sm" mr="1"/>
+                        Criar novo
+                    </Button>
+                </Link>
+            </Flex>
+            { isLoading && 
+                <Flex justify='center'>
+                    <Spinner />
+                </Flex>
+            }
+          { articles && articles.length === 0 ? 
             <Flex justify='center'>
                 <Text> Sem dados </Text>
             </Flex>
@@ -68,10 +76,12 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
                             <Text fontSize="sm" color="gray.300">{article.category}</Text>
                         </Td>
                         <Td>
-                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple" onClick={() => router.push(`/articles/edit/${article.slug}`)}>
-                                <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                                Editar
-                            </Button>
+                            <Link href={`/articles/edit/${article.slug}`}>
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                    <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
+                                    Editar
+                                </Button>
+                            </Link>
                         </Td>
                     </Tr>
                 )}

@@ -14,15 +14,12 @@ import { useRouter } from "../../../node_modules/next/router";
 import { ArticleComments } from "@/pages/admin/interfaces";
 
 interface CommentsProps {
-    comments: ArticleComments[] | null;
+    comments?: ArticleComments[] | null;
     isLoading?: boolean;
     error?: unknown;
 }
 
-const Comments = ({comments, isLoading, error}: CommentsProps) => {
-    const {query} = useRouter()
-    console.log(comments);
-    
+const Comments = ({comments, isLoading, error}: CommentsProps) => {    
     const [page, setPage ] = useState(1)
     const maxPages = (comments) ? Number((comments.length / 10).toFixed())  : 0
     return (
@@ -32,6 +29,11 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                     Comentários
                 </Heading>
             </Flex>
+            { isLoading && 
+            <Flex justify='center'>
+                <Spinner />
+            </Flex>
+            }
             { !comments || comments.length === 0 ? 
             <Flex justify="center">
                 <Text> Sem Comentários </Text>

@@ -12,14 +12,17 @@ import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
 import { useRouter } from "next/router";
 import { cms_api } from "@/services/cms_api";
+import Link from "next/link";
 
 interface DisabledProps {
-    articles: IArticles[];
+    articles?: IArticles[];
     isLoading?: boolean;
+    isRefetching?: boolean;
+    refetch: any
     error?: unknown;
 }
 
-const Disabled = ({articles, isLoading, error}: DisabledProps) => {
+const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
     const router = useRouter()
@@ -32,19 +35,30 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
             'Authorization': 'Bearer ' + token 
           }
         }
-
-        const response = await cms_api.patch('/articles/active', { id }, config)
-        console.log(response);
-        router.reload()
+        try{
+            const response = await cms_api.patch('/articles/active', { id }, config)
+            refetch()
+        } catch (error){
+            alert(error)
+        }
+        
     }
     return (
       <>
-            <Flex as="header" >
+            <Flex as="header" gap="4">
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
-                    Desativados
+                    Desativados 
                 </Heading>
+                { isRefetching && <Spinner /> }
             </Flex>
-            { articles.length === 0 ? 
+
+            { isLoading && 
+                <Flex justify='center'>
+                    <Spinner />
+                </Flex>
+            }
+
+            { articles && articles.length === 0 ? 
             <Flex justify='center'>
                 <Text> Sem dados </Text>
             </Flex>
@@ -78,13 +92,15 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
                             </Td>
                             <Td>
                                 <Flex gap='2'>
-                                    <Button as="a" onClick={() => handleActive(article.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="green">
+                                    <Button onClick={() => handleActive(article.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="green">
                                         Publicar
                                     </Button>
-                                    <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple" onClick={() => router.push(`/articles/edit/${article.slug}`)}>
-                                        <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
-                                        Editar
-                                    </Button>
+                                    <Link href={`/articles/edit/${article.slug}`}>
+                                        <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                            <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
+                                            Editar
+                                        </Button>
+                                    </Link>
                                 </Flex>
 
                             </Td>

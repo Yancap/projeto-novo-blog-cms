@@ -9,17 +9,17 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiEdit2Line, RiFilter3Fill } from "react-icons/ri";
 import { memo, useEffect, useRef, useState } from "react";
-import { Article, Authors } from "@/pages/admin/index";
 import { Filter } from "../Filter";
 import { FilterHeader } from "../Filter/FilterHeader";
 import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Checkbox } from "../Filter/Checkbox";
 import { Category } from "@/interfaces/_interfaces";
 import { filterForArticles } from "../Filter/services/filterForArticles";
+import { IArticles, IAuthors } from "@/pages/admin/interfaces";
 
 interface ArticlesProps {
-    articles: Article[] | undefined;
-    authors: Authors[] | undefined;
+    articles: IArticles[] | undefined;
+    authors: IAuthors[] | undefined;
     categories: Category[] | undefined;
     isLoading?: boolean;
     error?: unknown;

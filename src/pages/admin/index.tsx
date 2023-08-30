@@ -15,21 +15,52 @@ import { IAuthors, IArticles, Category,  ArticleComments  } from "./interfaces";
 
 
 interface AdminProps {
-  articles?: IArticles[];
   hierarchy: string;
-  published: IArticles[];
-  disabled: IArticles[];
-  drafts: IArticles[];
-  authors: IAuthors[];
-  categories: Category[];
-  comments: ArticleComments[];
 }
 
 
 
-export default function Admin(data: AdminProps) {
-  console.log(data.comments);
-  
+export default function Admin() {
+  const { data: temp, isLoading, error, isRefetching, refetch } = useQuery('admin', async () => {
+    const token = sessionStorage.getItem('token')
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      }
+    }
+    const { data: {articles} } = await cms_api.get("/articles", config)
+    const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
+    const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
+    const { data: {categories} } = await cms_api.get("/categories", config)
+    const comments = []
+
+    for(let article of articles){
+      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+      if(data){
+        comments.push(data);
+      }
+    }
+    
+    const published: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "active")
+
+    const disabled: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "inactive")
+
+    const drafts: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "draft")
+
+    return {
+      published,
+      disabled,
+      drafts,
+      authors,
+      articles: allArticles ?? null,
+      categories,
+      comments
+    }
+  })
+
   const { navigation } = useManagement()
   return (
       <>
@@ -41,12 +72,12 @@ export default function Admin(data: AdminProps) {
         </Head>
         <Main>
             {
-            navigation === "" ? <Publications articles={data.published} /> : 
-            navigation === "drafts" ? <Drafts articles={data.drafts} /> : 
-            navigation === "disabled" ? <Disabled articles={data.disabled} /> : 
-            navigation === "comments" ? <Comments comments={data.comments} />  : 
-            navigation === "authors" ? <Authors authors={data.authors} />  : 
-            navigation === "articles" ? <Articles categories={data.categories} authors={data.authors} articles={data.articles}/> : null
+            navigation === "" ? <Publications articles={temp?.published} isLoading={isLoading}/> : 
+            navigation === "drafts" ? <Drafts articles={temp?.drafts} isLoading={isLoading}/> : 
+            navigation === "disabled" ? <Disabled articles={temp?.disabled} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
+            navigation === "comments" ? <Comments comments={temp?.comments} isLoading={isLoading}/>  : 
+            navigation === "authors" ? <Authors authors={temp?.authors} isLoading={isLoading}/>  : 
+            navigation === "articles" ? <Articles categories={temp?.categories} authors={temp?.authors} articles={temp?.articles}/> : null
             }
         </Main>
       </>
@@ -64,46 +95,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       }
     }
   }
-  
-  const config = {
-    headers: {
-      'Authorization': 'Bearer ' + token 
-    }
-  }
-  const { data: {articles} } = await cms_api.get("/articles", config)
-  const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
-  const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
-  const { data: {categories} } = await cms_api.get("/categories", config)
-  const comments = []
-  for(let article of articles){
-    const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
-    if(data){
-      comments.push(data);
-    }
-  }
-  //const { data: {comments} } = await cms_api.get("/comments/get-all", config)
-  
-  const published: IArticles[] = articles
-  .filter((article: IArticles) => article.state === "active")
-
-  const disabled: IArticles[] = articles
-  .filter((article: IArticles) => article.state === "inactive")
-
-  const drafts: IArticles[] = articles
-  .filter((article: IArticles) => article.state === "draft")
-  
-
 
   return {
     props: {
-      hierarchy,
-      published,
-      disabled,
-      drafts,
-      authors,
-      articles: allArticles ?? null,
-      categories,
-      comments
+      hierarchy
     }
   }
 }

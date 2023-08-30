@@ -55,6 +55,11 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                     <Icon as={RiFilter3Fill} fontSize="lg" ml="1"/>
                 </Button>
             </Flex>
+            { isLoading && 
+            <Flex justify='center'>
+                <Spinner />
+            </Flex>
+            }
             { authors.length === 0 ? 
             <Flex justify='center'>
                 <Text> Sem dados </Text>

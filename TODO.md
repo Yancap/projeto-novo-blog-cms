@@ -18,9 +18,9 @@ no YG.News
 - [x] Fazer os botões de Rascunho e Publicar das pagina de create e edit voltar para a home
 - [x] Fazer a ativação dos artigos
 - [] Implementar o Chat
-- [] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
-- [] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
-
+- [x] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
+- [x] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
+- [] Fazer as requisições do Admin
 - [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que
