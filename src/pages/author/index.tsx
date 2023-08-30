@@ -35,10 +35,10 @@ export default function Author(data: AuthorProps) {
       </Head>
       <Main>
       {
-          navigation === "" ? <Publications articles={data?.published} /> : 
-          navigation === "drafts" ? <Drafts articles={data?.drafts} /> : 
-          navigation === "disabled" ? <Disabled articles={data?.disabled} /> : 
-          navigation === "comments" ? <Comments comments={data?.comments} /> : null
+          navigation === "" ? <Publications articles={data.published} /> : 
+          navigation === "drafts" ? <Drafts articles={data.drafts} /> : 
+          navigation === "disabled" ? <Disabled articles={data.disabled} /> : 
+          navigation === "comments" ? <Comments comments={data.comments} /> : null
       }
       </Main>
     </>
@@ -74,7 +74,13 @@ export default function Author(data: AuthorProps) {
 
     const { data: {articles} } = await cms_api.get("/articles", config)
     const { data: {categories} } = await cms_api.get("/categories", config)
-    const comments = "TODO"
+    const comments = []
+    for(let article of articles){
+      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+      if(data){
+        comments.push(data);
+      }
+    }
     
     const published: IArticles[] = articles
     .filter((article: IArticles) => article.state === "active")
@@ -94,7 +100,7 @@ export default function Author(data: AuthorProps) {
         disabled,
         drafts,
         categories,
-        comments: null
+        comments
       }
     }
   }

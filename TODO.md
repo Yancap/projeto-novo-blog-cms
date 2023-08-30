@@ -12,8 +12,9 @@ no YG.News
 - [x] rotas para mostrar todas as categorias
 - [x] finalzar a requisição para a pagina de criação
 = [x] Adicionar os comentarios
-- [] fazer atualização da pagina dos comentarios (refetch)
-- [] adicionar as funcionalidades de editar
+- [x] fazer atualização da pagina dos comentarios (refetch)
+- [x] adicionar as funcionalidades de editar
+- [] Colocar o botão de modificar o 'state' do artigo na pagina de editar
 - [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que

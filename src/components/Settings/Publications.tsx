@@ -11,6 +11,7 @@ import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
 import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
+import { useRouter } from "next/router";
 
 interface PublicationsProps {
     articles: IArticles[] ;
@@ -21,7 +22,7 @@ interface PublicationsProps {
 const Publications = ({articles, isLoading, error}: PublicationsProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
-    
+    const router = useRouter()
     
     return (
       <>
@@ -73,8 +74,10 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                                 <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
-                                    <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
+                                <Button onClick={() => router.push(`/articles/edit/${article.slug}`)}
+                                  as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple"
+                                >
+                                    <Icon as={RiEdit2Line} fontSize="xs" mr="1" />
                                     Editar
                                 </Button>
                             </Td>

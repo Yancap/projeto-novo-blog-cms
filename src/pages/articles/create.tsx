@@ -30,7 +30,7 @@ interface CreateProps {
 
 export default function Create({categories}: CreateProps) {
 
-  const { register, handleSubmit, setValue   } = useForm<FormCreateArticles>()
+  const { register, handleSubmit, setValue, getValues } = useForm<FormCreateArticles>()
   const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
     if(event){
       const button: HTMLButtonElement = event.target.querySelector('[data-click]')
@@ -128,11 +128,11 @@ export default function Create({categories}: CreateProps) {
             <Stack spacing="4" >
                   <TitleForms register={register}/>
                   <SubtitleForms register={register}/>
-                  <ImageForms setValue={setValue}/>
-                  <TextForms setValue={setValue}/>
-                  <CategoryForms setValue={setValue} categories={categories} />
-                  <TagsForms setValue={setValue}/>
-                  <CreditsForms setValue={setValue}/>
+                  <ImageForms setValue={setValue} getValues={getValues}/>
+                  <TextForms setValue={setValue} getValues={getValues}/>
+                  <CategoryForms setValue={setValue} getValues={getValues} categories={categories} />
+                  <TagsForms setValue={setValue} getValues={getValues}/>
+                  <CreditsForms setValue={setValue} getValues={getValues}/>
             </Stack>
           </Stack>
           

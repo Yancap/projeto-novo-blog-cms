@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
+import JoditEditor from 'jodit-react'
 import {  FormControl, FormLabel } from "@chakra-ui/react";
 import {  MdFormatItalic } from 'react-icons/md';
-import JoditEditor from 'jodit-react'
+import { FormCreateArticles } from '@/interfaces/_interfaces';
+import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
+
 
 interface TextFormsProps {
-  setValue: any
+  setValue: UseFormSetValue<FormCreateArticles>
+  getValues: UseFormGetValues<FormCreateArticles>
 }
 
-function TextForms({setValue}: TextFormsProps){
+function TextForms({setValue, getValues}: TextFormsProps){
   const editor = useRef(null)
   const [clientRendered, setClientRendered] = useState(false);
   
@@ -24,7 +28,7 @@ function TextForms({setValue}: TextFormsProps){
       'symbols', 'selectall', 'brush', 'indent', 'outdent'],
       placeholder: "Inicie seu texto..."
   }
-
+  
   return (
     
     <FormControl>
@@ -33,8 +37,8 @@ function TextForms({setValue}: TextFormsProps){
         <FormLabel htmlFor="text" fontSize={['md','lg']} fontWeight="medium">
             Texto
         </FormLabel>
-          <JoditEditor ref={editor} config={config} value=''
-          onBlur={(value) => {setValue('text', value);}} />
+          <JoditEditor ref={editor} config={config} value={getValues('text')}
+          onBlur={(value) => {setValue('text', value)}} />
       </>
       }
     </FormControl>

@@ -22,6 +22,7 @@ type Comments = {
 export interface ArticleComments {
   comments: Comments[],
   article: {
+      id: string;
       slug: string;
       title: string;
       category: string;
@@ -40,7 +41,7 @@ interface Delete {
 
 export default function Comments({slug}: CommentsProps) {
   
-  const { data, isLoading, error, refetch } = useQuery('comments', async () => {
+  const { data, isLoading, error, refetch,isRefetching } = useQuery('comments', async () => {
     const token = sessionStorage.getItem('token')
     const config = {
       headers: {
@@ -48,10 +49,16 @@ export default function Comments({slug}: CommentsProps) {
       }
     }
     const { data } = await cms_api.post("/comments/get-for-articles", { slug }, config)
-    const {article, comments}: ArticleComments = data
+    console.log(data);
     
+    if(data) {
+      const { article, comments }: ArticleComments = data
+      return {
+        comments, article
+      }
+    }
     return {
-      comments, article
+      comments: null, message: "Sem comentários"
     }
   })
   const { profile } = useManagement()
@@ -70,11 +77,10 @@ export default function Comments({slug}: CommentsProps) {
       await cms_api.delete("/comments/manager-delete", config) 
       refetch()
     } catch {
-
+      
     }
     
   }
-  console.log(data?.comments);
   
   return (
     <>
@@ -98,7 +104,7 @@ export default function Comments({slug}: CommentsProps) {
               {isLoading ? <Spinner /> :
               <>
                 <Heading as='h1' fontWeight="black" >
-                    {data?.article?.title}
+                    {data?.article?.title || data?.message}
                     <Text as="strong" color="purple.300">!</Text> 
                 </Heading>
                 <Stack gap="4">

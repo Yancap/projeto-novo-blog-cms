@@ -2,22 +2,29 @@ import {useEffect, useState} from 'react'
 import { Flex, FormControl, FormLabel, Stack, Input, Text, Icon, Box, Button } from "@chakra-ui/react";
 import { RiAddCircleLine, RiCloseCircleLine } from "react-icons/ri";
 import { RxTextAlignLeft } from "react-icons/rx";
+import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
+import { FormCreateArticles } from '@/interfaces/_interfaces';
+
 
 interface TagsInputForm {
     name: string;
 }
 
 interface TagsFormsProps {
-    setValue: any
+    setValue: UseFormSetValue<FormCreateArticles>
+    getValues: UseFormGetValues<FormCreateArticles>
 }
 
-export const TagsForms = ({setValue}: TagsFormsProps) => {
+export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
   const [ tags, setTags ] = useState<TagsInputForm[]>([
     {name: ""}
   ])
 
   const [ add, setAdd ] = useState(0)
-  
+  useEffect(() => {
+    setTags(getValues('tags'))
+    setAdd(tags.length)
+  }, [])
   let elements = []
   for(let i = 0; i < add+1; i++){
     elements.push(
@@ -29,7 +36,7 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                     <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                     <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1"
+                    borderRadius="0" color="purple.300" px="1" value={tags[i].name}
                     onChange={({currentTarget}) => {
                         setTags(tags => {
                             tags[add] = { name: currentTarget.value }
@@ -59,13 +66,13 @@ export const TagsForms = ({setValue}: TagsFormsProps) => {
                 <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
                 onClick={() => {
                     setAdd(add-1)
-                    setTags(tags => {
+                    setTags(tag => {
                         try {
-                            tags.splice(add, 1)
-                            setValue('tags', tags)
-                            return tags
+                            tag.splice(add, 1)
+                            setValue('tags', tag)
+                            return tag
                         } catch {
-                            return tags
+                            return tag
                         }
                     })
                 }}/>

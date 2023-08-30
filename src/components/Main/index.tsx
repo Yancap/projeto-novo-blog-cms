@@ -64,7 +64,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
     <>
         <Header>
           <HeaderLink href='/admin'>Gerencia</HeaderLink>
-          <HeaderLink href='/create'>Novo artigo</HeaderLink>
+          <HeaderLink href='/articles/create'>Novo artigo</HeaderLink>
           {profile.hierarchy === "admin" &&
           <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
           }

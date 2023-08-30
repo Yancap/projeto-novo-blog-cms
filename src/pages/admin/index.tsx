@@ -10,7 +10,7 @@ import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
 import { cms_api } from "@/services/cms_api";
-import { IAuthors, IArticles, Category, IComments, ArticleComments  } from "./interfaces";
+import { IAuthors, IArticles, Category,  ArticleComments  } from "./interfaces";
 
 
 

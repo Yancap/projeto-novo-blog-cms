@@ -1,6 +1,6 @@
 export interface Tags {
-    tag: string;
-  }
+  name: string;
+}
   
 export interface Credits{
 name: string;
