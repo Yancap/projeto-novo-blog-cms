@@ -20,7 +20,10 @@ no YG.News
 - [] Implementar o Chat
 - [x] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
 - [x] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
+- [] Ajustar a pagina de criação de tags e creditos
 - [] Fazer as requisições do Admin
+- [] Resolver o problema do filtro
+
 - [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que

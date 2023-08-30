@@ -19,13 +19,13 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
   const [ tags, setTags ] = useState<TagsInputForm[]>([
     {name: ""}
   ])
-  
+  const [firstFetch, setFirstFetch] = useState<TagsInputForm[]>()
   
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
     const tag = getValues('tags')
     if (tag) {
-        setTags(tag)
+        setFirstFetch(tag)
         setAdd(tag.length)
     }
     
@@ -41,8 +41,9 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                     <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                     <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1" value={ tags[i] &&  tags[i].name }
+                    borderRadius="0" color="purple.300" px="1" value={ firstFetch ?  firstFetch[i].name : undefined}
                     onChange={({currentTarget}) => {
+                        
                         setTags(tags => {
                             tags[add] = { name: currentTarget.value }
                             return tags

@@ -19,12 +19,13 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
   const [ credits, setCredits ] = useState<CreditsInputForm[]>([
     {name: "", link: ""}
   ])
+  const [firstFetch, setFirstFetch] = useState<CreditsInputForm[]>()
 
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
     const credits = getValues('credits')
     if(credits) {
-        setCredits(credits)
+        setFirstFetch(credits)
         setAdd(credits.length) 
     }
     
@@ -43,7 +44,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={ credits[i] && credits[i].name}
+                borderRadius="0" color="purple.300" px="1" value={ firstFetch ? firstFetch[i].name : undefined}
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
@@ -62,7 +63,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={credits[i] && credits[i].link}
+                borderRadius="0" color="purple.300" px="1" value={firstFetch ? firstFetch[i].link : undefined }
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
