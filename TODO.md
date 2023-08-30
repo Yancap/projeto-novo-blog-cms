@@ -11,10 +11,16 @@ no YG.News
 - [x] Filtrar
 - [x] rotas para mostrar todas as categorias
 - [x] finalzar a requisição para a pagina de criação
-= [x] Adicionar os comentarios
-- [x] fazer atualização da pagina dos comentarios (refetch)
+= [x] Adicionar os comentários
+- [x] fazer atualização da pagina dos comentários (refetch)
 - [x] adicionar as funcionalidades de editar
-- [] Colocar o botão de modificar o 'state' do artigo na pagina de editar
+- [x] Colocar o botão de modificar o 'state' do artigo na pagina de editar
+- [x] Fazer os botões de Rascunho e Publicar das pagina de create e edit voltar para a home
+- [x] Fazer a ativação dos artigos
+- [] Implementar o Chat
+- [] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
+- [] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
+
 - [] refatorar a pagina de registert author
 - [] Fazer o consumo da API via SSR, usar o useMemo para os componentes
 - [] pesquisar mais sobre o memo e useMemo para aplicar nas funções que

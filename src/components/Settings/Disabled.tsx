@@ -10,6 +10,8 @@ import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
+import { useRouter } from "next/router";
+import { cms_api } from "@/services/cms_api";
 
 interface DisabledProps {
     articles: IArticles[];
@@ -20,7 +22,21 @@ interface DisabledProps {
 const Disabled = ({articles, isLoading, error}: DisabledProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
+    const router = useRouter()
 
+    async function handleActive(id: string){
+        const token = sessionStorage.getItem('token')
+    
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + token 
+          }
+        }
+
+        const response = await cms_api.patch('/articles/active', { id }, config)
+        console.log(response);
+        router.reload()
+    }
     return (
       <>
             <Flex as="header" >
@@ -44,7 +60,6 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
                                 Titulo
                             </Th>
                             <Th>Categoria</Th>
-                            <Th>Data de publicação</Th>
                             <Th></Th>
                         </Tr>
                     </Thead>
@@ -53,21 +68,25 @@ const Disabled = ({articles, isLoading, error}: DisabledProps) => {
                         .slice((page - 1) * 10, page * 10)
                         .map( article => 
                         <Tr key={article.id}>
-                            <Td minW="14">
-                                <Heading fontSize="sm" fontFamily="Ubuntu" maxW="30ch">
+                            <Td minW="56" w='50%'>
+                                <Heading fontSize="sm" fontFamily="Ubuntu" maxW="40ch">
                                     {article.title}
                                 </Heading>
                             </Td>
-                            <Td>
+                            <Td w='30%'>
                                 <Text fontSize="sm" color="gray.300">{article.category}</Text>
                             </Td>
-                            <Td minW="14rem">
-                                <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
-                            </Td>
                             <Td>
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="green">
-                                    Publicar
-                                </Button>
+                                <Flex gap='2'>
+                                    <Button as="a" onClick={() => handleActive(article.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="green">
+                                        Publicar
+                                    </Button>
+                                    <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple" onClick={() => router.push(`/articles/edit/${article.slug}`)}>
+                                        <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
+                                        Editar
+                                    </Button>
+                                </Flex>
+
                             </Td>
                         </Tr>
                         )}

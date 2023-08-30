@@ -19,11 +19,16 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
   const [ tags, setTags ] = useState<TagsInputForm[]>([
     {name: ""}
   ])
-
+  
+  
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
-    setTags(getValues('tags'))
-    setAdd(tags.length)
+    const tag = getValues('tags')
+    if (tag) {
+        setTags(tag)
+        setAdd(tag.length)
+    }
+    
   }, [])
   let elements = []
   for(let i = 0; i < add+1; i++){
@@ -36,7 +41,7 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                     <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                     <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1" value={tags[i].name}
+                    borderRadius="0" color="purple.300" px="1" value={ tags[i] &&  tags[i].name }
                     onChange={({currentTarget}) => {
                         setTags(tags => {
                             tags[add] = { name: currentTarget.value }

@@ -11,6 +11,7 @@ import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
 import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
+import { useRouter } from "next/router";
 
 interface DraftsProps {
     articles: IArticles[];
@@ -21,6 +22,8 @@ interface DraftsProps {
 const Drafts = ({articles, isLoading, error}: DraftsProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
+    const router = useRouter()
+
     return (
         <>
         <Flex as="header" align="center" justify="space-between">
@@ -65,7 +68,7 @@ const Drafts = ({articles, isLoading, error}: DraftsProps) => {
                             <Text fontSize="sm" color="gray.300">{article.category}</Text>
                         </Td>
                         <Td>
-                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                            <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple" onClick={() => router.push(`/articles/edit/${article.slug}`)}>
                                 <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
                                 Editar
                             </Button>

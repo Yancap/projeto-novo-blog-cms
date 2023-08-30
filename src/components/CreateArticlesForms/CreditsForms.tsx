@@ -22,11 +22,15 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
 
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
-    setCredits(getValues('credits'))
-    setAdd(credits.length)
+    const credits = getValues('credits')
+    if(credits) {
+        setCredits(credits)
+        setAdd(credits.length) 
+    }
+    
   }, [])
   let elements = []
-  console.log(credits);
+  
   
   for(let i = 0; i < add+1; i++){
     elements.push(
@@ -39,7 +43,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={credits[i].name}
+                borderRadius="0" color="purple.300" px="1" value={ credits[i] && credits[i].name}
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
@@ -58,7 +62,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={credits[i].link}
+                borderRadius="0" color="purple.300" px="1" value={credits[i] && credits[i].link}
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
@@ -105,3 +109,4 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
     </FormControl>
   )
 }
+

@@ -13,6 +13,7 @@ import {  Category, FormCreateArticles } from "../../interfaces/_interfaces";
 import { GetServerSideProps } from "next";
 import { cms_api } from "@/services/cms_api";
 import { MouseEvent, useState } from "react";
+import { useRouter } from "next/router";
 
 
 
@@ -31,6 +32,8 @@ interface CreateProps {
 export default function Create({categories}: CreateProps) {
 
   const { register, handleSubmit, setValue, getValues } = useForm<FormCreateArticles>()
+  const router = useRouter()
+
   const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
     if(event){
       const button: HTMLButtonElement = event.target.querySelector('[data-click]')
@@ -76,9 +79,14 @@ export default function Create({categories}: CreateProps) {
         'Authorization': 'Bearer ' + token 
       }
     }
+    try {
+      const response = await cms_api.post('/articles', data, config)
+      router.back()
+    } catch (error){
+      //TODO: respostas de error
+      alert(error)
+    }
     
-    const response = await cms_api.post('/articles', data, config)
-    console.log(response);
   }
   async function handleDraft(value: FormCreateArticles){
     
@@ -102,8 +110,14 @@ export default function Create({categories}: CreateProps) {
       }
     }
     
-    const response = await cms_api.patch('/articles', data, config)
-    console.log(response);
+    try {
+      const response = await cms_api.patch('/articles', data, config)
+      router.back()
+    } catch(error){
+      //TODO: respostas de error
+      alert(error)
+    }
+    
   }
   
   return (

@@ -49,8 +49,6 @@ export default function Comments({slug}: CommentsProps) {
       }
     }
     const { data } = await cms_api.post("/comments/get-for-articles", { slug }, config)
-    console.log(data);
-    
     if(data) {
       const { article, comments }: ArticleComments = data
       return {

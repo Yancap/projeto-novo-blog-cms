@@ -2,7 +2,7 @@ import Head from "next/head";
 import dynamic from 'next/dynamic'
 import { MouseEvent, useEffect } from "react";
 import { Main } from "@/components/Main";
-import { Button, Flex, Stack} from "@chakra-ui/react";
+import { Button, Flex, HStack, Stack} from "@chakra-ui/react";
 import { CreditsForms } from "@/components/CreateArticlesForms/CreditsForms";
 import { TagsForms } from "@/components/CreateArticlesForms/TagsForms";
 import { ImageForms } from "@/components/CreateArticlesForms/ImageForms";
@@ -13,6 +13,8 @@ import {  Category, Credits, FormCreateArticles, Tags } from "../../../interface
 import { GetServerSideProps, GetStaticPaths } from "next";
 import { cms_api } from "@/services/cms_api";
 import { Article, IArticles } from "@/pages/admin/interfaces";
+import { StateForms } from "@/components/CreateArticlesForms/StateForms";
+import { useRouter } from "next/router";
 
 
 
@@ -34,79 +36,39 @@ interface CreateProps {
 export default function Create({categories, article, credits, tags}: CreateProps) {
 
   const { register, handleSubmit, setValue, getValues   } = useForm<FormCreateArticles>()
+  const router = useRouter()
   const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
-    if(event){
-      const button: HTMLButtonElement = event.target.querySelector('[data-click]')
-      if ('datatype' in button.attributes) {
-        if (button.getAttribute('datatype') === "draft") {
-          return handleDraft(value)
-        }
-        return handleUpdate(value)
-      }
-      
-    }
-    return null
-  }
-
-  function handleClickButton(event: MouseEvent){
-    const buttons = document.querySelectorAll('[data-click]')
-    for(let btn of buttons){
-      btn.removeAttribute('data-click')
-    }
-    event.currentTarget.setAttribute('data-click', 'true')
-  }
-  async function handleUpdate(value: FormCreateArticles){
-    const state = !value.title || !value.subtitle || !value.text || !value.image || 
-    !value.category || !value.tags || !value.credits ? "draft" : "active"
-
     const data = {
       article: {
+        id: article.id,
         title: value.title ?? '',
         subtitle: value.subtitle ?? '',
         text: value.text ?? '',
         image: value.image ?? '',
         category: value.category ?? 'front-end',
-        state: state,
+        state: value.state ?? "inactive",
       }, 
       tags: Array.from(value.tags || {}),
       credits: Array.from(value.credits || {}),
     }
     const token = sessionStorage.getItem('token')
-    
+    const hierarchy = sessionStorage.getItem('hierarchy')
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token 
       }
     }
     
-    const response = await cms_api.put('/articles', data, config)
-    console.log(response);
-  }
-  async function handleDraft(value: FormCreateArticles){
-    
-    const data = {
-      article: {
-        title: value.title ?? '',
-        subtitle: value.subtitle ?? '',
-        text: value.text ?? '',
-        image: value.image ?? '',
-        category: value.category ?? 'front-end',
-        state: "draft",
-      }, 
-      tags: value.tags ? Array.from(value.tags) : null,
-      credits: value.credits ? Array.from(value.credits) : null,
+    try {
+      const response = await cms_api.put('/articles', data, config)
+      router.push(`/${hierarchy}`)
+    } catch (error) {
+      alert(error)
     }
     
-    const token = sessionStorage.getItem('token')
-    const config = {
-      headers: {
-        'Authorization': 'Bearer ' + token 
-      }
-    }
-    
-    const response = await cms_api.patch('/articles', data, config)
-    console.log(response);
+
   }
+  
   
   useEffect(() => {
     setValue("title", article.title)
@@ -114,8 +76,15 @@ export default function Create({categories, article, credits, tags}: CreateProps
     setValue("image", article.image)
     setValue("text", article.text)
     setValue("category", article.category.category)
-    setValue("credits", credits)
-    setValue("tags", tags)
+    setValue("state", article.state)
+    if(credits.length !== 0){
+      setValue("credits", credits)
+    }
+    if(tags.length !== 0){
+      setValue("tags", tags)
+    }
+    
+    
   }, [])
   return (
     <>
@@ -128,13 +97,11 @@ export default function Create({categories, article, credits, tags}: CreateProps
       <Main aside={false}>
       
           <Stack as="form" onSubmit={handleSubmit(Submit)} >
-            <Flex gap="4" alignSelf="flex-end">
-              <Button onClick={handleClickButton} type="submit" datatype="draft" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
-                RASCUNHO
-              </Button>
-              <Button onClick={handleClickButton} type="submit" datatype="publish" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
-                ATUALIZAR
-              </Button>
+            <Flex gap="4" justifyContent="space-between">
+                <StateForms setValue={setValue} getValues={getValues}/>
+                <Button onClick={() => router.back()} type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
+                  ATUALIZAR
+                </Button>
             </Flex>
             <Stack spacing="4" >
                   <TitleForms register={register}/>
