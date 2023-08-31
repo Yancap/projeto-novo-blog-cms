@@ -17,10 +17,12 @@ no YG.News
 - [x] Colocar o botão de modificar o 'state' do artigo na pagina de editar
 - [x] Fazer os botões de Rascunho e Publicar das pagina de create e edit voltar para a home
 - [x] Fazer a ativação dos artigos
-- [] Implementar o Chat
 - [x] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
 - [x] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
-- [] Ajustar a pagina de criação de tags e creditos
+- [x] Ajustar a pagina de criação de tags e creditos
+- [] Implementar o Chat
+
+- [] Impedir que se volte para as rotas inexistentes
 - [] Fazer as requisições do Admin
 - [] Resolver o problema do filtro
 

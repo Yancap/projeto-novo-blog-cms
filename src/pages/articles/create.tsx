@@ -35,6 +35,7 @@ export default function Create({categories}: CreateProps) {
   const router = useRouter()
 
   const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
+    
     if(event){
       const button: HTMLButtonElement = event.target.querySelector('[data-click]')
       if ('datatype' in button.attributes) {
@@ -59,7 +60,6 @@ export default function Create({categories}: CreateProps) {
   async function handlePublish(value: FormCreateArticles){
     const state = !value.title || !value.subtitle || !value.text || !value.image || 
     !value.category || !value.tags || !value.credits ? "draft" : "active"
-
     const data = {
       article: {
         title: value.title ?? '',
@@ -84,6 +84,7 @@ export default function Create({categories}: CreateProps) {
       router.back()
     } catch (error){
       //TODO: respostas de error
+      console.log(error)
       alert(error)
     }
     

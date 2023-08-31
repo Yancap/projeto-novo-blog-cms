@@ -135,7 +135,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                                 <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
                                     <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
                                     Excluir
                                 </Button>

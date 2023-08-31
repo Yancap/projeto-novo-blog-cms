@@ -7,7 +7,7 @@ import { Th } from "@/components/Table/Th";
 import { Tbody } from "@/components/Table/Tbody";
 import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
-import { RiEdit2Line } from "react-icons/ri";
+import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import { memo, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
 import { useRouter } from "next/router";
@@ -42,6 +42,22 @@ const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledP
             alert(error)
         }
         
+    }
+    async function handleDelete(id: string){
+        const token = sessionStorage.getItem('token')
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + token 
+          },
+          data: { id }
+        }
+
+        try {
+            const response = await cms_api.delete('/articles',  config)
+            refetch()
+        } catch (error){
+            console.log(error);
+        }
     }
     return (
       <>
@@ -96,11 +112,15 @@ const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledP
                                         Publicar
                                     </Button>
                                     <Link href={`/articles/edit/${article.slug}`}>
-                                        <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                        <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
                                             <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
                                             Editar
                                         </Button>
                                     </Link>
+                                    <Button onClick={() => handleDelete(article.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
+                                        <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
+                                        Excluir
+                                    </Button>
                                 </Flex>
 
                             </Td>

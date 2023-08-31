@@ -16,22 +16,20 @@ interface TagsFormsProps {
 }
 
 export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
-  const [ tags, setTags ] = useState<TagsInputForm[]>([
-    {name: ""}
-  ])
-  const [firstFetch, setFirstFetch] = useState<TagsInputForm[]>()
+  const [ tags, setTags ] = useState<TagsInputForm[]>([])
   
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
     const tag = getValues('tags')
     if (tag) {
-        setFirstFetch(tag)
+        setTags(tag)
         setAdd(tag.length)
     }
     
   }, [])
   let elements = []
   for(let i = 0; i < add+1; i++){
+    console.log(tags)
     elements.push(
         <Flex gap="10" key={i} borderBottom={{base: "2px",md:"0"}} borderColor="gray.900">
             <Box w={{base: "100%",md:"70%"}} borderLeft="2px" borderColor="gray.900" px="4" py="2">
@@ -41,14 +39,14 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                     <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                     <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1" value={ firstFetch ?  firstFetch[i].name : undefined}
+                    borderRadius="0" color="purple.300" px="1" value={ tags.length > i ? tags[i].name : undefined}
                     onChange={({currentTarget}) => {
-                        
                         setTags(tags => {
                             tags[add] = { name: currentTarget.value }
                             return tags
                         })
                         setValue('tags', tags)
+                        
                     }}
                     />
                 </Flex>

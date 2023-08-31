@@ -65,7 +65,7 @@ export default function Author() {
       <Main>
       {
           navigation === "" ? <Publications articles={temp?.published} isLoading={isLoading}/> : 
-          navigation === "drafts" ? <Drafts articles={temp?.drafts} isLoading={isLoading}/> : 
+          navigation === "drafts" ? <Drafts articles={temp?.drafts} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
           navigation === "disabled" ? <Disabled articles={temp?.disabled} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
           navigation === "comments" ? <Comments comments={temp?.comments} isLoading={isLoading}/>  : null
       }

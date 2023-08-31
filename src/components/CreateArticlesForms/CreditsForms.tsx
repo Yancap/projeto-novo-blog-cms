@@ -16,16 +16,13 @@ interface CreditsFormsProps {
 }
 
 export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
-  const [ credits, setCredits ] = useState<CreditsInputForm[]>([
-    {name: "", link: ""}
-  ])
-  const [firstFetch, setFirstFetch] = useState<CreditsInputForm[]>()
+  const [ credits, setCredits ] = useState<CreditsInputForm[]>([])
 
   const [ add, setAdd ] = useState(0)
   useEffect(() => {
     const credits = getValues('credits')
     if(credits) {
-        setFirstFetch(credits)
+        setCredits(credits)
         setAdd(credits.length) 
     }
     
@@ -44,7 +41,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={ firstFetch ? firstFetch[i].name : undefined}
+                borderRadius="0" color="purple.300" px="1" value={ credits.length > i ? credits[i].name : undefined}
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
@@ -63,7 +60,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={firstFetch ? firstFetch[i].link : undefined }
+                borderRadius="0" color="purple.300" px="1" value={credits.length > i ? credits[i].link : undefined }
                 onChange={({currentTarget}) => {
                     setCredits(credits => {
                         credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}

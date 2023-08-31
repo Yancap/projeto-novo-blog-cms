@@ -21,6 +21,7 @@ export default function CategoryForms ({setValue, categories, isLoading, getValu
   const [ categoryState, setCategoryState ] = useState<string | null>(null)
   useEffect(() => {
     setCategoryState(getValues("category"))
+    setValue('category', categoryState ??  (categories ? categories[0]?.category as string : ''))
   }, [])
   return (
     <FormControl w="50%">
@@ -28,7 +29,7 @@ export default function CategoryForms ({setValue, categories, isLoading, getValu
             Categoria
         </FormLabel>
 
-        <Input as="select" id="category" name="category" defaultValue={categoryState as string}
+        <Input as="select" id="category" name="category" defaultValue={categoryState ?? categoryState ??  (categories ? categories[0]?.category as string : '')}
             focusBorderColor='purple.700' _hover={{bgColor: 'gray.800'}}        
             bgColor='gray.800' variant='filled' size={'md'} onChange={(event) => {
             if(event.target.value === "add") {

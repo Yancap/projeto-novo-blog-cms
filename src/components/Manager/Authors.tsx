@@ -113,13 +113,13 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                                 </Text>
                             </Td>
                             <Td maxW="7.5rem">
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
                                     <Icon as={RiMessage3Line} fontSize="md" mr="1"/>
                                     Mensagem
                                 </Button>
                             </Td>
                             <Td>
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
                                     <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
                                     Excluir
                                 </Button>
