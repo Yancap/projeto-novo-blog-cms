@@ -34,7 +34,7 @@ export function activateUpdate(setState: any) {
       setState(dataArray);
   
     });
-  }
+}
   
 interface WriteUserData{
     name: string;
@@ -51,7 +51,6 @@ export function writeUserData({name, email, message, chat}: WriteUserData) {
         email,
         createdAt: aux,
     });
-
 }
   
 

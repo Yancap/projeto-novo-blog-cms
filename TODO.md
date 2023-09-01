@@ -20,7 +20,10 @@ no YG.News
 - [x] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
 - [x] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
 - [x] Ajustar a pagina de criação de tags e creditos
-- [] Implementar o Chat
+- [x] Implementar o Chat
+- [] Verificar se a alternância de mensagens esta funcionando
+- [] testar com a mensagem do jonh doe
+- [] Implementar o date para cada dia
 - [] Fazer o modal de mensagens
 - [] Impedir que se volte para as rotas inexistentes
 - [] Fazer as requisições do Admin

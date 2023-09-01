@@ -15,6 +15,8 @@ import { FilterHeader } from "../Filter/FilterHeader";
 import { Checkbox } from "../Filter/Checkbox";
 import { filterForAuthors } from "../Filter/services/filterForAuthors";
 import { IAuthors } from "@/pages/admin/interfaces";
+import { Message } from "../Message";
+import { useMessager } from "@/context/MessageContext";
 
 interface AuthorsProps {
     authors: IAuthors[];
@@ -28,7 +30,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
     const maxPages = (authorsState ) ? Number((authorsState .length / 10).toFixed())  : 0
     const [modalFilter, setModalFilter] = useState(false)
     const [filter, setFilter] = useState<FilterState | null>(null)
-    
+    const {setMessagerModal, setUser, messagerModal} = useMessager()
 
     useEffect(() => {
         if(!filter) {
@@ -113,7 +115,11 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                                 </Text>
                             </Td>
                             <Td maxW="7.5rem">
-                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha" 
+                                onClick={() => {
+                                    setMessagerModal(true)
+                                    setUser({name: author.name, email: author.email})
+                                }}>
                                     <Icon as={RiMessage3Line} fontSize="md" mr="1"/>
                                     Mensagem
                                 </Button>
@@ -134,22 +140,21 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
             </>
             }
             <Filter active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
-            
-
-            <FilterHeader>
-                Ordenação
-            </FilterHeader>
-            <FilterContent  value='order' setFilter={setFilter}>
-                <Box >
-                    <Checkbox id="data" value='authors' name='order'>
-                        Autores
-                    </Checkbox>
-                    <Checkbox id="title" value='articles' name='order'>
-                        Quantidade de Artigos
-                    </Checkbox>
-                </Box>
-            </FilterContent>
-        </Filter>
+                <FilterHeader>
+                    Ordenação
+                </FilterHeader>
+                <FilterContent  value='order' setFilter={setFilter}>
+                    <Box >
+                        <Checkbox id="data" value='authors' name='order'>
+                            Autores
+                        </Checkbox>
+                        <Checkbox id="title" value='articles' name='order'>
+                            Quantidade de Artigos
+                        </Checkbox>
+                    </Box>
+                </FilterContent>
+            </Filter>
+            { messagerModal && <Message />}
       </>
     )
   }
