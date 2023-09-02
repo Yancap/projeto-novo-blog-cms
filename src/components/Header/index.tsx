@@ -43,9 +43,9 @@ export const Header = ({children}: HeaderProps) => {
     bottom:"0",
     zIndex:"10",
     px:{base:8,xl:0,'2xl':0},
-    w:{base:"100vw",md:"auto"},
-    bg:{base:"gray.900",md:"transparent"},
-    position:{base:"fixed",md:"static"}
+    w:{base:"100vw",lg:"auto"},
+    bg:{base:"gray.900",lg:"transparent"},
+    position:{base:"fixed",lg:"static"}
   }
   return (
     <Flex {...header}>
@@ -58,11 +58,11 @@ export const Header = ({children}: HeaderProps) => {
             </IconButton>
                 
             )}
-            <Flex gap="8"  >
-                <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
-                <Flex {...nav}>
-                    {children}
-                </Flex>
+            <Flex gap="8"  w="auto">
+              <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
+              <Flex {...nav}>
+                {children}
+              </Flex>
             </Flex>
             <Box>
                 <Profile />

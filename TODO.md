@@ -27,6 +27,7 @@ no YG.News
 - [X] Testar se o ontem está funcionando
 - [x] Fazer o modal de mensagens
 - [x] Pegar os authors
+- [] responsividade do chat
 - [] Impedir que se volte para as rotas inexistentes
 - [] Fazer as requisições do Admin
 - [] Resolver o problema do filtro

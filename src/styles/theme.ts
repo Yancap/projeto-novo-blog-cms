@@ -22,6 +22,9 @@ export const theme = extendTheme({
             "200": "#868AA8"
         }
     },
+    breakpoints: {
+        
+    },
     fonts: {
         heading: 'Poppins',
         body: 'Ubuntu'
