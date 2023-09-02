@@ -10,8 +10,6 @@ interface PersonMessager {
 }
 
 interface MessagerContextInfo {
-    messages: any;
-    setMessages: any;
     user: PersonMessager;
     setUser: Dispatch<SetStateAction<PersonMessager>>;
     messagerModal: boolean;
@@ -26,7 +24,6 @@ interface MessagerProviderProps{
     children: ReactNode
 }
 export function MessagerProvider({children}: MessagerProviderProps){
-    const [messages, setMessages] = useState()
     const [user, setUser] = useState<PersonMessager>({
         name: "", email: ""
     })
@@ -35,7 +32,6 @@ export function MessagerProvider({children}: MessagerProviderProps){
 
     return (
         <MessagerContext.Provider value={{
-            messages, setMessages,
             user, setUser,
             messagerModal, setMessagerModal,
             asideMessager, setAsideMessager

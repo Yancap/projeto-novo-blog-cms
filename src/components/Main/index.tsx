@@ -9,6 +9,8 @@ import {  MdOutlinePeopleAlt } from "react-icons/md";
 import {  LiaComment } from "react-icons/lia";
 import { useManagement } from '@/context/ManagementContext';
 import { useRouter } from 'next/router';
+import { Message } from '../Message';
+import { useMessager } from '@/context/MessageContext';
 
 interface AdminProps extends StackProps{
     aside?: boolean;
@@ -41,6 +43,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
 
   const router = useRouter()
   const {profile, setProfile} = useManagement()
+  const { messagerModal } = useMessager()
 
   useEffect(() => {
     const hierarchy = sessionStorage.getItem('hierarchy')
@@ -87,7 +90,9 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
                     {children}
                 </Stack>
             </Container>
-        </Flex>   
+        </Flex>  
+        
+        { messagerModal && <Message />} 
     </>
 
   )

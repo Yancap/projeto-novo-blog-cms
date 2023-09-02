@@ -1,8 +1,9 @@
 import { useMessager } from '@/context/MessageContext'
 import { Box, BoxProps, Flex } from '@chakra-ui/react'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { MessageAside } from './MessageAside'
 import { MessageContainer } from './MessageContainer'
+import { useManagement } from '@/context/ManagementContext'
 
 export const Message = () => {
 
@@ -21,8 +22,13 @@ export const Message = () => {
     zIndex: "60"
   }
 
-  const { asideMessager } = useMessager()
-
+  const { asideMessager, setUser } = useMessager()
+  const { profile } = useManagement()
+  useEffect(() => {
+    if(profile.hierarchy === "author") {
+      setUser({name: "Yan Gabriel Ferreira", email: "yan@email.com"})
+    }
+  }, [])
   return (
     <Box  {...box}>
         <Flex>

@@ -7,7 +7,7 @@ interface buildChatParams {
 interface MessagesRequest {
     name: string;
     email: string;
-    createdAt: number;
+    createdAt: number  | string;
     message: string;
     date: string;
 }

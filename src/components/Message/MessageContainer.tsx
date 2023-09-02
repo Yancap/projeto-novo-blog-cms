@@ -1,5 +1,5 @@
-import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Stack, StackProps, Text } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Spinner, Stack, StackProps, Text } from '@chakra-ui/react'
+import React, { useEffect, useRef } from 'react'
 import { ProfileMessage } from './ProfileMessage'
 import { RiCloseFill } from 'react-icons/ri'
 import { MessageInput } from './MessageInput'
@@ -16,7 +16,7 @@ export interface MessageForm{
 interface MessagesRequest {
     name: string;
     email: string;
-    createdAt: number;
+    createdAt: string | string;
     message: string;
     date: string;
 }
@@ -49,30 +49,37 @@ export const MessageContainer = () => {
     spacing: "1",
     overflowY: "auto",
   }
+
   const { register, handleSubmit, resetField } = useForm<MessageForm>()
   const { setMessagerModal, user } = useMessager()
   const { profile } = useManagement()
-  const [ date, useDate ] = useState()
-  const { data, isLoading, error, isRefetching, refetch } = useQuery('chat', async () => {
-    let adminEmail = ""
-    let authorEmail = ""
-    if(profile.hierarchy === "admin"){
-        adminEmail = profile.email
-        authorEmail = user.email
-    } else {
-        adminEmail = user.email
-        authorEmail = profile.email
+  const messageStackRef = useRef<HTMLDivElement>(null)
+
+  const { data, isRefetching, refetch   } = useQuery('chat', async () => {
+    if(user.email !== "" && user.name !== "") {
+        let adminEmail = ""
+        let authorEmail = ""
+        if(profile.hierarchy === "admin"){
+            adminEmail = profile.email
+            authorEmail = user.email
+        } else {
+            adminEmail = user.email
+            authorEmail = profile.email
+        }
+        const chat = buildChat({ adminMail: adminEmail, authorMail: authorEmail })
+        const { data } = await firebase_api.post<MessagesRequest[]>('get-chat', {chat})
+        
+        const messages = data.map( message => ({
+            ...message,
+            createdAt: `${new Date(message.createdAt).toLocaleString([], {  hour: '2-digit', minute: '2-digit' })}`
+        }))
+        
+        const datas = paginationMessagesInDatas(messages)
+        console.log(datas);
+        
+        return datas
     }
-    const chat = buildChat({ adminMail: adminEmail, authorMail: authorEmail })
-    const { data } = await firebase_api.post<MessagesRequest[]>('get-chat', {chat})
-    
-    const messages = data.map( message => ({
-        ...message,
-        createdAt: `${new Date(message.createdAt).getHours()}:${new Date(message.createdAt).getMinutes()}`
-    }))
-    
-    const datas = paginationMessagesInDatas(messages)
-    return datas
+    return null
   })
   const Submit: SubmitHandler<MessageForm> = async (value, event) => {
     let adminEmail = ""
@@ -100,22 +107,34 @@ export const MessageContainer = () => {
     }
     
   }
-  console.log(user);
+
+  useEffect(()=>{
+    refetch()
+    if(messageStackRef.current){
+        messageStackRef.current.scrollTo({
+            top: messageStackRef.current.scrollHeight
+        })
+    }
+  }, [user, data])
   
   return (
     <Box {...container}>
         <HStack {...header}>
-            { user.email === "" && user.name === "" ? null :
+            { user.email === "" && user.name === "" ? 
             <>
-                <ProfileMessage name={user.name} content={user.email}/>
-                <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
+            <Text borderRadius="full" bg="gray.800" px="4" py="1">
+                Selecione um chat
+            </Text>
+            </> :
+            <ProfileMessage name={user.name} content={user.email}/>
+            }
+            <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
                 onClick={() =>{
                     setMessagerModal(false)
                 }}/>
-            </>
-            }
         </HStack>
-        <Stack {...message_stack}>
+        <Stack {...message_stack} ref={messageStackRef}>
+            {isRefetching && <Spinner />}
             {data && data.map( item => (
                 <>
                 <DateMessage date={item.date}/>
@@ -127,7 +146,7 @@ export const MessageContainer = () => {
             ))}
         </Stack>
         <Box as="form" bg="gray.800" px="6" py="3" onSubmit={handleSubmit(Submit)}>
-            <MessageInput {...register('message')}/>
+            <MessageInput {...register('message')} />
         </Box>
     </Box>
   )
@@ -136,7 +155,7 @@ export const MessageContainer = () => {
 
 interface MessageBoxProps {
     content: string;
-    hour: string;
+    hour: string | number;
     my: boolean | false
 }
 

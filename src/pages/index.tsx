@@ -9,6 +9,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { cms_api } from '@/services/cms_api';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react'
+import { useMessager } from '@/context/MessageContext';
 
 interface SignInForm{
   email: string;
@@ -56,6 +57,7 @@ export default function Home() {
   })
 
   const { setProfile } = useManagement()
+  const { setUser, setAsideMessager, setMessagerModal} = useMessager()
   const router = useRouter()
   useEffect(() => {
     //Limpar os Cookies
@@ -64,6 +66,9 @@ export default function Home() {
       document.cookie = c.replace(/^ +/, "")
       .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
     });
+    setUser({name:"", email:""})
+    setAsideMessager(false)
+    setMessagerModal(false)
   }, [])
   const handleSignIn: SubmitHandler<SignInForm> = async (value, event) =>{
    
@@ -89,7 +94,6 @@ export default function Home() {
       
     }
   }
-
 
   return (
     <>

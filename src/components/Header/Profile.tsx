@@ -24,13 +24,13 @@ export const Profile = () => {
   }
   const notification_span: TextProps = {
     as:"span",
-    fontFamily:"Poppins",
-    fontWeight:"medium",
+    fontFamily:"Ubuntu",
+    fontWeight:"bold",
     color:"purple.300",
     position:"absolute",
-    fontSize:"sm",
+    fontSize:"md",
     top:"0",
-    right:"2"
+    right:"2.5"
   }
   return (
     <Flex gap={{base: "2", xl:"3"}} align="center">
@@ -42,7 +42,7 @@ export const Profile = () => {
             }
         }}>
           <Text {...notification_span}>
-            3
+            !
           </Text>
           <Icon as={RiMessage3Line} fontSize="2xl" color="gray.700" transition="all .15s" />
         </Flex>

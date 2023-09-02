@@ -23,10 +23,10 @@ no YG.News
 - [x] Implementar o Chat
 - [x] Verificar se a alternância de mensagens esta funcionando
 - [x] testar com a mensagem do jonh doe
-- [] Implementar o date para cada dia
-- [] Testar se o ontem está funcionando
-- [] Fazer o modal de mensagens
-- [] Pegar os authors
+- [X] Implementar o date para cada dia
+- [X] Testar se o ontem está funcionando
+- [x] Fazer o modal de mensagens
+- [x] Pegar os authors
 - [] Impedir que se volte para as rotas inexistentes
 - [] Fazer as requisições do Admin
 - [] Resolver o problema do filtro
