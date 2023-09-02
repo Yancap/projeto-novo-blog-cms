@@ -27,13 +27,14 @@ no YG.News
 - [X] Testar se o ontem está funcionando
 - [x] Fazer o modal de mensagens
 - [x] Pegar os authors
-- [] responsividade do chat
-- [] Impedir que se volte para as rotas inexistentes
-- [] Fazer as requisições do Admin
+- [x] responsividade do chat
+- [x] Fazer as requisições do Admin
+- [-] Impedir que se volte para as rotas inexistentes // verificar
 - [] Resolver o problema do filtro
 
 - [] refatorar a pagina de registert author
 
+- [] verificar a responsividade geral
 
 - [] Resolver o problema da renderização desnecessária da header e dos demais componentes
 - [-] Usar o MirageJS para criar dados fakes para a página

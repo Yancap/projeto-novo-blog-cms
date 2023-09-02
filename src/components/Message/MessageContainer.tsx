@@ -129,18 +129,20 @@ export const MessageContainer = () => {
   return (
     <Stack {...container}>
         <HStack {...header}>
-            { !isWideVersion && 
-                <Icon as={RiArrowGoBackFill} fontSize="xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
-                onClick={() => setNavigationMessager(true)}/>
-            }
-            { user.email === "" && user.name === "" ? 
-                <>
-                <Text borderRadius="full" bg="gray.800" px="4" py="1">
-                    Selecione um chat
-                </Text>
-                </> :
-                <ProfileMessage name={user.name} content={user.email}/>
-            }
+            <Flex gap="4" align="center">
+                { (!isWideVersion && profile.hierarchy === "admin") && 
+                    <Icon as={RiArrowGoBackFill} fontSize="xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
+                    onClick={() => setNavigationMessager(true)}/>
+                }
+                { user.email === "" && user.name === "" ? 
+                    <>
+                    <Text borderRadius="full" bg="gray.800" px="4" py="1">
+                        Selecione um chat
+                    </Text>
+                    </> :
+                    <ProfileMessage name={user.name} content={user.email}/>
+                }
+            </Flex>
             <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
                 onClick={() =>{
                     setMessagerModal(false)

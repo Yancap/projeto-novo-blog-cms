@@ -142,6 +142,14 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
 
   const { data: {categories} } = await cms_api.get("/categories", config)
   const { data: {article} } = await cms_api.post("articles/get", { slug }, config)
+  if(!article) {
+    return {
+      redirect: {
+        destination: `/${hierarchy}`,
+        permanent: true
+      }
+    }
+  }
   const article_id = await article.id
   
   const { data: {credits}} = await cms_api.post("credits", { article_id } )

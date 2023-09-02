@@ -16,6 +16,7 @@ import { Checkbox } from "../Filter/Checkbox";
 import { Category } from "@/interfaces/_interfaces";
 import { filterForArticles } from "../Filter/services/filterForArticles";
 import { IArticles, IAuthors } from "@/pages/admin/interfaces";
+import { cms_api } from "@/services/cms_api";
 
 interface ArticlesProps {
     articles: IArticles[] | undefined;
@@ -23,10 +24,12 @@ interface ArticlesProps {
     categories: Category[] | undefined;
     isLoading?: boolean;
     error?: unknown;
+    isRefetching: boolean;
+    refetch: any;
 }
 
 
-const Articles = ({articles, authors, categories, isLoading, error}: ArticlesProps) => {
+const Articles = ({articles, authors, categories, isLoading, error, isRefetching, refetch}: ArticlesProps) => {
     
     const [articlesState, setArticlesState] = useState(articles)
     const [modalFilter, setModalFilter] = useState(false)
@@ -74,6 +77,22 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
         }
     }
     
+
+    async function handleDelete(article_id: string){
+        const token = sessionStorage.getItem('token')
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + token 
+          },
+          data: { article_id }
+        }
+        try{
+            await cms_api.delete('admin/delete-articles', config)
+            refetch()
+        } catch(error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         if(!filter) {
             setArticlesState(articles)
@@ -84,13 +103,15 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                 
             })
         }
-    }, [filter])
+    }, [filter, articles, authors])
     
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
                     Artigos totais
+
+                    { isRefetching && <Spinner ml="4"/> }
                 </Heading>
                 <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
                 fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}} 
@@ -135,7 +156,7 @@ const Articles = ({articles, authors, categories, isLoading, error}: ArticlesPro
                                 <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
+                                <Button onClick={() => handleDelete(article.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
                                     <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
                                     Excluir
                                 </Button>

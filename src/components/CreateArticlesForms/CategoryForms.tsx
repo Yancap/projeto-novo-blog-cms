@@ -36,7 +36,7 @@ export default function CategoryForms ({setValue, categories, isLoading, getValu
                 return setAddCategory(true)
             }
             setAddCategory(false)
-            setValue('category', event.target.value)
+            setValue('category', event.target.value.toLowerCase())
             }}
         >
             {isLoading ?  

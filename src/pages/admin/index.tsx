@@ -76,8 +76,8 @@ export default function Admin() {
             navigation === "drafts" ? <Drafts articles={temp?.drafts} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
             navigation === "disabled" ? <Disabled articles={temp?.disabled} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
             navigation === "comments" ? <Comments comments={temp?.comments} isLoading={isLoading}/>  : 
-            navigation === "authors" ? <Authors authors={temp?.authors} isLoading={isLoading}/>  : 
-            navigation === "articles" ? <Articles categories={temp?.categories} authors={temp?.authors} articles={temp?.articles}/> : null
+            navigation === "authors" ? <Authors authors={temp?.authors} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/>  : 
+            navigation === "articles" ? <Articles categories={temp?.categories} authors={temp?.authors} articles={temp?.articles} isRefetching={isRefetching} refetch={refetch}/> : null
             }
         </Main>
       </>
