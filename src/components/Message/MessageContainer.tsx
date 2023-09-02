@@ -75,8 +75,6 @@ export const MessageContainer = () => {
         }))
         
         const datas = paginationMessagesInDatas(messages)
-        console.log(datas);
-        
         return datas
     }
     return null

@@ -17,7 +17,7 @@ export const MessageAside = () => {
         overflow: "hidden"
     }
 
-    const { data: authors, isLoading, error, isRefetching, refetch } = useQuery('authors', async () => {
+    const { data: authors, isLoading  } = useQuery('authors', async () => {
         const token = sessionStorage.getItem('token')
         const config = {
             headers: {
