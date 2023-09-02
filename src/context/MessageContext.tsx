@@ -16,6 +16,8 @@ interface MessagerContextInfo {
     setMessagerModal: Dispatch<SetStateAction<boolean>>;
     asideMessager: boolean;
     setAsideMessager: Dispatch<SetStateAction<boolean>>;
+    navigationMessager: boolean;
+    setNavigationMessager: Dispatch<SetStateAction<boolean>>;
 }
 
 const MessagerContext = createContext({} as MessagerContextInfo);
@@ -29,12 +31,14 @@ export function MessagerProvider({children}: MessagerProviderProps){
     })
     const [messagerModal, setMessagerModal] = useState(false)
     const [asideMessager, setAsideMessager] = useState(false)
+    const [navigationMessager, setNavigationMessager] = useState(false)
 
     return (
         <MessagerContext.Provider value={{
             user, setUser,
             messagerModal, setMessagerModal,
-            asideMessager, setAsideMessager
+            asideMessager, setAsideMessager,
+            navigationMessager, setNavigationMessager
         }}>
             {children}
         </MessagerContext.Provider>

@@ -31,7 +31,7 @@ export const Message = () => {
   }, [])
   return (
     <Box  {...box}>
-        <Flex>
+        <Flex maxW="750px" w="100%" pl="1" pr="2">
           {asideMessager && <MessageAside />}
           <MessageContainer /> 
         </Flex>

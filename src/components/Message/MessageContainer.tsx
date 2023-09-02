@@ -1,7 +1,7 @@
-import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Spinner, Stack, StackProps, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Spinner, Stack, StackProps, Text, useBreakpointValue } from '@chakra-ui/react'
 import React, { useEffect, useRef } from 'react'
 import { ProfileMessage } from './ProfileMessage'
-import { RiCloseFill } from 'react-icons/ri'
+import { RiArrowGoBackFill, RiCloseFill } from 'react-icons/ri'
 import { MessageInput } from './MessageInput'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMessager } from '@/context/MessageContext'
@@ -26,21 +26,32 @@ interface MessagesWithDatas {
 }
 
 export const MessageContainer = () => {
-  const container: BoxProps = {
-    bg:"black",
-    w:"600px",
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  })
+  const { setMessagerModal, user, navigationMessager, setNavigationMessager } = useMessager()
+
+  const container: StackProps = {
+    bg:"gray.900",
+    maxW:{md:"500px"},
     border:"2px",
     borderRadius:"8px",
-    borderColor:"gray.400"
+    borderColor:"gray.400",
+    w: "100%",
+    h: {base: "100vh",md:"auto"},
+    justify: "space-between",
+    display: (navigationMessager ? "none" : "flex")
   }
   const header: StackProps = {
     as:"header",
     w:"100%",
     justify:"space-between",
     px:"6",
-    py:"3",
+    py:"4",
     borderBottom:"4px",
-    borderColor:"purple.700"
+    borderColor:"purple.700",
+    maxH: "78px"
   }
   const message_stack: StackProps = {
     px:"6",
@@ -51,9 +62,9 @@ export const MessageContainer = () => {
   }
 
   const { register, handleSubmit, resetField } = useForm<MessageForm>()
-  const { setMessagerModal, user } = useMessager()
   const { profile } = useManagement()
   const messageStackRef = useRef<HTMLDivElement>(null)
+  
 
   const { data, isRefetching, refetch   } = useQuery('chat', async () => {
     if(user.email !== "" && user.name !== "") {
@@ -116,15 +127,19 @@ export const MessageContainer = () => {
   }, [user, data])
   
   return (
-    <Box {...container}>
+    <Stack {...container}>
         <HStack {...header}>
+            { !isWideVersion && 
+                <Icon as={RiArrowGoBackFill} fontSize="xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
+                onClick={() => setNavigationMessager(true)}/>
+            }
             { user.email === "" && user.name === "" ? 
-            <>
-            <Text borderRadius="full" bg="gray.800" px="4" py="1">
-                Selecione um chat
-            </Text>
-            </> :
-            <ProfileMessage name={user.name} content={user.email}/>
+                <>
+                <Text borderRadius="full" bg="gray.800" px="4" py="1">
+                    Selecione um chat
+                </Text>
+                </> :
+                <ProfileMessage name={user.name} content={user.email}/>
             }
             <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
                 onClick={() =>{
@@ -143,10 +158,10 @@ export const MessageContainer = () => {
                 </>
             ))}
         </Stack>
-        <Box as="form" bg="gray.800" px="6" py="3" onSubmit={handleSubmit(Submit)}>
+        <Box as="form" maxH="64px" bg="gray.800" px="6" py="3" onSubmit={handleSubmit(Submit)}>
             <MessageInput {...register('message')} />
         </Box>
-    </Box>
+    </Stack>
   )
 }
 
@@ -161,7 +176,7 @@ function MessageBox({content, hour, my}: MessageBoxProps){
     const message_box: FlexProps = {
         borderRadius:"8px",
         gap:"2",
-        bg: my ? 'purple.700' : 'gray.800',
+        bg: my ? 'purple.900' : 'gray.800',
         w:"fit-content",
         py: "2",
         px: "4",
@@ -182,7 +197,7 @@ interface DateMessageProps {
     date: string;
 }
 function DateMessage({date}: DateMessageProps){
-    const message_box: FlexProps = {
+    const date_box: FlexProps = {
         borderRadius:"full",
         bg: 'purple.700',
         w:"fit-content",
@@ -195,7 +210,7 @@ function DateMessage({date}: DateMessageProps){
         my: "4",
     }
     return (
-        <Flex {...message_box}>
+        <Flex {...date_box}>
             <Text color="gray.100" fontSize="sm" fontFamily="Poppins" fontWeight="bold">
                 {date}
             </Text>

@@ -10,7 +10,7 @@ interface ProfileMessageProps {
 
 export const ProfileMessage = ({name, content, avatar}: ProfileMessageProps) => {
   return (
-    <Flex gap="2">
+    <Flex gap="2" overflow="hidden" >
         {avatar && avatar !== ""  ? 
         <Avatar size='md' name={name} src={avatar}/>
         : 
