@@ -1,5 +1,7 @@
+import { useMessager } from '@/context/MessageContext'
 import { Box, BoxProps, Flex } from '@chakra-ui/react'
 import React from 'react'
+import { MessageAside } from './MessageAside'
 import { MessageContainer } from './MessageContainer'
 
 export const Message = () => {
@@ -18,10 +20,14 @@ export const Message = () => {
     backdropBlur: "md",
     zIndex: "60"
   }
+
+  const { asideMessager } = useMessager()
+
   return (
     <Box  {...box}>
         <Flex>
-           <MessageContainer /> 
+          {asideMessager && <MessageAside />}
+          <MessageContainer /> 
         </Flex>
     </Box>
   )

@@ -1,4 +1,5 @@
 import { useManagement } from '@/context/ManagementContext'
+import { useMessager } from '@/context/MessageContext'
 import {  Avatar, Box, Flex, FlexProps, Icon, Text, TextProps } from '@chakra-ui/react'
 import React from 'react'
 import { RiMessage3Line } from 'react-icons/ri'
@@ -7,6 +8,8 @@ import { RiMessage3Line } from 'react-icons/ri'
 
 export const Profile = () => {
   const { profile } = useManagement()
+  const {setMessagerModal, setUser, messagerModal, setAsideMessager} = useMessager()
+
   const notification_container: FlexProps = {
     position:"relative",
     align:"center",
@@ -31,7 +34,13 @@ export const Profile = () => {
   }
   return (
     <Flex gap={{base: "2", xl:"3"}} align="center">
-        <Flex {...notification_container}>
+        <Flex {...notification_container} 
+        onClick={() => {
+            setMessagerModal(true)
+            if(profile.hierarchy === "admin"){
+              setAsideMessager(true)
+            }
+        }}>
           <Text {...notification_span}>
             3
           </Text>

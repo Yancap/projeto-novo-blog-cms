@@ -16,6 +16,8 @@ interface MessagerContextInfo {
     setUser: Dispatch<SetStateAction<PersonMessager>>;
     messagerModal: boolean;
     setMessagerModal: Dispatch<SetStateAction<boolean>>;
+    asideMessager: boolean;
+    setAsideMessager: Dispatch<SetStateAction<boolean>>;
 }
 
 const MessagerContext = createContext({} as MessagerContextInfo);
@@ -29,12 +31,14 @@ export function MessagerProvider({children}: MessagerProviderProps){
         name: "", email: ""
     })
     const [messagerModal, setMessagerModal] = useState(false)
+    const [asideMessager, setAsideMessager] = useState(false)
 
     return (
         <MessagerContext.Provider value={{
             messages, setMessages,
             user, setUser,
-            messagerModal, setMessagerModal
+            messagerModal, setMessagerModal,
+            asideMessager, setAsideMessager
         }}>
             {children}
         </MessagerContext.Provider>

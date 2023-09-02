@@ -1,11 +1,11 @@
 import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Stack, StackProps, Text } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProfileMessage } from './ProfileMessage'
 import { RiCloseFill } from 'react-icons/ri'
 import { MessageInput } from './MessageInput'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMessager } from '@/context/MessageContext'
-import { buildChat, firebase_api } from '@/services/firebase_messager'
+import { buildChat, firebase_api, paginationMessagesInDatas } from '@/services/firebase_messager'
 import { useManagement } from '@/context/ManagementContext'
 import { useQuery } from 'react-query'
 
@@ -20,7 +20,10 @@ interface MessagesRequest {
     message: string;
     date: string;
 }
-
+interface MessagesWithDatas {
+    date: string;
+    messages: MessagesRequest[]
+}
 
 export const MessageContainer = () => {
   const container: BoxProps = {
@@ -49,8 +52,8 @@ export const MessageContainer = () => {
   const { register, handleSubmit, resetField } = useForm<MessageForm>()
   const { setMessagerModal, user } = useMessager()
   const { profile } = useManagement()
-
-  const { data: messages, isLoading, error, isRefetching, refetch } = useQuery('chat', async () => {
+  const [ date, useDate ] = useState()
+  const { data, isLoading, error, isRefetching, refetch } = useQuery('chat', async () => {
     let adminEmail = ""
     let authorEmail = ""
     if(profile.hierarchy === "admin"){
@@ -62,12 +65,14 @@ export const MessageContainer = () => {
     }
     const chat = buildChat({ adminMail: adminEmail, authorMail: authorEmail })
     const { data } = await firebase_api.post<MessagesRequest[]>('get-chat', {chat})
+    
     const messages = data.map( message => ({
         ...message,
         createdAt: `${new Date(message.createdAt).getHours()}:${new Date(message.createdAt).getMinutes()}`
     }))
     
-    return messages
+    const datas = paginationMessagesInDatas(messages)
+    return datas
   })
   const Submit: SubmitHandler<MessageForm> = async (value, event) => {
     let adminEmail = ""
@@ -95,21 +100,30 @@ export const MessageContainer = () => {
     }
     
   }
-  console.log(messages);
+  console.log(user);
   
   return (
     <Box {...container}>
         <HStack {...header}>
-            <ProfileMessage name={user.name} content={user.email}/>
-            <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
-            onClick={() =>{
-                setMessagerModal(false)
-            }}/>
+            { user.email === "" && user.name === "" ? null :
+            <>
+                <ProfileMessage name={user.name} content={user.email}/>
+                <Icon as={RiCloseFill} fontSize="3xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
+                onClick={() =>{
+                    setMessagerModal(false)
+                }}/>
+            </>
+            }
         </HStack>
         <Stack {...message_stack}>
-            <DateMessage date="14 de Agosto"/>
-            {messages && messages.map( message => (
-                <MessageBox content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
+            {data && data.map( item => (
+                <>
+                <DateMessage date={item.date}/>
+                {item.messages.map( message => (
+                    <MessageBox content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
+                ))}
+                
+                </>
             ))}
         </Stack>
         <Box as="form" bg="gray.800" px="6" py="3" onSubmit={handleSubmit(Submit)}>
@@ -128,7 +142,7 @@ interface MessageBoxProps {
 
 function MessageBox({content, hour, my}: MessageBoxProps){
     const message_box: FlexProps = {
-        borderRadius:"4px",
+        borderRadius:"8px",
         gap:"2",
         bg: my ? 'purple.700' : 'gray.800',
         w:"fit-content",
