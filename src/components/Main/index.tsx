@@ -69,7 +69,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
           <HeaderLink href='/admin'>Gerencia</HeaderLink>
           <HeaderLink href='/articles/create'>Novo artigo</HeaderLink>
           {profile.hierarchy === "admin" &&
-          <HeaderLink href='/register-author'>Adicionar autor</HeaderLink>
+          <HeaderLink href='/admin/register-author'>Adicionar autor</HeaderLink>
           }
         </Header>
         <Flex {...main}>

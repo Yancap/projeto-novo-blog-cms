@@ -30,11 +30,10 @@ no YG.News
 - [x] responsividade do chat
 - [x] Fazer as requisições do Admin
 - [-] Impedir que se volte para as rotas inexistentes // verificar
+- [x] refatorar a pagina de register author
+
 - [] Resolver o problema do filtro
-
-- [] refatorar a pagina de registert author
-
 - [] verificar a responsividade geral
 
 - [] Resolver o problema da renderização desnecessária da header e dos demais componentes
-- [-] Usar o MirageJS para criar dados fakes para a página
+- [x] Usar o MirageJS para criar dados fakes para a página
