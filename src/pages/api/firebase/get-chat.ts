@@ -33,6 +33,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
                 const data = snapshot.val();
                 
                 const dataArray = Object.keys(data).map(key => data[key]);
+                
                 response = dataArray
             });
             return res.status(200).send( response )

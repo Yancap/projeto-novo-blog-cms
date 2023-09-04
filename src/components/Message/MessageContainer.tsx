@@ -85,7 +85,8 @@ export const MessageContainer = () => {
             createdAt: `${new Date(message.createdAt).toLocaleString([], {  hour: '2-digit', minute: '2-digit' })}`
         }))
         
-        const datas = paginationMessagesInDatas(messages)
+        
+        const datas = await paginationMessagesInDatas(messages)
         return datas
     }
     return null
