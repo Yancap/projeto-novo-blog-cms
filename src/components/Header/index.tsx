@@ -48,8 +48,10 @@ export const Header = ({children}: HeaderProps) => {
     position:{base:"fixed",lg:"static"}
   }
   return (
-    <Flex {...header}>
-        <Container {...container}>
+    <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, md: 0}}  align="center" justify="center">
+        <Container alignItems="center" justifyContent="space-between" 
+        gap="8" display="flex" w="100%" maxW={{lg: 1024,'2xl': 1124}}
+        py={{base: "6", md: 0}}>
             {(!isWideVersion && (asPath === "/admin" || asPath === "/author"))&& (
             <IconButton icon={<Icon as={RiMenuLine}/>}  
                 display="grid" placeContent="center"
@@ -58,11 +60,16 @@ export const Header = ({children}: HeaderProps) => {
             </IconButton>
                 
             )}
-            <Flex gap="8"  w="auto">
-              <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
-              <Flex {...nav}>
-                {children}
-              </Flex>
+            <Flex justify="space-between" gap="8" w="100%" maxW="580px" >
+                <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
+                <Flex gap={{base: "2", sm: "4"}} left="0" bottom="0" 
+                zIndex="10" 
+                px={{base: 8, xl: 0,'2xl': 0}} 
+                w={{base: "100vw", md: "auto"}} 
+                bg={{base: "gray.900", md: "transparent"}} 
+                position={{base: "fixed", md: "static"}}>
+                    {children}
+                </Flex>
             </Flex>
             <Box>
                 <Profile />

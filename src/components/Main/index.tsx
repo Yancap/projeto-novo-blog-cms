@@ -86,7 +86,7 @@ export const Main = ({children, aside=true, ...props}: AdminProps) => {
                 </Aside>
                 }
                 <Stack as="section" borderRadius={12} w={{base:"100%"}}
-                px={["4", "8"]} py="8" bg="gray.900" spacing='6'  maxW="100%" {...props}>
+                px={aside ? ["4", "8"] : ["0", "0", "8"]} py="8" bg="gray.900" spacing='6'  maxW="100%" {...props}>
                     {children}
                 </Stack>
             </Container>

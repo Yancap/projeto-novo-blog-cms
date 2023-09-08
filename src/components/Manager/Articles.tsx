@@ -149,10 +149,10 @@ const Articles = ({articles, authors, categories, isLoading, error, isRefetching
                                     {article.title}
                                 </Heading>
                             </Td>
-                            <Td>
+                            <Td minW="10rem">
                                 <Text fontSize="sm" color="gray.300">{article.author}</Text>
                             </Td>
-                            <Td minW="14rem">
+                            <Td >
                                 <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >

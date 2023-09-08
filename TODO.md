@@ -8,32 +8,6 @@ no YG.News
 - [X] Realizar o Mock de dados dos autores e comentários
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
-- [x] Filtrar
-- [x] rotas para mostrar todas as categorias
-- [x] finalzar a requisição para a pagina de criação
-= [x] Adicionar os comentários
-- [x] fazer atualização da pagina dos comentários (refetch)
-- [x] adicionar as funcionalidades de editar
-- [x] Colocar o botão de modificar o 'state' do artigo na pagina de editar
-- [x] Fazer os botões de Rascunho e Publicar das pagina de create e edit voltar para a home
-- [x] Fazer a ativação dos artigos
-- [x] Substituir o SSR pelo React Query para deixar as atualizações mais dinâmicas
-- [x] Resolver os problemas do next routes das paginas de edit e create, verificando se o React Query ajudou
-- [x] Ajustar a pagina de criação de tags e creditos
-- [x] Implementar o Chat
-- [x] Verificar se a alternância de mensagens esta funcionando
-- [x] testar com a mensagem do jonh doe
-- [X] Implementar o date para cada dia
-- [X] Testar se o ontem está funcionando
-- [x] Fazer o modal de mensagens
-- [x] Pegar os authors
-- [x] responsividade do chat
-- [x] Fazer as requisições do Admin
-- [-] Impedir que se volte para as rotas inexistentes // verificar
-- [x] refatorar a pagina de register author
+- [] Filtrar
 
-- [] Resolver o problema do filtro
-- [] verificar a responsividade geral
-
-- [] Resolver o problema da renderização desnecessária da header e dos demais componentes
-- [x] Usar o MirageJS para criar dados fakes para a página
+- [-] Usar o MirageJS para criar dados fakes para a página
