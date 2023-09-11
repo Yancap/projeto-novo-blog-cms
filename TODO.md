@@ -8,6 +8,7 @@ no YG.News
 - [X] Realizar o Mock de dados dos autores e comentários
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
-- [] Filtrar
+- [x] Filtrar
+- [] Fazer a funcionalidade de adicionar um avatar ao perfil
 
 - [-] Usar o MirageJS para criar dados fakes para a página
