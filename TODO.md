@@ -9,5 +9,7 @@ no YG.News
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
 - [x] Filtrar
-
+- [] Ajeitar o sistema de chat
+- [] ajustar a parte de comentários
+- [] ajustar os slugs
 - [x] Usar o MirageJS para criar dados fakes para a página
