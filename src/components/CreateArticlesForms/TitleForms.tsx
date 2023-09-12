@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { Input } from '../Input'
 import { useCreateArticles } from '@/hooks/useCreateArticles'
-import { FormCreateArticles } from '@/pages/create'
 import { UseFormRegister } from "react-hook-form";
+import { FormCreateArticles } from '@/interfaces/_interfaces';
 
 interface TitleFormsProps {
   register: UseFormRegister<FormCreateArticles>
 }
 
 export const TitleForms = ({register}: TitleFormsProps) => {
-  console.log("aaaaaa");
   
   return (
     <>

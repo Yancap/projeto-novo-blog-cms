@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react'
 import { Flex, FormControl, FormLabel, Stack, Input, Text, Icon, Box, Button } from "@chakra-ui/react";
-import { RiAddCircleLine } from "react-icons/ri";
+import { RiAddCircleLine, RiCloseCircleLine } from "react-icons/ri";
 import { RxTextAlignLeft } from "react-icons/rx";
+import { FormCreateArticles } from '@/interfaces/_interfaces';
+import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 
 interface CreditsInputForm {
     name: string;
@@ -9,50 +11,61 @@ interface CreditsInputForm {
 }
 
 interface CreditsFormsProps {
-    setValue: any
+    setValue: UseFormSetValue<FormCreateArticles>
+    getValues: UseFormGetValues<FormCreateArticles>
 }
 
-export const CreditsForms = ({setValue}: CreditsFormsProps) => {
-  const [ credits, setCredits ] = useState<CreditsInputForm[]>([
-    {name: "", link: ""}
-  ])
+export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
+  const [ credits, setCredits ] = useState<CreditsInputForm[]>([])
 
   const [ add, setAdd ] = useState(0)
-
+  useEffect(() => {
+    const credits = getValues('credits')
+    if(credits) {
+        setCredits(credits)
+        setAdd(credits.length) 
+    }
+    
+  }, [])
   let elements = []
+  
+  
   for(let i = 0; i < add+1; i++){
     elements.push(
-        <Flex gap="10" key={i}>
-            <Box w="45%" borderLeft="2px" borderColor="gray.900" px="4" py="2">
+        <Flex gap={{base: "0",md:"10"}} direction={{base: "column",md:"row"}} key={i}
+        borderBottom={{base: "2px",md:"0"}} borderColor="gray.900">
+            <Box w={{base: "100&",md:"45%"}} borderLeft="2px" borderColor="gray.900" px="4" py="2">
                 <FormLabel fontSize="sm" color="gray.400">
                 Nome
                 </FormLabel>
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" 
-                onBlur={({currentTarget}) => {
-                    setCredits(credits => ({...credits, 
-                        [add]: { name: currentTarget.value, link: credits[add]?.link ?? ''}}
-                    ))
+                borderRadius="0" color="purple.300" px="1" value={ credits.length > i ? credits[i].name : undefined}
+                onChange={({currentTarget}) => {
+                    setCredits(credits => {
+                        credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
+                        return credits
+                    })
                     setValue('credits',  credits )
                     
                 }}
                 />
                 </Flex>
             </Box>
-            <Box w="45%" borderLeft="2px" borderColor="gray.900" px="4" py="2">
+            <Box w={{base: "100&",md:"45%"}}  borderLeft="2px" borderColor="gray.900" px="4" py="2">
                 <FormLabel fontSize="sm" color="gray.400">
                 Link
                 </FormLabel>
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1"
+                borderRadius="0" color="purple.300" px="1" value={credits.length > i ? credits[i].link : undefined }
                 onChange={({currentTarget}) => {
-                    setCredits(credits => ({...credits, 
-                        [add]: { name: credits[add]?.name ?? '', link: currentTarget.value}}
-                    ))
+                    setCredits(credits => {
+                        credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
+                        return credits
+                    })
                     setValue('credits',  credits)
                 }}
                 />
@@ -63,15 +76,35 @@ export const CreditsForms = ({setValue}: CreditsFormsProps) => {
   }
   
   return (
-    <FormControl w="80%">
+    <FormControl w={{base: "100%",md:"80%"}}>
         <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">
             Créditos
         </Text>
         <Stack minH="120px" borderRadius="4" bgColor='gray.800' px="8" py="4">
             
             {...elements}
+            <Flex gap="2">
             <Icon as={RiAddCircleLine} fontSize="2xl" color="purple.200" onClick={() => setAdd(add+1)}/>
+            {add >= 1 && 
+            <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
+                onClick={() => {
+                    setAdd(add-1)
+                    setCredits(credits => {
+                        try {
+                            credits.splice(add, 1)
+                            setValue('credits', credits)
+                            return credits
+                        } catch {
+                            return credits
+                        }
+                    })
+                    
+                }}/>
+            }
+            </Flex>
+            
         </Stack>
     </FormControl>
   )
 }
+

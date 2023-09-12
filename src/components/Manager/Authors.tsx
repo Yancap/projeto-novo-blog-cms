@@ -9,56 +9,63 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiFilter3Fill, RiMessage3Line } from "react-icons/ri";
 import { memo, useEffect, useRef, useState } from "react";
-import { Authors } from "@/pages/admin/index";
 import { FilterContent, FilterState } from "../Filter/FilterContent";
 import { Filter } from "../Filter/index";
 import { FilterHeader } from "../Filter/FilterHeader";
 import { Checkbox } from "../Filter/Checkbox";
 import { filterForAuthors } from "../Filter/services/filterForAuthors";
+import { IAuthors } from "@/pages/admin/interfaces";
+import { Message } from "../Message";
+import { useMessager } from "@/context/MessageContext";
+import { cms_api } from "@/services/cms_api";
 
 interface AuthorsProps {
-    authors: Authors[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    authors: IAuthors[];
+    isLoading?: boolean;
+    error?: unknown;
+    isRefetching: boolean;
+    refetch: any;
 }
 
-const Authors = ({authors, isLoading, error}: AuthorsProps) => {
+const Authors = ({authors, isLoading, error, refetch, isRefetching}: AuthorsProps) => {
     const [page, setPage ] = useState(1)
-    const [authorsState, setAuthorsState] = useState(authors)
-    const maxPages = (authorsState) ? Number((authorsState.length / 10).toFixed())  : 0
-    const [modalFilter, setModalFilter] = useState(false)
-    const [filter, setFilter] = useState<FilterState | null>(null)
-    
+    const maxPages = (authors ) ? Number((authors .length / 10).toFixed())  : 0
+    const {setMessagerModal, setUser } = useMessager()
 
-    useEffect(() => {
-        if(!filter) {
-            setAuthorsState(authors)
+    async function handleDelete(author_id: string){
+        const token = sessionStorage.getItem('token')
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + token 
+          },
+          data: { author_id }
         }
-        if(authorsState && filter && authors){
-            console.log(filter);
-            
-            return setAuthorsState(() => {
-                return filterForAuthors(filter, authors)
-            })
+        try{
+            await cms_api.delete('admin/delete-authors', config)
+            refetch()
+        } catch(error) {
+            console.log(error);
         }
-    }, [filter])
+    }
     return (
       <>
             <Flex as="header" align="center" justify="space-between">
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
-                    Artigos totais
+                    Autores
+
+                    { isRefetching && <Spinner ml="4"/> }
                 </Heading>
-                <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
-                fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}
-                onClick={() => setModalFilter(true)}>
-                    Filtrar
-                    <Icon as={RiFilter3Fill} fontSize="lg" ml="1"/>
-                </Button>
             </Flex>
-            { isLoading ? 
+            { isLoading && 
             <Flex justify='center'>
                 <Spinner />
             </Flex>
+            }
+            { authors.length === 0 ? 
+            <Flex justify='center'>
+                <Text> Sem dados </Text>
+            </Flex>
+            
                 : error ? 
             <Flex>
                 <Text> Falha ao buscar os dados </Text>
@@ -77,7 +84,7 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                    {authorsState && authorsState.slice((page - 1) * 10, page * 10)
+                    {authors && authors.slice((page - 1) * 10, page * 10)
                     .map(author =>
                         <Tr key={author.id}>
                             <Td minW="18rem">
@@ -100,20 +107,24 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                             </Td>
                             <Td minW="14rem">
                                 <Text fontSize="sm" color="gray.300">
-                                    {author.all_articles === 0 ? "N/A" :
-                                    author.all_articles === 1 ? '1 Artigo' :
-                                    `${author.all_articles} Artigos`
+                                    {author.allArticles === 0 ? "N/A" :
+                                    author.allArticles === 1 ? '1 Artigo' :
+                                    `${author.allArticles} Artigos`
                                     }
                                 </Text>
                             </Td>
                             <Td maxW="7.5rem">
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha">
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="whiteAlpha" 
+                                onClick={() => {
+                                    setMessagerModal(true)
+                                    setUser({name: author.name, email: author.email})
+                                }}>
                                     <Icon as={RiMessage3Line} fontSize="md" mr="1"/>
                                     Mensagem
                                 </Button>
                             </Td>
                             <Td>
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                                <Button onClick={() => handleDelete(author.id)} fontWeight="normal" size="xs" fontSize="xs" colorScheme="red">
                                     <Icon as={RiDeleteBin6Line} fontSize="xs" mr="1"/>
                                     Excluir
                                 </Button>
@@ -127,23 +138,6 @@ const Authors = ({authors, isLoading, error}: AuthorsProps) => {
                 </Flex>
             </>
             }
-            <Filter active={modalFilter} setActive={setModalFilter} setFilter={setFilter}>
-            
-
-            <FilterHeader>
-                Ordenação
-            </FilterHeader>
-            <FilterContent  value='order' setFilter={setFilter}>
-                <Box >
-                    <Checkbox id="data" value='authors' name='order'>
-                        Autores
-                    </Checkbox>
-                    <Checkbox id="title" value='articles' name='order'>
-                        Quantidade de Artigos
-                    </Checkbox>
-                </Box>
-            </FilterContent>
-        </Filter>
       </>
     )
   }

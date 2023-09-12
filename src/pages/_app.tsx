@@ -9,10 +9,11 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 import { AsideDrawerProvider } from '@/context/AsideDrawerContext'
 import { ManagementProvider } from '@/context/ManagementContext'
 import { makeServer } from '@/services/miragejs'
+import { MessagerProvider } from '@/context/MessageContext'
 
 
 if(process.env.NODE_ENV === 'development') {
-  makeServer()
+  //makeServer()
 }
 const client = new QueryClient()
 
@@ -22,9 +23,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={client}>
       <ChakraProvider theme={theme}>
         <ManagementProvider>
-          <AsideDrawerProvider>
-            <Component {...pageProps} />
-          </AsideDrawerProvider>
+          <MessagerProvider >
+            <AsideDrawerProvider>
+              <Component {...pageProps} />
+            </AsideDrawerProvider>
+          </MessagerProvider >
         </ManagementProvider>
       </ChakraProvider>
     </QueryClientProvider>

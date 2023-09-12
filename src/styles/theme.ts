@@ -16,11 +16,15 @@ export const theme = extendTheme({
             "100": "#D0DAFA",
         },
         purple: {
+            "900": "#4340FF",
             "800": "#4643F0",
             "700": "#5653F4",
             "300": "#9D9BF2",
             "200": "#868AA8"
         }
+    },
+    breakpoints: {
+        
     },
     fonts: {
         heading: 'Poppins',

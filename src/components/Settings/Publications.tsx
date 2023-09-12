@@ -9,19 +9,21 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
-import { Article } from "@/pages/admin";
 import { memo, useState } from "react";
+import { IArticles } from "@/pages/admin/interfaces";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface PublicationsProps {
-    articles: Article[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    articles?: IArticles[] ;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
 const Publications = ({articles, isLoading, error}: PublicationsProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
-    
+    const router = useRouter()
     
     return (
       <>
@@ -29,17 +31,24 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                 <Heading fontFamily="Ubuntu" fontSize="2rem" fontWeight="normal">
                     Artigos publicados
                 </Heading>
-                <Button as="a" fontWeight="normal" size="sm" cursor="pointer"
-                fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}>
-                    <Icon as={PiPlusBold} fontSize="sm" mr="1"/>
-                    Criar novo
-                </Button>
+                <Link href='/articles/create'>
+                    <Button as="button" fontWeight="normal" size="sm" cursor="pointer"
+                    fontSize="sm" bg="purple.700" color="white" _hover={{bg: "purple.800"}}>
+                        <Icon as={PiPlusBold} fontSize="sm" mr="1"/>
+                        Criar novo
+                    </Button>
+                </Link>
+                
             </Flex>
-
-            { isLoading ? (
-                        <Flex justify='center'>
-                            <Spinner />
-                        </Flex>
+            { isLoading && 
+            <Flex justify='center'>
+                <Spinner />
+            </Flex>
+            }
+            { articles && articles.length === 0 ? (
+                    <Flex justify='center'>
+                        <Text> Sem dados </Text>
+                    </Flex>
                     ) : error ? 
                     <Flex>
                         <Text> Falha ao buscar os dados </Text>
@@ -73,10 +82,12 @@ const Publications = ({articles, isLoading, error}: PublicationsProps) => {
                                 <Text fontSize="sm" color="gray.300">{new Date(article.created_at).toLocaleDateString()}</Text>
                             </Td>
                             <Td >
-                                <Button as="a" fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
+                            <Link href={`/articles/edit/${article.slug}`}>
+                                <Button fontWeight="normal" size="xs" fontSize="xs" colorScheme="purple">
                                     <Icon as={RiEdit2Line} fontSize="xs" mr="1"/>
                                     Editar
                                 </Button>
+                            </Link>
                             </Td>
                         </Tr>    
                         )}

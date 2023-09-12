@@ -4,7 +4,7 @@ import { useCreateArticles } from '@/hooks/useCreateArticles'
 
 
 import { UseFormRegister } from "react-hook-form";
-import { FormCreateArticles } from '@/pages/create';
+import { FormCreateArticles } from '@/interfaces/_interfaces';
 
 interface SubtitleFormsProps {
   register: UseFormRegister<FormCreateArticles>

@@ -1,6 +1,6 @@
 export interface Tags {
-    tag: string;
-  }
+  name: string;
+}
   
 export interface Credits{
 name: string;
@@ -20,5 +20,6 @@ export interface FormCreateArticles{
     category: string;
     tags: Tags[];
     credits: Credits[];
+    state?: string;
   }
   

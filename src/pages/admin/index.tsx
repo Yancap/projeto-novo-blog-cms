@@ -9,87 +9,60 @@ import { GetServerSideProps } from "next";
 import { useQuery } from "react-query";
 import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
+import { cms_api } from "@/services/cms_api";
+import { IAuthors, IArticles, Category,  ArticleComments  } from "./interfaces";
 
-export interface Article {
-  id: string;
-  title: string;
-  subtitle: string;
-  text: string;
-  category: string;
-  author: string;
-  created_at: string;
-  state: string;
-  
-}
-export interface Authors {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string | null | undefined;
-  all_articles: number;
-}
-type Comments = {
-  id: string;
-  text: string;
-  created_at: string;
-  user_name: string;
-}
 
-export interface ArticleComments {
-  comments: Comments[],
-  article: {
-      slug: string;
-      title: string;
-      category: string;
-  }
-}
 
 interface AdminProps {
-  articles: Article[];
+  hierarchy: string;
 }
 
-export interface Category {
-  id: string;
-  category: string;
-}
 
-export default function Admin({}: AdminProps) {
 
-  const { data, isLoading, error } = useQuery('articles', async () => {
+export default function Admin() {
+  const { data: temp, isLoading, error, isRefetching, refetch } = useQuery('admin', async () => {
+    const token = sessionStorage.getItem('token')
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + token 
+      }
+    }
+    const { data: {articles} } = await cms_api.get("/articles", config)
+    const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
+    const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
+    const { data: {categories} } = await cms_api.get("/categories", config)
+    const comments = []
+
+    for(let article of articles){
+      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+      if(data){
+        comments.push(data);
+      }
+    }
     
-    const [articlesResponse, authorsResponse, commentsResponse, categoriesResponse] = await Promise.all([
-      fetch("http://localhost:3000/api/articles"),
-      fetch("http://localhost:3000/api/authors"),
-      fetch("http://localhost:3000/api/comments"),
-      fetch("http://localhost:3000/api/categories")
-    ])
+    const published: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "active")
 
-    const [{articles}, authors, comments, categories] = await Promise.all([
-      articlesResponse.json(),
-      authorsResponse.json(),
-      commentsResponse.json(),
-      categoriesResponse.json()
-    ])
+    const disabled: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "inactive")
 
-    const published: Article[] = articles
-    .filter((article: Article) => article.state === "active")
-
-    const disabled: Article[] = articles
-    .filter((article: Article) => article.state === "inactive")
-
-    const drafts: Article[] = articles
-    .filter((article: Article) => article.state === "draft")
+    const drafts: IArticles[] = articles
+    .filter((article: IArticles) => article.state === "draft")
 
     return {
-      published, disabled, drafts, 
-      articles, authors, comments, categories
+      published,
+      disabled,
+      drafts,
+      authors,
+      articles: allArticles ?? null,
+      categories,
+      comments
     }
   })
-    
-  
-  const { navigation } = useManagement()
 
-    return (
+  const { navigation } = useManagement()
+  return (
       <>
         <Head>
             <title>Admin | ARTechCMS</title>
@@ -99,12 +72,12 @@ export default function Admin({}: AdminProps) {
         </Head>
         <Main>
             {
-            navigation === "" ? <Publications articles={data?.published} isLoading={isLoading} error={error}/> : 
-            navigation === "drafts" ? <Drafts articles={data?.drafts} isLoading={isLoading} error={error}/> : 
-            navigation === "disabled" ? <Disabled articles={data?.disabled} isLoading={isLoading} error={error}/> : 
-            navigation === "comments" ? <Comments comments={data?.comments} isLoading={isLoading} error={error}/>  : 
-            navigation === "authors" ? <Authors authors={data?.authors} isLoading={isLoading} error={error}/>  : 
-            navigation === "articles" ? <Articles categories={data?.categories} authors={data?.authors} articles={data?.articles} isLoading={isLoading} error={error}/> : null
+            navigation === "" ? <Publications articles={temp?.published} isLoading={isLoading}/> : 
+            navigation === "drafts" ? <Drafts articles={temp?.drafts} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
+            navigation === "disabled" ? <Disabled articles={temp?.disabled} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/> : 
+            navigation === "comments" ? <Comments comments={temp?.comments} isLoading={isLoading}/>  : 
+            navigation === "authors" ? <Authors authors={temp?.authors} isLoading={isLoading} isRefetching={isRefetching} refetch={refetch}/>  : 
+            navigation === "articles" ? <Articles categories={temp?.categories} authors={temp?.authors} articles={temp?.articles} isRefetching={isRefetching} refetch={refetch}/> : null
             }
         </Main>
       </>
@@ -113,8 +86,8 @@ export default function Admin({}: AdminProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {
   
-  let hierarchy = "admin" 
-  if (hierarchy !== "admin") {
+  let { hierarchy, token } = req.cookies 
+  if (!hierarchy || !token || hierarchy !== "admin") {
     return {
       redirect: {
         destination: '/author',
@@ -122,10 +95,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
       }
     }
   }
-  
+
   return {
     props: {
-      //articles
+      hierarchy
     }
   }
 }

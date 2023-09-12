@@ -9,19 +9,17 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiEyeLine } from "react-icons/ri";
 import { memo, useState } from "react";
-import { ArticleComments } from "@/pages/admin";
 import Link from "../../../node_modules/next/link";
 import { useRouter } from "../../../node_modules/next/router";
+import { ArticleComments } from "@/pages/admin/interfaces";
 
 interface CommentsProps {
-    comments: ArticleComments[] | undefined;
-    isLoading: boolean;
-    error: unknown;
+    comments?: ArticleComments[] | null;
+    isLoading?: boolean;
+    error?: unknown;
 }
 
-const Comments = ({comments, isLoading, error}: CommentsProps) => {
-    const {query} = useRouter()
-    
+const Comments = ({comments, isLoading, error}: CommentsProps) => {    
     const [page, setPage ] = useState(1)
     const maxPages = (comments) ? Number((comments.length / 10).toFixed())  : 0
     return (
@@ -31,13 +29,14 @@ const Comments = ({comments, isLoading, error}: CommentsProps) => {
                     Comentários
                 </Heading>
             </Flex>
-            { isLoading ? 
+            { isLoading && 
             <Flex justify='center'>
                 <Spinner />
             </Flex>
-                : error ? 
-            <Flex>
-                <Text> Falha ao buscar os dados </Text>
+            }
+            { !comments || comments.length === 0 ? 
+            <Flex justify="center">
+                <Text> Sem Comentários </Text>
             </Flex> :
             <>
                 <Table>

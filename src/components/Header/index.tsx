@@ -1,6 +1,5 @@
-import { Box, Container, Flex, Icon, IconButton, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Container, ContainerProps, Flex, FlexProps, Icon, IconButton, useBreakpointValue } from '@chakra-ui/react'
 import Image from 'next/image'
-import React from 'react'
 import { Profile } from './Profile'
 import { RiMenuLine } from 'react-icons/ri'
 import { useAsideDrawer } from '@/context/AsideDrawerContext'
@@ -10,18 +9,49 @@ interface HeaderProps {
     children: React.ReactNode
 }
 
+
 export const Header = ({children}: HeaderProps) => {
+
   const { asPath } = useRouter() 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   })
   const { onOpen } = useAsideDrawer()
+
+  const header: FlexProps = {
+    as:"header",
+    maxW:"100vw",
+    px:{base:4,sm:8,md:10,lg:0},
+    align:"center",
+    justify:"center"
+  }
+  const container: ContainerProps = {
+    alignItems:"center",
+    justifyContent:"space-between",
+    gap:"8",
+    display:"flex",
+    w:"100%",
+    maxW:{lg:992,'2xl':1024},
+    py:{base: "6", md: 0},
+    pt:{base: 2, md: 2}
+  }
+  const nav: FlexProps = {
+    as:"nav",
+    gap:{base:"2",sm:"4"},
+    left:"0",
+    bottom:"0",
+    zIndex:"10",
+    px:{base:8,xl:0,'2xl':0},
+    w:{base:"100vw",lg:"auto"},
+    bg:{base:"gray.900",lg:"transparent"},
+    position:{base:"fixed",lg:"static"}
+  }
   return (
-    <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, lg: 0}}  align="center" justify="center">
+    <Flex as="header" maxW="100vw" px={{base: 4,sm: 8, md: 0}}  align="center" justify="center">
         <Container alignItems="center" justifyContent="space-between" 
         gap="8" display="flex" w="100%" maxW={{lg: 1024,'2xl': 1124}}
-        py={{base: "6", lg: 0}}>
+        py={{base: "6", md: 0}}>
             {(!isWideVersion && (asPath === "/admin" || asPath === "/author"))&& (
             <IconButton icon={<Icon as={RiMenuLine}/>}  
                 display="grid" placeContent="center"
@@ -35,9 +65,9 @@ export const Header = ({children}: HeaderProps) => {
                 <Flex gap={{base: "2", sm: "4"}} left="0" bottom="0" 
                 zIndex="10" 
                 px={{base: 8, xl: 0,'2xl': 0}} 
-                w={{base: "100vw", lg: "auto"}} 
-                bg={{base: "gray.900", lg: "transparent"}} 
-                position={{base: "fixed", lg: "static"}}>
+                w={{base: "100vw", md: "auto"}} 
+                bg={{base: "gray.900", md: "transparent"}} 
+                position={{base: "fixed", md: "static"}}>
                     {children}
                 </Flex>
             </Flex>

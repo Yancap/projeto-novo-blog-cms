@@ -13,3 +13,6 @@ no YG.News
 - [] ajustar a parte de comentários
 - [] ajustar os slugs
 - [x] Usar o MirageJS para criar dados fakes para a página
+- [] Fazer a funcionalidade de adicionar um avatar ao perfil
+
+- [-] Usar o MirageJS para criar dados fakes para a página

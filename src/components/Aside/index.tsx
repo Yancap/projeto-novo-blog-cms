@@ -18,7 +18,8 @@ export const Aside = ({children}: AsideProps) => {
     base: true,
     lg: false
   })
-
+  
+  
   if(isDrawerSidebar){
     return (
         <Drawer isOpen={isOpen} placement='left' onClose={onClose}>
@@ -34,9 +35,9 @@ export const Aside = ({children}: AsideProps) => {
                             <Heading as="h4" marginBottom="2" fontSize="12px" fontWeight="extrabold" color="gray.400">
                                 Configurações
                             </Heading>
-                            <AsideLink href='/settings/publications' text='Publicações'  icon={BsGlobe2}/>
-                            <AsideLink href='/settings/drafts' text='Rascunhos'  icon={RiFileEditLine}/>
-                            <AsideLink href='/settings/disabled' text='Desativados'  icon={MdCloudOff}/>
+                            <AsideLink href='' text='Publicações'  icon={BsGlobe2}/>
+                            <AsideLink href='drafts' text='Rascunhos'  icon={RiFileEditLine}/>
+                            <AsideLink href='disabled' text='Desativados'  icon={MdCloudOff}/>
                         </Stack>
                         <Stack spacing="3">
                             <Heading as="h4" marginBottom="2" fontSize="12px" fontWeight="extrabold" color="gray.400">
