@@ -9,9 +9,9 @@ no YG.News
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
 - [x] Filtrar
-- [] Ajeitar o sistema de chat
-- [] ajustar a parte de comentários
-- [] ajustar os slugs
+- [x] Ajeitar o sistema de chat
+- [x] ajustar a parte de comentários
+- [x] ajustar os slugs
 - [x] Usar o MirageJS para criar dados fakes para a página
 - [] Fazer a funcionalidade de adicionar um avatar ao perfil
 

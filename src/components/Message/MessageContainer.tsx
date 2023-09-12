@@ -66,7 +66,7 @@ export const MessageContainer = () => {
   const messageStackRef = useRef<HTMLDivElement>(null)
   
 
-  const { data, isRefetching, refetch   } = useQuery('chat', async () => {
+  const { data, isRefetching, refetch, isLoading   } = useQuery(user.email, async () => {
     if(user.email !== "" && user.name !== "") {
         let adminEmail = ""
         let authorEmail = ""
@@ -119,7 +119,6 @@ export const MessageContainer = () => {
   }
 
   useEffect(()=>{
-    refetch()
     if(messageStackRef.current){
         messageStackRef.current.scrollTo({
             top: messageStackRef.current.scrollHeight
@@ -150,7 +149,7 @@ export const MessageContainer = () => {
                 }}/>
         </HStack>
         <Stack {...message_stack} ref={messageStackRef}>
-            {isRefetching && <Spinner />}
+            {isRefetching || isLoading && <Spinner />}
             {data && data.map( item => (
                 <>
                 <DateMessage date={item.date}/>
