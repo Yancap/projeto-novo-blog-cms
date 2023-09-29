@@ -4,7 +4,6 @@ import { Main } from "@/components/Main";
 import { Button, Flex, Stack} from "@chakra-ui/react";
 import { CreditsForms } from "@/components/CreateArticlesForms/CreditsForms";
 import { TagsForms } from "@/components/CreateArticlesForms/TagsForms";
-//import { TextForms } from "@/components/CreateArticlesForms/TextForms";
 import { ImageForms } from "@/components/CreateArticlesForms/ImageForms";
 import { SubtitleForms } from "@/components/CreateArticlesForms/SubtitleForms";
 import { TitleForms } from "@/components/CreateArticlesForms/TitleForms";

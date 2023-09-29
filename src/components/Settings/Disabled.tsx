@@ -25,20 +25,20 @@ interface DisabledProps {
 const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledProps) => {
     const [page, setPage ] = useState(1)
     const maxPages = (articles) ? Number((articles.length / 10).toFixed())  : 0
-    const router = useRouter()
 
     async function handleActive(id: string){
         const token = sessionStorage.getItem('token')
-    
         const config = {
           headers: {
             'Authorization': 'Bearer ' + token 
           }
         }
+        
         try{
-            const response = await cms_api.patch('/articles/active', { id }, config)
+            await cms_api.patch('/articles/active/' + id, config)
             refetch()
         } catch (error){
+            console.error(error);
             alert(error)
         }
         
@@ -48,15 +48,14 @@ const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledP
         const config = {
           headers: {
             'Authorization': 'Bearer ' + token 
-          },
-          data: { id }
+          }
         }
 
         try {
-            const response = await cms_api.delete('/articles',  config)
+            await cms_api.delete('/articles/' + id, config)
             refetch()
         } catch (error){
-            console.log(error);
+            console.error(error);
         }
     }
     return (

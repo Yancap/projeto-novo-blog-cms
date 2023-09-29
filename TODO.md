@@ -9,10 +9,22 @@ no YG.News
 - [x] Fazer a página de comentários
 - [x] Fazer o Filter
 - [x] Filtrar
-- [] Ajeitar o sistema de chat
-- [] ajustar a parte de comentários
-- [] ajustar os slugs
+- [x] Ajeitar o sistema de chat
+- [x] ajustar a parte de comentários
+- [x] ajustar os slugs
 - [x] Usar o MirageJS para criar dados fakes para a página
+- [] Responsividade da pagina de criação e edit de artigos
 - [] Fazer a funcionalidade de adicionar um avatar ao perfil
 
 - [-] Usar o MirageJS para criar dados fakes para a página
+
+## REFATORAÇÃO DAS ROTAS
+[x] - página admin
+[x] - página register author
+[x] - página author
+[x] - página index
+[x] - página comments
+[x] - components Managers
+[] - components Settings - Disabled: ajeitar o active articles
+[] - página 
+[] - página 

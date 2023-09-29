@@ -35,12 +35,11 @@ interface CreateProps {
 
 export default function Create({categories, article, credits, tags}: CreateProps) {
 
-  const { register, handleSubmit, setValue, getValues   } = useForm<FormCreateArticles>()
+  const { register, handleSubmit, setValue, getValues } = useForm<FormCreateArticles>()
   const router = useRouter()
   const Submit: SubmitHandler<FormCreateArticles> = async (value, event) => {
     const data = {
       article: {
-        id: article.id,
         title: value.title ?? '',
         subtitle: value.subtitle ?? '',
         text: value.text ?? '',
@@ -60,7 +59,7 @@ export default function Create({categories, article, credits, tags}: CreateProps
     }
     
     try {
-      const response = await cms_api.put('/articles', data, config)
+      const response = await cms_api.put('/articles/'+article.id, data, config)
       router.push(`/${hierarchy}`)
     } catch (error) {
       alert(error)
@@ -95,8 +94,7 @@ export default function Create({categories, article, credits, tags}: CreateProps
           <link rel="icon" href="/favicon.ico" />
       </Head>
       <Main aside={false}>
-      
-          <Stack as="form" onSubmit={handleSubmit(Submit)} >
+          <Stack as="form" p="2" onSubmit={handleSubmit(Submit)} >
             <Flex gap="4" justifyContent="space-between">
                 <StateForms setValue={setValue} getValues={getValues}/>
                 <Button onClick={() => router.back()} type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
@@ -113,7 +111,6 @@ export default function Create({categories, article, credits, tags}: CreateProps
                   <CreditsForms setValue={setValue} getValues={getValues} />
             </Stack>
           </Stack>
-          
       </Main>
     </>
   )
@@ -141,7 +138,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   }
 
   const { data: {categories} } = await cms_api.get("/categories", config)
-  const { data: {article} } = await cms_api.post("articles/get", { slug }, config)
+  const { data: {article} } = await cms_api.get("/articles/get?slug=" + slug, config)
   if(!article) {
     return {
       redirect: {
@@ -152,8 +149,8 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, params})
   }
   const article_id = await article.id
   
-  const { data: {credits}} = await cms_api.post("credits", { article_id } )
-  const { data: {tags}} = await cms_api.post("tags", { article_id } )
+  const { data: {credits}} = await cms_api.get("/credits/" + article_id)
+  const { data: {tags}} = await cms_api.get("/tags/" + article_id)
   
   return {
     props: {

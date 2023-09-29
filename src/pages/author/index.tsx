@@ -29,7 +29,7 @@ export default function Author() {
     const comments = []
 
     for(let article of articles){
-      const { data } = await cms_api.post("/comments/get-for-articles", { article_id: article.id }, config)
+      const { data } = await cms_api.get(`/comments/from-articles?article_id=${article.id}`, config)
       if(data){
         comments.push(data);
       }

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { useState } from 'react'
-import { GetStaticProps, GetStaticPaths } from "next";
+import { GetServerSideProps } from "next";
 import { useQuery } from "react-query";
 import { Stack, Icon, Flex, Text, Heading, Spinner } from "@chakra-ui/react";
 import { Main } from "../../components/Main";
@@ -48,7 +48,7 @@ export default function Comments({slug}: CommentsProps) {
         'Authorization': 'Bearer ' + token 
       }
     }
-    const { data } = await cms_api.post("/comments/get-for-articles", { slug }, config)
+    const { data } = await cms_api.get(`/comments/from-articles?slug=${slug}`,  config)
     if(data) {
       const { article, comments }: ArticleComments = data
       return {
@@ -150,7 +150,7 @@ export default function Comments({slug}: CommentsProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
   const slug = params?.slug ?? '';
   
   return {
