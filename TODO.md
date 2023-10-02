@@ -26,6 +26,6 @@ no YG.News
 [x] - página index
 [x] - página comments
 [x] - components Managers
-[] - components Settings - Disabled: ajeitar o active articles
-[] - página 
-[] - página 
+[x] - components Settings - Disabled: ajeitar o active articles --> Foi error nos parametros da função do axios
+[x] - página create
+[x] - página edit

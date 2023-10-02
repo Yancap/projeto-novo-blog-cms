@@ -85,7 +85,6 @@ export default function Home() {
       sessionStorage.setItem("email", email)
       sessionStorage.setItem("name", name)
       sessionStorage.setItem("avatar", avatar)
-
       router.push(`/${hierarchy}`)
     } catch (err) {
       if (err instanceof AxiosError) {

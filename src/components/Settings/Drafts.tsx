@@ -34,11 +34,10 @@ const Drafts = ({articles, isLoading, error,  isRefetching, refetch}: DraftsProp
           headers: {
             'Authorization': 'Bearer ' + token 
           },
-          data: { id }
         }
 
         try {
-            const response = await cms_api.delete('/articles',  config)
+            await cms_api.delete('/articles/' + id, config)
             refetch()
         } catch (error){
             console.log(error);
