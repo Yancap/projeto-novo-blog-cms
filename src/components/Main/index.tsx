@@ -25,7 +25,7 @@ const main: FlexProps = {
   justify:"center",
   pt:{base:"4",md:"12"},
   maxW:"100vw",
-  px:{base:4,sm:8,md:10, lg:0},
+  px:{base:0,sm:4,md:10, lg:0},
   position:"relative",
   minH:"100vh"
 }

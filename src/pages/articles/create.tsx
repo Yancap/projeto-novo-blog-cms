@@ -130,12 +130,12 @@ export default function Create({categories}: CreateProps) {
       </Head>
       <Main aside={false}>
       
-          <Stack as="form" onSubmit={handleSubmit(Submit)} >
+          <Stack as="form" onSubmit={handleSubmit(Submit)} px="4">
             <Flex gap="4" alignSelf="flex-end">
-              <Button onClick={handleClickButton} type="submit" datatype="draft" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
+              <Button onClick={handleClickButton} type="submit" fontSize={{base: "14px", md:"16px"}} datatype="draft" fontFamily="Poppins" bg="gray.800" color="gray.300" _hover={{color:"gray.100", bg:"black"}}>
                 RASCUNHO
               </Button>
-              <Button onClick={handleClickButton} type="submit" datatype="publish" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
+              <Button onClick={handleClickButton} type="submit" fontSize={{base: "14px", md:"16px"}} datatype="publish" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
                 PUBLICAR
               </Button>
             </Flex>

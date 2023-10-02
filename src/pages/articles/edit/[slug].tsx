@@ -94,10 +94,10 @@ export default function Create({categories, article, credits, tags}: CreateProps
           <link rel="icon" href="/favicon.ico" />
       </Head>
       <Main aside={false}>
-          <Stack as="form" p="2" onSubmit={handleSubmit(Submit)} >
+          <Stack as="form" p="2" onSubmit={handleSubmit(Submit)}  px="4">
             <Flex gap="4" justifyContent="space-between">
                 <StateForms setValue={setValue} getValues={getValues}/>
-                <Button onClick={() => router.back()} type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
+                <Button onClick={() => router.back()}  fontSize={{base: "12px", md:"16px"}} type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
                   ATUALIZAR
                 </Button>
             </Flex>

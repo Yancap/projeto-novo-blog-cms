@@ -72,8 +72,9 @@ const box = {
     _focus:{
         boxShadow: 'none',
     },
-    px:5,
-    py:3
+    fontSize:{base: "12px", md:"16px"},
+    px:{base: 2, md:5},
+    py:{base: 2, md:3}
 }
 return (
     <Box as='label'>
