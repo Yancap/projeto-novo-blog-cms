@@ -1,12 +1,14 @@
 import { useManagement } from '@/context/ManagementContext'
 import { useMessager } from '@/context/MessageContext'
 import {  Avatar, Box, Flex, FlexProps, Icon, Text, TextProps } from '@chakra-ui/react'
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { RiMessage3Line } from 'react-icons/ri'
 
+interface ChangeAvatarProps {
+  setModalChangeAvatar: Dispatch<SetStateAction<boolean>>
+}
 
-
-export const Profile = () => {
+export const Profile = ({setModalChangeAvatar}: ChangeAvatarProps) => {
   const { profile } = useManagement()
   const {setMessagerModal, setUser, messagerModal, setAsideMessager} = useMessager()
 
@@ -55,9 +57,19 @@ export const Profile = () => {
             </Text>
         </Box>
         {profile.avatar !== "" ? 
-        <Avatar size={{base: "md", xl:"md"}} name={profile.name} src={profile.avatar}/>
+        <Avatar size={{base: "md", xl:"md"}} 
+          name={profile.name} 
+          src={profile.avatar} 
+          onClick={() => setModalChangeAvatar(true)}
+        />
         : 
-        <Avatar size={{base: "md", xl:"md"}} bg="transparent" color="purple.700" fill="purple.700" border="2px" />
+        <Avatar size={{base: "md", xl:"md"}} 
+          bg="transparent" 
+          color="purple.700" 
+          fill="purple.700" 
+          border="2px"  
+          onClick={() => setModalChangeAvatar(true)}
+        />
         }
     </Flex>
   )

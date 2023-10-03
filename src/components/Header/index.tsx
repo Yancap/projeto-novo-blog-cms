@@ -4,6 +4,8 @@ import { Profile } from './Profile'
 import { RiMenuLine } from 'react-icons/ri'
 import { useAsideDrawer } from '@/context/AsideDrawerContext'
 import { useRouter } from 'next/router'
+import { ChangeAvatar } from './ChangeAvatar'
+import { useState } from 'react'
 
 interface HeaderProps {
     children: React.ReactNode
@@ -47,27 +49,34 @@ export const Header = ({children}: HeaderProps) => {
     bg:{base:"gray.900",lg:"transparent"},
     position:{base:"fixed",lg:"static"}
   }
+
+  const [modalChangeAvatar, setModalChangeAvatar] = useState(false);
   return (
-    <Flex {...header}>
-        <Container {...container}>
-            {(!isWideVersion && (asPath === "/admin" || asPath === "/author"))&& (
-            <IconButton icon={<Icon as={RiMenuLine}/>}  
-                display="grid" placeContent="center"
-                fontSize="24" variant="unstyled" aria-label='Open navigation' 
-                onClick={onOpen} mr="2">
-            </IconButton>
-                
-            )}
-            <Flex justify="space-between" gap="8" w="100%" maxW="580px" >
-                <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
-                <Flex {...nav}>
-                    {children}
-                </Flex>
-            </Flex>
-            <Box>
-                <Profile />
-            </Box>
-        </Container>
-    </Flex>
+    <>
+      <Flex {...header}>
+          <Container {...container}>
+              {(!isWideVersion && (asPath === "/admin" || asPath === "/author"))&& (
+              <IconButton icon={<Icon as={RiMenuLine}/>}  
+                  display="grid" placeContent="center"
+                  fontSize="24" variant="unstyled" aria-label='Open navigation' 
+                  onClick={onOpen} mr="2">
+              </IconButton>
+                  
+              )}
+              <Flex justify="space-between" gap="8" w="100%" maxW="580px" >
+                  <Image src="/logo.svg" alt='ARTechCMS' width="187" height="28"/>
+                  <Flex {...nav}>
+                      {children}
+                  </Flex>
+              </Flex>
+              <Box>
+                  <Profile setModalChangeAvatar={setModalChangeAvatar}/>
+              </Box>
+          </Container>
+      </Flex>
+      {modalChangeAvatar && 
+      <ChangeAvatar setModalChangeAvatar={setModalChangeAvatar}/>
+      }
+    </>
   )
 }
