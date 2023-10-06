@@ -1,12 +1,9 @@
-import { Article, Authors } from "@/pages/admin/index";
+import { Article, IAuthors } from '@/pages/admin/interfaces';
 import { FilterState } from "../FilterContent";
 
-type Types =  Article | Authors 
 
-
-
-export function filterForAuthors(filter: FilterState | null, objects:  Authors[] ){
-    let setsObjects = [] as Authors[]
+export function filterForAuthors(filter: FilterState | null, objects:  IAuthors[] ){
+    let setsObjects = [] as IAuthors[]
     if(objects && filter) {
         setsObjects = objects
         const keys = Object.keys(filter).map( key => key.split('_'))
@@ -23,7 +20,7 @@ export function filterForAuthors(filter: FilterState | null, objects:  Authors[]
                 }
                 if(filter["order"] === "articles") {
                     setsObjects = setsObjects.sort((a, b) =>  {
-                        return b.all_articles - a.all_articles
+                        return b.allArticles - a.allArticles
                     })
                 }
             }

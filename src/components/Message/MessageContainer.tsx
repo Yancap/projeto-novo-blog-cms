@@ -1,4 +1,4 @@
-import { Box, BoxProps, Container, Flex, FlexProps, HStack, Icon, Spinner, Stack, StackProps, Text, useBreakpointValue } from '@chakra-ui/react'
+import { Box, BoxProps, Flex, FlexProps, HStack, Icon, Spinner, Stack, StackProps, Text, useBreakpointValue } from '@chakra-ui/react'
 import React, { useEffect, useRef } from 'react'
 import { ProfileMessage } from './ProfileMessage'
 import { RiArrowGoBackFill, RiCloseFill } from 'react-icons/ri'
@@ -154,7 +154,7 @@ export const MessageContainer = () => {
                 <>
                 <DateMessage date={item.date}/>
                 {item.messages.map( message => (
-                    <MessageBox content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
+                    <MessageBox key={message.message} content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
                 ))}
                 
                 </>

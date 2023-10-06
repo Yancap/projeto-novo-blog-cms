@@ -26,10 +26,9 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
         setAdd(tag.length)
     }
     
-  }, [])
+  }, [getValues])
   let elements = []
   for(let i = 0; i < add+1; i++){
-    console.log(tags)
     elements.push(
         <Flex gap="10" key={i} borderBottom={{base: "2px",md:"0"}} borderColor="gray.900">
             <Box w={{base: "100%",md:"70%"}} borderLeft="2px" borderColor="gray.900" px="4" py="2">

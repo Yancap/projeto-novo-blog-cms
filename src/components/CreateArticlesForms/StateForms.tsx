@@ -5,11 +5,6 @@ import { RiAddCircleLine } from "react-icons/ri";
 import { FormCreateArticles } from '@/interfaces/_interfaces';
 import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 
-interface CreditsInputForm {
-    name: string;
-    link: string;
-}
-
 interface StateFormsProps {
     setValue: UseFormSetValue<FormCreateArticles>
     getValues: UseFormGetValues<FormCreateArticles>
@@ -33,7 +28,7 @@ export const StateForms = ({ setValue, getValues }: StateFormsProps) => {
         setState(state)
         setRadioValue(state as string);
         
-    }, [])
+    }, [getValues, setRadioValue])
     
     return (
         <HStack {...group}>

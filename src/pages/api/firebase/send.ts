@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set } from "firebase/database";
 import { NextApiRequest, NextApiResponse } from "next";

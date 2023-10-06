@@ -26,7 +26,7 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
         setAdd(credits.length) 
     }
     
-  }, [])
+  }, [getValues])
   let elements = []
   
   
@@ -48,7 +48,6 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                         return credits
                     })
                     setValue('credits',  credits )
-                    
                 }}
                 />
                 </Flex>
@@ -60,14 +59,14 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={credits.length > i ? credits[i].link : undefined }
-                onChange={({currentTarget}) => {
-                    setCredits(credits => {
-                        credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
-                        return credits
-                    })
-                    setValue('credits',  credits)
-                }}
+                    borderRadius="0" color="purple.300" px="1" value={credits.length > i ? credits[i].link : undefined }
+                    onChange={({currentTarget}) => {
+                        setCredits(credits => {
+                            credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
+                            return credits
+                        })
+                        setValue('credits',  credits)
+                    }}
                 />
                 </Flex>
             </Box>

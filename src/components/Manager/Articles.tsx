@@ -100,11 +100,10 @@ const Articles = ({articles, authors, categories, isLoading, error, isRefetching
         if(articlesState && filter && articles){
             return setArticlesState(() => {
                 return filterForArticles(filter, articles)
-                
             })
         }
     }, [filter, articles, authors])
-    
+    console.log(articles)
     return (
       <>
             <Flex as="header" align="center" justify="space-between">

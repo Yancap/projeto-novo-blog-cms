@@ -35,7 +35,7 @@ const Disabled = ({articles, isLoading, error, isRefetching, refetch}: DisabledP
         }
         
         try {
-            await cms_api.patch('/articles/active', {id}, config )
+            await cms_api.patch('/articles/active/' + id, {}, config )
             refetch()
         } catch (error){
             console.error(error);

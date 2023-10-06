@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Image from '../../../node_modules/next/image';
 import {  FormControl, FormLabel,  Input, Text, Icon } from "@chakra-ui/react";
 import { RiAddCircleLine } from "react-icons/ri";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
@@ -14,7 +13,7 @@ export const ImageForms = ({ setValue, getValues }: ImageFormsProps) => {
   const [ image, setImage ] = useState<string | ArrayBuffer | null>(null)
   useEffect(() => {
     setImage(getValues('image'))
-  }, [image])
+  }, [image, getValues])
   return (
     <FormControl >
         <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">Imagem</Text>

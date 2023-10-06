@@ -2,7 +2,7 @@ import { useMessager } from '@/context/MessageContext'
 import { cms_api } from '@/services/cms_api'
 import { useQuery } from "react-query";
 import React, { useEffect, useRef } from 'react'
-import { Box, BoxProps, Flex, HStack, Icon, Spinner, Stack, StackProps, useBreakpointValue } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Icon, Spinner, Stack, StackProps, useBreakpointValue } from '@chakra-ui/react';
 import { ProfileMessage } from './ProfileMessage';
 import { IAuthors } from '@/pages/admin/interfaces';
 import { RiArrowGoForwardFill } from 'react-icons/ri';
@@ -41,19 +41,19 @@ export const MessageAside = () => {
     
     
     return (
-    <Stack {...stack}>
-        {!isWideVersion && 
-        <Flex bg="gray.900" py="2" px="4" justifyContent="flex-end">
-            <Icon as={RiArrowGoForwardFill} fontSize="2xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
-                onClick={() => setNavigationMessager(false)}/>
-        </Flex>
-        }
-        {isLoading && <Spinner />}
-        {authors && authors.map(author => (
-            <Chat key={author.email} name={author.name} content={author.email} />
-        ))}
-        
-    </Stack>
+        <Stack {...stack}>
+            {!isWideVersion && 
+            <Flex bg="gray.900" py="2" px="4" justifyContent="flex-end">
+                <Icon as={RiArrowGoForwardFill} fontSize="2xl" cursor="pointer" transition="all .15s" _hover={{color: "purple.300"}} 
+                    onClick={() => setNavigationMessager(false)}/>
+            </Flex>
+            }
+            {isLoading && <Spinner />}
+            {authors && authors.map(author => (
+                <Chat key={author.email} name={author.name} content={author.email} />
+            ))}
+            
+        </Stack>
     )
 }
 
@@ -95,7 +95,6 @@ function Chat({name, content, avatar}: ChatProps){
             if(button.current){
                 button.current.disabled = true
             }
-            
         }
     }, [])
     return (

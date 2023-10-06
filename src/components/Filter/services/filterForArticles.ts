@@ -1,19 +1,19 @@
-import { Article, Authors } from "@/pages/admin/index";
+import { Article, IArticles } from '@/pages/admin/interfaces';
 import { FilterState } from "../FilterContent";
 
 
-
-export function filterForArticles(filter: FilterState | null, objects: Article[]  ){
-    let setsObjects = [] as Article[] 
+export function filterForArticles(filter: FilterState | null, objects: IArticles[]  ){
+    let setsObjects = [] as IArticles[] 
     if(objects && filter) {
         setsObjects = objects
         const keys = Object.keys(filter).map( key => key.split('_'))
+        
         
         keys.forEach(key => {
             if(key[0] === "filter") {
                 setsObjects = setsObjects.filter( object => {
                     if (key[1] === "category") {
-                        return object.category === filter.filter_category
+                        return filter.filter_category && object.category === filter.filter_category
                     } 
                     if (key[1] === "author"){
                         return object.author === filter.filter_author

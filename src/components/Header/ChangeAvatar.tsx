@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { Flex, Box, Avatar, Button, Input, FormLabel, Icon, FlexProps, AspectRatio, Image } from '@chakra-ui/react'
+import { Flex, Box, Avatar, Button, Input, FormLabel, Icon, FlexProps, AspectRatio, Image, IconProps, FormLabelProps, ButtonProps } from '@chakra-ui/react'
 import { RiCloseLine } from 'react-icons/ri'
 import { cms_api } from '@/services/cms_api'
 import { useManagement } from '@/context/ManagementContext'
@@ -36,12 +36,12 @@ export const ChangeAvatar = ({setModalChangeAvatar}: ChangeAvatarProps) => {
     gap: "8",
     position: "relative"
   }
-  const btn = {
+  const btn: ButtonProps = {
     flexGrow:"1",
     textTransform:"uppercase",
     color:"white"
   }
-  const photoContainer = {
+  const photoContainer: FlexProps = {
     bg:"gray.800",
     py:"2px",
     w:"100%",
@@ -51,7 +51,7 @@ export const ChangeAvatar = ({setModalChangeAvatar}: ChangeAvatarProps) => {
     justify:"center",
     align:"center"
   }
-  const label = {
+  const label: FormLabelProps = {
     htmlFor:'photo',
     w:"100%",
     h:"100%",
@@ -61,7 +61,7 @@ export const ChangeAvatar = ({setModalChangeAvatar}: ChangeAvatarProps) => {
     m:"0",
     cursor:"pointer"
   }
-  const close = {
+  const close: IconProps = {
     fontSize:"2xl",
     position:"absolute",
     right:"1.5",
@@ -106,7 +106,7 @@ export const ChangeAvatar = ({setModalChangeAvatar}: ChangeAvatarProps) => {
         <Icon as={RiCloseLine} {...close} onClick={() => setModalChangeAvatar(false)}/>
         <Flex {...photoContainer}>
           <AspectRatio bg="#00f" rounded="full" w="100%" h="100%" overflow="hidden" maxW='224px' maxH="224px" ratio={1}>
-            <Image src={photo ?? avatar} alt='avatar' objectFit='cover' />
+            <Image src={photo as string ?? avatar} alt='avatar' objectFit='cover' />
           </AspectRatio>
           {/* <img  src={photo ?? avatar}/> */}
         </Flex>

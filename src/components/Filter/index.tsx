@@ -1,7 +1,6 @@
-import { Box,  Button,  Flex, Icon, Stack, useRadio} from '@chakra-ui/react'
-import React, { Dispatch, RefObject, SetStateAction, useRef, useState } from 'react'
+import { Box,  Button,  Flex, FlexProps, Icon, Stack } from '@chakra-ui/react'
+import React, { Dispatch, SetStateAction, useRef } from 'react'
 import { RiCloseFill } from 'react-icons/ri'
-import { filterProps } from '../../../node_modules/framer-motion/dist/index';
 
 interface FilterProps {
     children: React.ReactNode
@@ -14,7 +13,7 @@ interface FilterProps {
 
 export const Filter = ({children, active, setActive, setFilter }: FilterProps) => {
   const stack = useRef<HTMLFormElement>(null)
-  const filterProps = {
+  const filterProps: FlexProps = {
     bg: "#27282B", 
     borderRadius:"8", 
     transitionDuration:".5s", 

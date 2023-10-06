@@ -1,7 +1,6 @@
+'use client'
 import { useManagement } from '@/context/ManagementContext'
 import { Icon, Link as ChakraLink } from '@chakra-ui/react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 interface AsideLink {
@@ -11,14 +10,20 @@ interface AsideLink {
 }
 
 export const AsideLink = ({icon, text, href}: AsideLink) => {
-  const { navigation, useNavigation } = useManagement()
+  const { navigation, setNavigation } = useManagement()
+  const link = {
+    display:"flex",
+    gap:"3",
+    alignItems:"center",
+    color: href === navigation ? "purple.300" : "gray.200",
+    fontWeight: href === navigation ? "bold" : "normal",
+    _hover:{color: "purple.300"}
+  }
+  
   return (
-      <ChakraLink onClick={() => {useNavigation(href)}} display="flex" gap="3" alignItems="center" 
-      color={href === navigation ? "purple.300" : "gray.200" } 
-      fontWeight={href === navigation ? "bold" : "normal" } 
-      _hover={{color: "purple.300"}}>
-            <Icon as={icon} fontSize="24"/>
-            {text}
-      </ChakraLink>
+    <ChakraLink onClick={() => setNavigation(href)} {...link}>
+      <Icon as={icon} fontSize="24"/>
+      {text}
+    </ChakraLink>
   )
 }

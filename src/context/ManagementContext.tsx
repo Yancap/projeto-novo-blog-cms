@@ -15,7 +15,7 @@ interface ManagementsInfo {
     hierarchy: string;
     useHierarchy: Dispatch<SetStateAction<string>>;
     navigation: string;
-    useNavigation: Dispatch<SetStateAction<string>>;
+    setNavigation: Dispatch<SetStateAction<string>>;
 }
 
 const ManagementContext = createContext({} as ManagementsInfo);
@@ -26,10 +26,10 @@ interface ManagementProviderProps{
 export function ManagementProvider({children}: ManagementProviderProps){
     const [profile, setProfile] = useState<Profile>({} as Profile)
     const [hierarchy, useHierarchy] = useState("")
-    const [navigation, useNavigation] = useState("")
+    const [navigation, setNavigation] = useState("")
     
     return (
-        <ManagementContext.Provider value={{hierarchy, useHierarchy, navigation, useNavigation, profile, setProfile}}>
+        <ManagementContext.Provider value={{hierarchy, useHierarchy, navigation, setNavigation, profile, setProfile}}>
             {children}
         </ManagementContext.Provider>
     )
