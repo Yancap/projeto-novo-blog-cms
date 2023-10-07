@@ -96,7 +96,7 @@ function Chat({name, content, avatar}: ChatProps){
                 button.current.disabled = true
             }
         }
-    }, [])
+    }, [user])
     return (
         <Box as="button" ref={button} {...box} onClick={handleActive}>
             <ProfileMessage name={name} content={content} avatar={avatar}/>

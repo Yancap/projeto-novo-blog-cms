@@ -152,11 +152,10 @@ export const MessageContainer = () => {
             {isRefetching || isLoading && <Spinner />}
             {data && data.map( item => (
                 <>
-                <DateMessage date={item.date}/>
-                {item.messages.map( message => (
-                    <MessageBox key={message.message} content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
-                ))}
-                
+                    <DateMessage date={item.date} key={item.date}/>
+                    {item.messages.map( message => (
+                        <MessageBox key={message.message} content={message.message} hour={message.createdAt} my={ profile.email === message.email}/>
+                    ))}
                 </>
             ))}
         </Stack>
