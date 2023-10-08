@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { cms_api } from '@/services/cms_api';
 import { AxiosError } from 'axios';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useMessager } from '@/context/MessageContext';
 
 interface SignInForm{
@@ -57,6 +57,7 @@ export default function Home() {
   })
 
   const { setProfile } = useManagement()
+  const [ loading, setLoading] = useState(false)
   const { setUser, setAsideMessager, setMessagerModal} = useMessager()
   const router = useRouter()
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function Home() {
   const handleSignIn: SubmitHandler<SignInForm> = async (value, event) =>{
    
     try {
+      setLoading(true)
       const { data } = await cms_api.post("/sessions", value)
       const { name, email, hierarchy, token, avatar} = data
       
@@ -85,6 +87,7 @@ export default function Home() {
       sessionStorage.setItem("email", email)
       sessionStorage.setItem("name", name)
       sessionStorage.setItem("avatar", avatar)
+      setLoading(false)
       router.push(`/${hierarchy}`)
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -117,8 +120,8 @@ export default function Home() {
               }
             </Box>
           </Stack>
-          <Button {...button} isLoading={formState.isLoading}>
-            { formState.isLoading ? <Spinner /> : "Entrar"}
+          <Button {...button} isLoading={loading}>
+            { loading ? <Spinner /> : "Entrar"}
           </Button>
         </Flex>
       </Flex>
