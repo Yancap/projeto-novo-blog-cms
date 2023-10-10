@@ -13,7 +13,7 @@ export const ImageForms = ({ setValue, getValues }: ImageFormsProps) => {
   const [ image, setImage ] = useState<string | ArrayBuffer | null>(null)
   useEffect(() => {
     setImage(getValues('image'))
-  }, [image, getValues])
+  }, [image])
   return (
     <FormControl >
         <Text fontSize={['md','lg']} mb="2.5" fontWeight="medium">Imagem</Text>

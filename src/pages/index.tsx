@@ -93,7 +93,8 @@ export default function Home() {
       if (err instanceof AxiosError) {
         setError("root", { message: err.response?.data.message })
       }
-      
+    } finally {
+      setLoading(false)
     }
   }
 

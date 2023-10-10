@@ -7,38 +7,35 @@ import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 
 interface StateFormsProps {
     setValue: UseFormSetValue<FormCreateArticles>
-    getValues: UseFormGetValues<FormCreateArticles>
+    state: string
 }
 
-export const StateForms = ({ setValue, getValues }: StateFormsProps) => {
-    const [ state, setState ] = useState<string | undefined>(undefined)
-
+export const StateForms = ({ setValue, state }: StateFormsProps) => {
+    const [ stateArt, setStateArt ] = useState<string | undefined>(state)
+    
     const { getRootProps, getRadioProps, setValue: setRadioValue } = useRadioGroup({
         name: 'state',
         defaultValue: state,
-        onChange: (state) => {
-            setState(state)
-            setValue('state', state)
+        onChange: (stateChange) => {
+            setStateArt(stateChange)
+            setValue('state', stateChange)
         },
     })
     const group = getRootProps()
     
     useEffect(() => {
-        const state = getValues('state')
-        setState(state)
         setRadioValue(state as string);
-        
-    }, [getValues, setRadioValue])
+    }, [])
     
     return (
         <HStack {...group}>
-            <RadioCard key={'active'} radio={getRadioProps({ value: 'active' }) as any} value={state}>
+            <RadioCard key={'active'} radio={getRadioProps({ value: 'active' }) as any} value={stateArt}>
                 Ativar
             </RadioCard>
-            <RadioCard key={'inactive'} radio={getRadioProps({ value: 'inactive' }) as any} value={state}>
+            <RadioCard key={'inactive'} radio={getRadioProps({ value: 'inactive' }) as any} value={stateArt}>
                 Desativar
             </RadioCard>
-            <RadioCard key={'draft'} radio={getRadioProps({ value: 'draft' }) as any} value={state}>
+            <RadioCard key={'draft'} radio={getRadioProps({ value: 'draft' }) as any} value={stateArt}>
                 Rascunho
             </RadioCard>
         </HStack>

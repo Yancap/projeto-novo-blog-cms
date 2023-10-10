@@ -12,21 +12,14 @@ interface CreditsInputForm {
 
 interface CreditsFormsProps {
     setValue: UseFormSetValue<FormCreateArticles>
-    getValues: UseFormGetValues<FormCreateArticles>
+    credits?: CreditsInputForm[]
 }
 
-export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
-  const [ credits, setCredits ] = useState<CreditsInputForm[]>([])
+export const CreditsForms = ({setValue, credits}: CreditsFormsProps) => {
+  const [ creditsArticle, setCreditsArticle ] = useState<CreditsInputForm[]>(credits ?? [])
 
-  const [ add, setAdd ] = useState(0)
-  useEffect(() => {
-    const credits = getValues('credits')
-    if(credits) {
-        setCredits(credits)
-        setAdd(credits.length) 
-    }
-    
-  }, [getValues])
+  const [ add, setAdd ] = useState(credits?.length ?? 0)
+  
   let elements = []
   
   
@@ -41,13 +34,13 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                borderRadius="0" color="purple.300" px="1" value={ credits.length > i ? credits[i].name : undefined}
+                borderRadius="0" color="purple.300" px="1" value={ creditsArticle.length > i ? creditsArticle[i].name : undefined}
                 onChange={({currentTarget}) => {
-                    setCredits(credits => {
+                    setCreditsArticle(credits => {
                         credits[add] = { name: currentTarget.value, link: credits[add]?.link ?? ''}
                         return credits
                     })
-                    setValue('credits',  credits )
+                    setValue('credits',  creditsArticle )
                 }}
                 />
                 </Flex>
@@ -59,13 +52,13 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                 <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                 <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1" value={credits.length > i ? credits[i].link : undefined }
+                    borderRadius="0" color="purple.300" px="1" value={creditsArticle.length > i ? creditsArticle[i].link : undefined }
                     onChange={({currentTarget}) => {
-                        setCredits(credits => {
+                        setCreditsArticle(credits => {
                             credits[add] = { link: currentTarget.value, name: credits[add]?.name ?? ''}
                             return credits
                         })
-                        setValue('credits',  credits)
+                        setValue('credits',  creditsArticle)
                     }}
                 />
                 </Flex>
@@ -88,10 +81,10 @@ export const CreditsForms = ({setValue, getValues}: CreditsFormsProps) => {
             <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
                 onClick={() => {
                     setAdd(add-1)
-                    setCredits(credits => {
+                    setCreditsArticle(credits => {
                         try {
                             credits.splice(add, 1)
-                            setValue('credits', credits)
+                            setValue('credits', creditsArticle)
                             return credits
                         } catch {
                             return credits

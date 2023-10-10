@@ -82,8 +82,6 @@ export default function Create({categories, article, credits, tags}: CreateProps
     if(tags.length !== 0){
       setValue("tags", tags)
     }
-    
-    
   }, [])
   return (
     <>
@@ -96,7 +94,7 @@ export default function Create({categories, article, credits, tags}: CreateProps
       <Main aside={false}>
           <Stack as="form" p="2" onSubmit={handleSubmit(Submit)}  px="4">
             <Flex gap="4" justifyContent="space-between">
-                <StateForms setValue={setValue} getValues={getValues}/>
+                <StateForms setValue={setValue} state={article.state}/>
                 <Button onClick={() => router.back()}  fontSize={{base: "12px", md:"16px"}} type="submit" fontFamily="Poppins" bg="purple.300" color="white" _hover={{bg:"purple.700"}}>
                   ATUALIZAR
                 </Button>
@@ -107,14 +105,15 @@ export default function Create({categories, article, credits, tags}: CreateProps
                   <ImageForms setValue={setValue} getValues={getValues}/>
                   <TextForms setValue={setValue} getValues={getValues}/>
                   <CategoryForms setValue={setValue} getValues={getValues} categories={categories} />
-                  <TagsForms setValue={setValue} getValues={getValues}/>
-                  <CreditsForms setValue={setValue} getValues={getValues} />
+                  <TagsForms setValue={setValue} tags={tags}/>
+                  <CreditsForms setValue={setValue}  credits={credits}/>
             </Stack>
           </Stack>
       </Main>
     </>
   )
 }
+
 
 
 export const getServerSideProps: GetServerSideProps = async ({req, res, params}) => {

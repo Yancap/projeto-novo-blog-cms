@@ -145,8 +145,8 @@ export default function Create({categories}: CreateProps) {
                   <ImageForms setValue={setValue} getValues={getValues}/>
                   <TextForms setValue={setValue} getValues={getValues}/>
                   <CategoryForms setValue={setValue} getValues={getValues} categories={categories} />
-                  <TagsForms setValue={setValue} getValues={getValues}/>
-                  <CreditsForms setValue={setValue} getValues={getValues}/>
+                  <TagsForms setValue={setValue} />
+                  <CreditsForms setValue={setValue} />
             </Stack>
           </Stack>
           

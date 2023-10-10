@@ -12,21 +12,12 @@ interface TagsInputForm {
 
 interface TagsFormsProps {
     setValue: UseFormSetValue<FormCreateArticles>
-    getValues: UseFormGetValues<FormCreateArticles>
+    tags?: TagsInputForm[] 
 }
 
-export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
-  const [ tags, setTags ] = useState<TagsInputForm[]>([])
-  
-  const [ add, setAdd ] = useState(0)
-  useEffect(() => {
-    const tag = getValues('tags')
-    if (tag) {
-        setTags(tag)
-        setAdd(tag.length)
-    }
-    
-  }, [getValues])
+export const TagsForms = ({setValue, tags}: TagsFormsProps) => {
+  const [ tagsArticle, setTagsArticle ] = useState<TagsInputForm[]>(tags ?? [])
+  const [ add, setAdd ] = useState(tags?.length ?? 0)
   let elements = []
   for(let i = 0; i < add+1; i++){
     elements.push(
@@ -38,13 +29,13 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
                 <Flex borderBottom="2px" borderColor="gray.400">
                     <Icon as={RxTextAlignLeft} fontSize="2xl" color="purple.200" />
                     <Input type="text" name="tag" variant="unstyled"
-                    borderRadius="0" color="purple.300" px="1" value={ tags.length > i ? tags[i].name : undefined}
+                    borderRadius="0" color="purple.300" px="1" value={ tagsArticle.length > i ? tagsArticle[i].name : undefined}
                     onChange={({currentTarget}) => {
-                        setTags(tags => {
+                        setTagsArticle(tags => {
                             tags[add] = { name: currentTarget.value }
                             return tags
                         })
-                        setValue('tags', tags)
+                        setValue('tags', tagsArticle)
                         
                     }}
                     />
@@ -69,10 +60,10 @@ export const TagsForms = ({setValue, getValues}: TagsFormsProps) => {
                 <Icon as={RiCloseCircleLine} fontSize="2xl" color="purple.200" 
                 onClick={() => {
                     setAdd(add-1)
-                    setTags(tag => {
+                    setTagsArticle(tag => {
                         try {
                             tag.splice(add, 1)
-                            setValue('tags', tag)
+                            setValue('tags', tagsArticle)
                             return tag
                         } catch {
                             return tag

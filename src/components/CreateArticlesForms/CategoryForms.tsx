@@ -21,7 +21,7 @@ export default function CategoryForms ({setValue, categories, isLoading, getValu
   useEffect(() => {
     setCategoryState(getValues("category"))
     setValue('category', categoryState ??  (categories ? categories[0]?.category as string : ''))
-  }, [categories, categoryState, getValues, setValue]) 
+  }, []) 
   return (
     <FormControl w="50%">
         <FormLabel htmlFor="category" fontSize={['md','lg']} fontWeight="medium">
