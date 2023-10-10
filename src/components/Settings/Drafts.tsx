@@ -9,7 +9,7 @@ import { Td } from "@/components/Table/Td";
 import { Pagination } from "@/components/Pagination";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import { PiPlusBold } from "react-icons/pi";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { IArticles } from "@/pages/admin/interfaces";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -43,6 +43,9 @@ const Drafts = ({articles, isLoading, error,  isRefetching, refetch}: DraftsProp
             console.log(error);
         }
     }
+    useEffect(() => {
+        refetch()
+      }, [])
     return (
         <>
             <Flex as="header" align="center" justify="space-between">

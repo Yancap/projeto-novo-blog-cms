@@ -11,6 +11,7 @@ import { Main } from "@/components/Main";
 import Comments from "@/components/Manager/Comments";
 import { cms_api } from "@/services/cms_api";
 import { IAuthors, IArticles, Category,  ArticleComments  } from "./interfaces";
+import { useEffect } from 'react';
 
 
 
@@ -21,19 +22,30 @@ interface AdminProps {
 
 
 export default function Admin() {
-  const { data: temp, isLoading, error, isRefetching, refetch } = useQuery('admin', async () => {
+  const { data: temp, isLoading, isRefetching, refetch } = useQuery('admin', async () => {
     const token = sessionStorage.getItem('token')
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token 
       }
     }
-    const { data: {articles} } = await cms_api.get("/articles", config)
-    const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
-    const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
-    const { data: {categories} } = await cms_api.get("/categories", config)
+    const [
+      {data: {articles}}, 
+      {data: {authors}}, 
+      {data: {articles: allArticles}},
+      {data: {categories}}
+    ] = await Promise.all<any[]>([
+      cms_api.get("/articles", config), 
+      cms_api.get("/admin/get-authors", config),
+      cms_api.get("/admin/get-all-articles", config),
+      cms_api.get("/categories", config)
+    ])
+    // const { data: {articles} } = await cms_api.get("/articles", config)
+    // const { data: {authors} } = await cms_api.get("/admin/get-authors", config)
+    // const { data: {articles: allArticles} } = await cms_api.get("/admin/get-all-articles", config)
+    // const { data: {categories} } = await cms_api.get("/categories", config)
     const comments = []
-
+    
     for(let article of articles){
       const { data } = await cms_api.get(`/comments/from-articles?article_id=${article.id}`, config)
       if(data){
@@ -60,7 +72,7 @@ export default function Admin() {
       comments
     }
   })
-
+  
   const { navigation } = useManagement()
   return (
       <>
