@@ -10,7 +10,11 @@ Esse é um projeto fullstack, onde desenvolvi sozinho:
 
 # Página de CMS ARTechCMS
 
-URL: <>
+URL: <https://artechcms.netlify.app/>
+
+Para acessar a conta de ADMIN -> **Email: yan@email.com Senha: 1234567**
+<br>
+Para acessar a conta de Author -> **Email: jonhdoe@email.com Senha: 1234567**
 
 O Objetivo desse projeto foi de fazer uma página para gerenciar conteudo, com esse projeto possuindo:
 
@@ -23,6 +27,7 @@ O Objetivo desse projeto foi de fazer uma página para gerenciar conteudo, com e
   - Troca de Avatar;
   - Chat em tempo real entre o ADMIN e os Autores;
   - Paginações
+
 
 ### Tecnologias Utilizadas nesse Projeto
 
